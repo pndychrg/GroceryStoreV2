@@ -31,4 +31,19 @@ class UserDB:
             print(error,flush=True)
             raise e
         
-    
+    def loginUser(self,username,password):
+        
+        # try catch for sqlalchemy errors
+        try:
+            user = User.query.filter_by(username=username).first()
+            if user:
+                if password == user.password :
+                    return user,True
+                else :
+                    return "Wrong Password",False
+            else:
+                return "User not found with username",False
+        except SQLAlchemyError as e:
+            error = str(e.__dict__['orig'])
+            print(error,flush=True)
+            raise e
