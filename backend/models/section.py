@@ -16,4 +16,6 @@ class Section(db.Model):
             'id': self.id,
             'name': self.name,
             'unit': self.unit,
+            'has_pending_changes': self.has_pending_changes,
+            'section_icon': self.section_icon
         }

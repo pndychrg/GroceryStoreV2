@@ -16,3 +16,9 @@ class Validators:
             return False
         else:
             return True
+
+    def checkForInt(variable):
+        if variable.isnumeric():
+            return True
+        else:
+            return False

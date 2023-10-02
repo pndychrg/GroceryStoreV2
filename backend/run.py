@@ -21,10 +21,10 @@ def create_app():
 
     # importing all api resources
     from lib.api.user import UserAPI
-
+    from lib.api.sections import SectionAPI
     # registering all the api resources
     api.add_resource(UserAPI, '/user')
-
+    api.add_resource(SectionAPI, '/section')
     # api docs init code
     SWAGGER_URL = '/api/docs'
     API_URL = '/static/docs/swagger.yaml'
@@ -35,7 +35,6 @@ def create_app():
             'app_name': "Test application"
         }
     )
-
     return app
 
 

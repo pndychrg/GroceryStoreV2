@@ -2,7 +2,7 @@
   <div class="d-flex justify-content-center align-items-center">
     <div class="container">
       <navbar />
-      <router-view />
+      <router-view style="margin-top: 60px;" />
     </div>
   </div>
 </template>

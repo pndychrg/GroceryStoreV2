@@ -1,7 +1,7 @@
 from models.section import Section
 from extensions import db
 from sqlalchemy.exc import SQLAlchemyError
-from methods.validators import Validators
+from lib.methods.validators import Validators
 
 
 class SectionDB:
@@ -31,8 +31,11 @@ class SectionDB:
         return new_section, "Section Added"
 
     def getSectionById(self, section_id):
-        section = Section.query.get(section_id)
-        return section
+        if Validators.checkForInt(section_id):
+            section = Section.query.get(section_id)
+            return section, "Section Found"
+        else:
+            return None, "Invalid section_id"
 
     def deleteSection(self, section_id):
         section = self.getSectionById(section_id=section_id)
