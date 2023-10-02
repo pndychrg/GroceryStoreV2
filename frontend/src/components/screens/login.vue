@@ -24,16 +24,19 @@
 
 <script>
 import { reactive } from 'vue';
-
+import { userStateStore } from '@/services/stateManager';
 export default {
     name: "LoginComponent",
     setup() {
+        // setting up state store
+        const store = userStateStore()
+
         const state = reactive({
             username: '',
             password: '',
         })
-        function submitHandler() {
-
+        async function submitHandler() {
+            await store.loginUser(state.username, state.password)
         }
         return {
             state,

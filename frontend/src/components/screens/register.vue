@@ -29,10 +29,12 @@
 
 <script>
 import { reactive } from 'vue';
-
+import { userStateStore } from '@/services/stateManager';
 export default {
     name: "RegisterComponent",
     setup() {
+        const store = userStateStore()
+
         const state = reactive({
             name: '',
             username: '',
@@ -40,7 +42,10 @@ export default {
         });
 
 
-        function submitHandler() { }
+        async function submitHandler() {
+
+            await store.registerUser(state.name, state.username, state.password)
+        }
 
         return {
             state,

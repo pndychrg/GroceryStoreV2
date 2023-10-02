@@ -6,14 +6,19 @@
                 Grocery Store
             </RouterLink>
             <div class="collapse navbar-collapse justify-content-end">
-                <ul class="navbar-nav ml-auto">
+                <ul class="navbar-nav ml-auto" v-if="!isAuthenticated">
                     <li class="nav-item">
-                        <!-- <RouterLink to="/login" class="nav-link">Login</RouterLink> -->
                         <RouterLink to="/login" class="nav-link" v-if="$route.path === '/register'">Login</RouterLink>
                     </li>
                     <li class="nav-item">
                         <RouterLink to="/register" class="nav-link" v-if="$route.path === '/login'">Register
                         </RouterLink>
+                    </li>
+                </ul>
+                <ul class="navbar-nav ml-auto" v-if="isAuthenticated">
+                    <li class="nav-item">
+                        <button @click="logoutMethod" class="nav-link">Logout
+                        </button>
                     </li>
                 </ul>
             </div>
@@ -22,18 +27,23 @@
 </template>
 
 <script>
-import { ref } from 'vue';
+import { ref, computed } from 'vue';
 import { RouterLink, useRouter } from 'vue-router';
-
+import { userStateStore } from '@/services/stateManager';
 export default {
     // eslint-disable-next-line vue/multi-word-component-names
     name: 'Navbar',
     setup() {
+        const store = userStateStore();
         const router = useRouter();
         const routeName = ref(router.currentRoute.value.name);
-        console.log(routeName);
+        // Use a computed property for isAuthenticated
+        const isAuthenticated = computed(() => store.isAuthenticated);
+        const logoutMethod = store.logoutUser;
         return {
-            routeName
+            routeName,
+            isAuthenticated,
+            logoutMethod
         };
     },
     components: { RouterLink }
