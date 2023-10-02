@@ -1,12 +1,19 @@
 <template>
-  <h1>Empty</h1>
+  <div class="d-flex justify-content-center align-items-center">
+    <div class="container">
+      <navbar />
+      <router-view />
+    </div>
+  </div>
 </template>
 
 <script>
-
+import Navbar from './components/widgets/navbar.vue';
 export default {
   name: 'App',
-
+  components: {
+    Navbar
+  }
 }
 </script>
 
@@ -17,6 +24,20 @@ export default {
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
   color: #2c3e50;
-  margin-top: 60px;
+  height: 100%;
+}
+
+html,
+#app,
+body {
+  height: 100%;
+}
+
+.container {
+  height: 100%;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 </style>
