@@ -10,12 +10,25 @@ import Toast from "vue-toastification";
 import "vue-toastification/dist/index.css";
 import { userStateStore } from "./services/stateManager";
 
+/* import the fontawesome core */
+import { library } from "@fortawesome/fontawesome-svg-core";
+/* import font awesome icon component */
+import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
+import "font-awesome-animation/css/font-awesome-animation.min.css";
+/* import specific icons */
+import { faArrowRightFromBracket } from "@fortawesome/free-solid-svg-icons";
+// adding icons to library
+library.add(
+  // add the icons here
+  faArrowRightFromBracket
+);
+
 const pinia = createPinia();
 const app = createApp(App);
 app.use(router);
 app.use(Toast);
 app.use(pinia);
-
+app.component("font-awesome-icon", FontAwesomeIcon);
 userStateStore().checkTokenOnAppStart();
 app.mount("#app");
 

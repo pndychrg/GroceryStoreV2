@@ -17,7 +17,9 @@
                 </ul>
                 <ul class="navbar-nav ml-auto" v-if="isAuthenticated">
                     <li class="nav-item">
-                        <button @click="logoutMethod" class="nav-link">Logout
+                        <button @click="logoutMethod" class="nav-link">
+                            <font-awesome-icon :icon="['fas', 'arrow-right-from-bracket']"
+                                class="faa-horizontal animated-hover" />
                         </button>
                     </li>
                 </ul>
