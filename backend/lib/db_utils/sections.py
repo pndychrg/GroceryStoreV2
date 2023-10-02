@@ -7,14 +7,13 @@ from lib.methods.validators import Validators
 class SectionDB:
 
     def checkIfSectionExists(self, name):
-        section = Section.query.filter_by(name=name)
+        section = Section.query.filter_by(name=name).first()
         if section:
             return section
         else:
             return False
 
     def addSection(self, name, unit):
-
         if (Validators.checkStringForNull(name)):
             return None, "Name can't be empty"
         if (Validators.checkStringForNull(unit)):
@@ -38,7 +37,7 @@ class SectionDB:
             return None, "Invalid section_id"
 
     def deleteSection(self, section_id):
-        section = self.getSectionById(section_id=section_id)
+        section, message = self.getSectionById(section_id=section_id)
         # TODO check if section doesn't contain products
         # if section and len(section.products) == 0:
         if section:
@@ -53,11 +52,12 @@ class SectionDB:
     def updateSection(self, section_id, name, unit):
         # checking if section already exits with name
         existingSection = self.checkIfSectionExists(name=name)
+        # print(type(existingSection.id), type(section_id), flush=True)
         # now checking if the existing section_id is same as current section id
         # because if section id is same, then essentially same section name is being supplied
-        if (existingSection.id != section_id):
+        if existingSection and (existingSection.id != int(section_id)):
             return False, "A Section already exists with new name provided"
-        section = self.getSectionById(section_id=section_id)
+        section, message = self.getSectionById(section_id=section_id)
         if section:
             section.name = name
             section.unit = unit
