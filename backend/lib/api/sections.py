@@ -87,3 +87,17 @@ class SectionAPI(Resource):
             return response, 200
         else:
             return {'message': message}, 400
+
+
+class GetAllSections(Resource):
+
+    @jwt_required()
+    @checkJWTForAdmin
+    def get(self):
+        user = get_jwt_identity()
+        print(user, flush=True)
+        all_sections = sectionDB.getAllSections()
+        # creating the json response
+        response_json = [section.toJson() for section in all_sections]
+
+        return response_json, 200

@@ -1,5 +1,5 @@
 <template>
-    <nav class="navbar navbar-expand navbar-light fixed-top bg-body-tertiary">
+    <nav class="navbar navbar-expand fixed-top">
         <div class="container-fluid">
             <RouterLink to="/" class="navbar-brand">
                 <img src="@/assets/logo.png" alt="Bootstrap" width="30" height="24">
@@ -16,6 +16,11 @@
                     </li>
                 </ul>
                 <ul class="navbar-nav ml-auto" v-if="isAuthenticated">
+                    <li class="nav-item">
+                        <RouterLink :to='dashboardLink' class="btn btn-dark profile-button">
+                            <font-awesome-icon :icon="['fas', 'user']" class="faa-horizontal animated-hover" />
+                        </RouterLink>
+                    </li>
                     <li class="nav-item">
                         <button @click="logoutMethod" class="nav-link">
                             <font-awesome-icon :icon="['fas', 'arrow-right-from-bracket']"
@@ -42,14 +47,28 @@ export default {
         // Use a computed property for isAuthenticated
         const isAuthenticated = computed(() => store.isAuthenticated);
         const logoutMethod = store.logoutUser;
+
+        // calculating the dashboard link according to user role
+        const dashboardLink = computed(() => {
+            return '/' + store.user.role + '/dashboard'
+        });
         return {
             routeName,
             isAuthenticated,
-            logoutMethod
+            logoutMethod,
+            dashboardLink
         };
     },
     components: { RouterLink }
 }
 </script>
 
-<style scoped></style>
+<style scoped>
+.profile-button {
+    margin-right: 10px;
+    border-radius: 30px;
+    padding-left: 20px;
+    padding-right: 20px;
+    background-color: #393737;
+}
+</style>

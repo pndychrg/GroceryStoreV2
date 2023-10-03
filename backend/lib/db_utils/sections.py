@@ -65,3 +65,7 @@ class SectionDB:
             return section, "Section Updated"
         else:
             return False, "Section not found with given section_id"
+
+    def getAllSections(self):
+        sections = Section.query.all()
+        return sections

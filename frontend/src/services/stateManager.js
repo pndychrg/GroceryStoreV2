@@ -3,6 +3,7 @@ import axios from "axios";
 import router from "./router";
 import { TokenService } from "./tokenService";
 import { showSuccessToast, showErrorToast } from "@/static/js/toasts";
+import { toRaw } from "vue";
 
 export const userStateStore = defineStore("store", {
   state: () => {
@@ -42,6 +43,7 @@ export const userStateStore = defineStore("store", {
         // extracting user from token
         this.user = JSON.parse(atob(token.split(".")[1])).sub;
         this.isAuthenticated = true;
+        console.log(toRaw(this.user));
         showSuccessToast("Welcome " + this.user.name);
         // console.log(toRaw(this.user));
         router.push("/");
