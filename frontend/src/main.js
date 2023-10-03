@@ -10,6 +10,12 @@ import Toast from "vue-toastification";
 import "vue-toastification/dist/index.css";
 import { userStateStore } from "./services/stateManager";
 
+// modal library setup
+import { createVfm } from "vue-final-modal";
+import "vue-final-modal/style.css";
+
+const vfm = createVfm();
+
 /* import the fontawesome core */
 import { library } from "@fortawesome/fontawesome-svg-core";
 /* import font awesome icon component */
@@ -34,6 +40,7 @@ const app = createApp(App);
 app.use(router);
 app.use(Toast);
 app.use(pinia);
+app.use(vfm);
 app.component("font-awesome-icon", FontAwesomeIcon);
 userStateStore().checkTokenOnAppStart();
 app.mount("#app");

@@ -1,7 +1,6 @@
 <template>
-    <div class="section-form">
+    <div class="section-form ">
         <h4>{{ formTitle }}</h4>
-
         <form @submit.prevent="submitHandler">
             <div class="form-group">
                 <label for="sectionName">Section Name</label>

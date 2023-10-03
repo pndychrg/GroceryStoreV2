@@ -5,7 +5,8 @@
             <div class="row">
                 <h2 class="col text-start">
                     Sections
-                    <button @click="showAddSectionForm" class="btn btn-primary btn-addSection" type="button">
+                    <button @click="showAddSectionForm" class="btn btn-primary btn-addSection" type="button"
+                        data-bs-toggle="modal" data-bs-target="#sectionForm" id="addSectionBtn">
                         Add Section
                     </button>
                 </h2>
@@ -14,12 +15,17 @@
                 <SectionCard :sectionData="section" />
             </div>
 
+
             <!-- Form Section -->
-            <div v-if="isFormVisible">
-                <SectionForm v-if="isAddingSection" formTitle="Add Section" submitButtonText="Submit" @cancel="hideForm"
-                    @section-added="handleSectionAdded" />
-                <SectionForm v-else formTitle="Edit Section" submitButtonText="Update" :initialData="selectedSection"
-                    @cancel="hideForm" />
+            <div class="modal fade" id="sectionForm" tabindex="-1" aria-labelledby="sectionForm" aria-hidden="false">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <SectionForm v-if="isAddingSection" formTitle="Add Section" submitButtonText="Submit"
+                            @cancel="hideForm" @section-added="handleSectionAdded" />
+                        <SectionForm v-else formTitle="Edit Section" submitButtonText="Update"
+                            :initialData="selectedSection" @cancel="hideForm" />
+                    </div>
+                </div>
             </div>
         </div>
     </div>
@@ -59,6 +65,7 @@ export default {
 
         const hideForm = () => {
             isFormVisible.value = false
+            document.getElementById('addSectionBtn').click();
         }
 
         const handleSectionAdded = (newSection) => {
