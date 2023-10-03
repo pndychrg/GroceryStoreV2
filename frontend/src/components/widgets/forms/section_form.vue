@@ -1,27 +1,33 @@
 <template>
-    <div class="section-form ">
-        <h4>{{ formTitle }}</h4>
-        <form @submit.prevent="submitHandler">
-            <div class="form-group">
-                <label for="sectionName">Section Name</label>
-                <input v-model="formData.name" type="text" id="sectionName" required>
+    <div class="modal-dialog">
+        <div class="modal-content text-start">
+            <div class="modal-header">
+                <h4 class="modal-title">{{ formTitle }}</h4>
             </div>
+            <div class="section-form ">
+                <form @submit.prevent="submitHandler">
+                    <div class="modal-body">
+                        <div class="form-group">
+                            <label for="sectionName">Section Name</label>
+                            <input v-model="formData.name" type="text" id="sectionName" class="form-control mb-2" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="sectionUnit">Section Unit</label>
+                            <input v-model="formData.unit" class="form-control mb-2" type="text" id="sectionUnit" required>
+                        </div>
+                        <div class="form-actions modal-footer">
+                            <button type="button" @click="handleCancel" class="btn btn-secondary">
+                                Cancel
+                            </button>
+                            <button type="submit" class="btn btn-primary">
+                                {{ submitButtonText }}
+                            </button>
+                        </div>
+                    </div>
+                </form>
 
-            <div class="form-group">
-                <label for="sectionUnit">Section Unit</label>
-                <input v-model="formData.unit" type="text" id="sectionUnit" required>
             </div>
-
-            <div class="form-actions">
-                <button type="submit">
-                    {{ submitButtonText }}
-                </button>
-                <button type="button" @click="handleCancel">
-                    Cancel
-                </button>
-            </div>
-        </form>
-
+        </div>
     </div>
 </template>
 

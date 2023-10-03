@@ -17,23 +17,11 @@ import "vue-final-modal/style.css";
 const vfm = createVfm();
 
 /* import the fontawesome core */
-import { library } from "@fortawesome/fontawesome-svg-core";
 /* import font awesome icon component */
 import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
 import "font-awesome-animation/css/font-awesome-animation.min.css";
-/* import specific icons */
-import {
-  faArrowRightFromBracket,
-  faUser,
-  faXmark,
-} from "@fortawesome/free-solid-svg-icons";
-// adding icons to library
-library.add(
-  // add the icons here
-  faArrowRightFromBracket,
-  faUser,
-  faXmark
-);
+// eslint-disable-next-line no-unused-vars
+import { iconLib } from "./static/js/icons";
 
 const pinia = createPinia();
 const app = createApp(App);

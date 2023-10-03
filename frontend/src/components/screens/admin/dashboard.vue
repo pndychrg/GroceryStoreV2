@@ -11,22 +11,20 @@
                     </button>
                 </h2>
             </div>
-            <div v-for="section in sections" :key="section.id">
+
+            <div v-for="section in sections" :key="section.id" class="SectionCard card">
                 <SectionCard :sectionData="section" />
             </div>
 
 
-            <!-- Form Section -->
-            <div class="modal fade" id="sectionForm" tabindex="-1" aria-labelledby="sectionForm" aria-hidden="false">
-                <div class="modal-dialog">
-                    <div class="modal-content">
-                        <SectionForm v-if="isAddingSection" formTitle="Add Section" submitButtonText="Submit"
-                            @cancel="hideForm" @section-added="handleSectionAdded" />
-                        <SectionForm v-else formTitle="Edit Section" submitButtonText="Update"
-                            :initialData="selectedSection" @cancel="hideForm" />
-                    </div>
-                </div>
-            </div>
+        </div>
+        <!-- Form Section -->
+        <div class="modal fade" id="sectionForm" tabindex="-1" aria-labelledby="sectionForm" aria-hidden="false">
+
+            <SectionForm v-if="isAddingSection" formTitle="Add Section" submitButtonText="Submit" @cancel="hideForm"
+                @section-added="handleSectionAdded" />
+            <SectionForm v-else formTitle="Edit Section" submitButtonText="Update" :initialData="selectedSection"
+                @cancel="hideForm" />
         </div>
     </div>
 </template>
@@ -109,8 +107,21 @@ export default {
     padding: 40px 55px 45px 55px;
     border-radius: 15px;
     transition: all .3s;
+
+    /* Flexbox settings */
+    /* display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between; */
 }
 
+.SectionCard {
+    border: none;
+    box-shadow: 3px 3px 5px rgba(34, 35, 58, 0.2);
+    border-radius: 15px;
+    transition: all .3s;
+    width: 18rem;
+    margin: 10px;
+}
 
 .btn-addSection {
     background-color: #4D6DE3;
