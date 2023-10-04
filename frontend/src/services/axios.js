@@ -13,7 +13,7 @@ export const httpGetAllRequest = async (path) => {
   } catch (e) {
     console.log(e);
     showErrorToast(e.response.data.message);
-    return e.response.data.message;
+    throw new Error(e.response.data.message);
   }
 };
 
@@ -24,6 +24,7 @@ export const httpPostRequest = async (path, data) => {
   } catch (e) {
     console.log(e.response.data.message);
     showErrorToast(e.response.data.message);
+    return null;
   }
 };
 
@@ -36,5 +37,6 @@ export const httpDeleteRequest = async (path, params) => {
   } catch (e) {
     console.log(e.response.data.message);
     showErrorToast(e.response.data.message);
+    throw new Error(e.response.data.message);
   }
 };

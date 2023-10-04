@@ -11,18 +11,16 @@ export const sectionMethods = {
       const data = await httpGetAllRequest("/sections");
       return data;
     } catch (e) {
-      console.log(e.response);
+      console.log(e);
     }
   },
 
   async addSection(data) {
-    try {
-      const response = await httpPostRequest("/section", data);
+    const response = await httpPostRequest("/section", data);
+    if (response) {
       showSuccessToast("Section Added Successfully");
-      return response;
-    } catch (e) {
-      console.log(e);
     }
+    return response;
   },
 
   async deleteSection(section_id) {

@@ -1,5 +1,5 @@
 <template>
-    <div class="modal-dialog">
+    <div class="modal-overlay">
         <div class="modal-content text-start">
             <div class="modal-header">
                 <h4 class="modal-title">{{ formTitle }}</h4>
@@ -32,55 +32,79 @@
 </template>
 
 <script>
+import { computed, reactive, watch } from 'vue';
 import { sectionMethods } from '@/services/HTTPRequests/sectionMethods';
-import { reactive, watch } from 'vue';
 
 export default {
-    name: "SectionForm",
+    name: "SectionFormModal",
+    emits: ["close", "section-edited", "section-added"],
     props: {
-        formTitle: String,
-        submitButtonText: String,
-        initalData: Object,
+        initialData: Object
     },
     setup(props, { emit }) {
         // initialising the data models
         const formData = reactive({
-            name: '',
+            name: "",
             unit: '',
         });
+
+        const formTitle = computed(() => {
+            if (props.initialData == null) {
+                return "Add Section"
+            }
+            return "Edit Section"
+        })
+
+        const submitButtonText = computed(() => {
+            if (props.initialData == null) {
+                return "Submit"
+            }
+            return "Update"
+        })
 
         const submitHandler = async () => {
             const dataObject = {
                 "name": formData.name,
                 "unit": formData.unit,
             }
-            // backend request
-            const response = await sectionMethods.addSection(dataObject)
-            // console.log(response)
-            emit('section-added', response)
+            if (props.initialData == null) {
+                // backend request
+                const response = await sectionMethods.addSection(dataObject)
+                if (response) {
+                    emit('section-added', response)
+                }
+            } else {
+                console.log("Update button clicked")
+            }
+
         }
 
-        // watching the initialData prop for changes
-        watch(() => props.initalData, (newData) => {
+        watch(() => props.initialData, (newData) => {
             if (newData) {
-                formData.value.name = newData.name;
-                formData.value.unit = newData.unit;
+                formData.name = newData.name;
+                formData.unit = newData.unit;
             }
-        },
+        }, { immediate: true })
 
-            { immediate: true });
 
         const handleCancel = () => {
-            emit('cancel');
+            Object.assign(formData, {
+                "name": "",
+                "unit": ""
+            })
+            emit('close');
         }
         return {
             formData,
             handleCancel,
-            submitHandler
-
+            submitHandler,
+            formTitle,
+            submitButtonText
         }
     }
 }
 </script>
 
-<style scoped></style>
+<style scoped>
+@import "@/static/css/modal.css";
+</style>

@@ -9,7 +9,7 @@
                     <font-awesome-icon :icon="['fas', 'trash-can']" class="faa-horizontal animated-hover"
                         style="color: #c01c28;" />
                 </button>
-                <button class="btn">
+                <button class="btn" @click="$emit('editSection')">
                     <font-awesome-icon :icon="['fas', 'pen-to-square']" class="faa-horizontal animated-hover" />
                 </button>
             </div>
@@ -25,13 +25,6 @@ export default {
     props: {
         sectionData: Object,
     },
-    setup() {
-        function deleteSectionHandler() {
-        }
-        return {
-            deleteSectionHandler,
-        }
-    }
 }
 </script>
 

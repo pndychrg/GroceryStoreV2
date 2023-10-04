@@ -5,38 +5,34 @@
             <div class="row">
                 <h2 class="col text-start">
                     Sections
-                    <button @click="showAddSectionForm" class="btn btn-primary btn-addSection" type="button"
-                        data-bs-toggle="modal" data-bs-target="#sectionForm" id="addSectionBtn">
+                    <button @click="showAddSectionForm" class="btn btn-primary btn-addSection" type="button">
                         Add Section
                     </button>
                 </h2>
             </div>
 
             <div v-for="section in sections" :key="section.id" class="SectionCard card">
-                <SectionCard :sectionData="section" @deleteSection="showDelete(section)" />
+                <SectionCard :sectionData="section" @deleteSection="showDelete(section)"
+                    @editSection="showEditSectionForm(section)" />
             </div>
 
 
         </div>
-        <!-- Form Section -->
-        <div class="modal fade" id="sectionForm" tabindex="-1" aria-labelledby="sectionForm" aria-hidden="false">
 
-            <SectionForm v-if="isAddingSection" formTitle="Add Section" submitButtonText="Submit" @cancel="hideForm"
-                @section-added="handleSectionAdded" />
-            <SectionForm v-else formTitle="Edit Section" submitButtonText="Update" :initialData="selectedSection"
-                @cancel="hideForm" />
-        </div>
 
         <teleport to="#modal-root">
-            <Modal v-show="isDeleteModalShown" deleteElement="Section" :element="selectedSection"
+            <ConfirmationModal v-show="isDeleteModalShown" deleteElement="Section" :element="selectedSection"
                 @close="isDeleteModalShown = false" @confirm="deleteSection" />
+            <SectionForm v-show="isSectionFormShown" :initialData="selectedSection" @close="formClosed"
+                @section-added="handleAddSectionEvent" @section-edited="handleEditSectionEvent" />
         </teleport>
     </div>
 </template>
 
 <script>
-import Modal from '@/components/widgets/confirmation.vue'
+import ConfirmationModal from '@/components/widgets/confirmation.vue'
 import SectionForm from '@/components/widgets/forms/section_form.vue'
+
 import { onMounted, ref } from 'vue';
 import { sectionMethods } from '@/services/HTTPRequests/sectionMethods'
 import SectionCard from '@/components/widgets/section_card.vue';
@@ -45,29 +41,40 @@ export default {
     components: {
         SectionCard,
         SectionForm,
-        Modal,
+        ConfirmationModal,
     },
     setup() {
         const sections = ref([]);
-        const isFormVisible = ref(false);
         const selectedSection = ref(null);
-        const isAddingSection = ref(true);
-        const isDeleteModalShown = ref(false);
-        // function to set the boolean values 
+        // const formTitle = ref('Add Section')
+        // const submitButtonText
+        // add - edit section form values
+        const isSectionFormShown = ref(false);
         const showAddSectionForm = () => {
-            isAddingSection.value = true;
-            selectedSection.value = null;
-            isFormVisible.value = true;
-
+            isSectionFormShown.value = true
         }
-
-
         const showEditSectionForm = (section) => {
-            isAddingSection.value = false;
-            selectedSection.value = section;
-            isFormVisible.value = true
+            isSectionFormShown.value = true
+            selectedSection.value = section
         }
 
+        const formClosed = () => {
+            isSectionFormShown.value = false
+            selectedSection.value = null
+        }
+
+        const handleAddSectionEvent = (newSection) => {
+            sections.value.unshift(newSection);
+            isSectionFormShown.value = false
+            selectedSection.value = null
+        }
+
+        const handleEditSectionEvent = (editedSection) => {
+            console.log("Section edited", editedSection);
+        }
+
+        // Delete Section functions and values
+        const isDeleteModalShown = ref(false);
         const showDelete = (sectionData) => {
             selectedSection.value = sectionData
             isDeleteModalShown.value = true
@@ -86,18 +93,6 @@ export default {
             console.log("section delete confirmed", section)
         }
 
-
-        const hideForm = () => {
-            isFormVisible.value = false
-            document.getElementById('addSectionBtn').click();
-        }
-
-        const handleSectionAdded = (newSection) => {
-            // console.log(newSection)
-            sections.value.push(newSection);
-            hideForm();
-        }
-
         const fetchSectionsData = async () => {
             try {
                 const sectionsData = await sectionMethods.fetchAllSections();
@@ -110,19 +105,18 @@ export default {
             fetchSectionsData();
 
         })
-
         return {
             sections,
-            showAddSectionForm,
-            showEditSectionForm,
+            isSectionFormShown,
+            formClosed,
+            handleAddSectionEvent,
+            handleEditSectionEvent,
             isDeleteModalShown,
             deleteSection,
             showDelete,
-            hideForm,
-            isFormVisible,
-            isAddingSection,
+            showAddSectionForm,
+            showEditSectionForm,
             selectedSection,
-            handleSectionAdded,
         }
     }
 }
