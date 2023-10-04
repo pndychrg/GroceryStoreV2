@@ -1,10 +1,14 @@
-import { httpGetRequest, httpPostRequest } from "../axios";
+import {
+  httpDeleteRequest,
+  httpGetAllRequest,
+  httpPostRequest,
+} from "../axios";
 import { showSuccessToast } from "@/static/js/toasts";
 
 export const sectionMethods = {
   async fetchAllSections() {
     try {
-      const data = await httpGetRequest("/sections");
+      const data = await httpGetAllRequest("/sections");
       return data;
     } catch (e) {
       console.log(e.response);
@@ -15,6 +19,20 @@ export const sectionMethods = {
     try {
       const response = await httpPostRequest("/section", data);
       showSuccessToast("Section Added Successfully");
+      return response;
+    } catch (e) {
+      console.log(e);
+    }
+  },
+
+  async deleteSection(section_id) {
+    try {
+      const response = await httpDeleteRequest("/section", {
+        section_id: section_id,
+      });
+      if (response == true) {
+        showSuccessToast("Section deleted Successfully ");
+      }
       return response;
     } catch (e) {
       console.log(e);

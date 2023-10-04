@@ -1,7 +1,7 @@
 <template>
     <div class="modal-overlay" @click="$emit('close')">
         <div class="modal-content">
-            <h3>Delete this {{ deleteElement }}</h3>
+            <h3>Delete this {{ element?.name }} {{ deleteElement }} </h3>
             <button @click="$emit('close')" class="btn">Close</button>
             <button @click="$emit('confirm', element)" class="btn btn-danger">Delete</button>
         </div>

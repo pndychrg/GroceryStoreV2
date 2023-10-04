@@ -74,7 +74,15 @@ export default {
             console.log("From dashboard", sectionData);
         }
 
-        const deleteSection = (section) => {
+        const deleteSection = async (section) => {
+            try {
+                await sectionMethods.deleteSection(section.id);
+
+                sections.value = sections.value.filter(s => s !== section);
+
+            } catch (e) {
+                console.log(e)
+            }
             console.log("section delete confirmed", section)
         }
 
