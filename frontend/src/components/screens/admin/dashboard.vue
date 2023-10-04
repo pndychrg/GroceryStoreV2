@@ -13,7 +13,7 @@
             </div>
 
             <div v-for="section in sections" :key="section.id" class="SectionCard card">
-                <SectionCard :sectionData="section" />
+                <SectionCard :sectionData="section" @deleteSection="showDelete(section)" />
             </div>
 
 
@@ -26,10 +26,16 @@
             <SectionForm v-else formTitle="Edit Section" submitButtonText="Update" :initialData="selectedSection"
                 @cancel="hideForm" />
         </div>
+
+        <teleport to="#modal-root">
+            <Modal v-show="isDeleteModalShown" deleteElement="Section" :element="selectedSection"
+                @close="isDeleteModalShown = false" @confirm="deleteSection" />
+        </teleport>
     </div>
 </template>
 
 <script>
+import Modal from '@/components/widgets/confirmation.vue'
 import SectionForm from '@/components/widgets/forms/section_form.vue'
 import { onMounted, ref } from 'vue';
 import { sectionMethods } from '@/services/HTTPRequests/sectionMethods'
@@ -39,14 +45,14 @@ export default {
     components: {
         SectionCard,
         SectionForm,
-
+        Modal,
     },
     setup() {
         const sections = ref([]);
         const isFormVisible = ref(false);
         const selectedSection = ref(null);
         const isAddingSection = ref(true);
-
+        const isDeleteModalShown = ref(false);
         // function to set the boolean values 
         const showAddSectionForm = () => {
             isAddingSection.value = true;
@@ -55,11 +61,23 @@ export default {
 
         }
 
+
         const showEditSectionForm = (section) => {
             isAddingSection.value = false;
             selectedSection.value = section;
             isFormVisible.value = true
         }
+
+        const showDelete = (sectionData) => {
+            selectedSection.value = sectionData
+            isDeleteModalShown.value = true
+            console.log("From dashboard", sectionData);
+        }
+
+        const deleteSection = (section) => {
+            console.log("section delete confirmed", section)
+        }
+
 
         const hideForm = () => {
             isFormVisible.value = false
@@ -89,6 +107,9 @@ export default {
             sections,
             showAddSectionForm,
             showEditSectionForm,
+            isDeleteModalShown,
+            deleteSection,
+            showDelete,
             hideForm,
             isFormVisible,
             isAddingSection,

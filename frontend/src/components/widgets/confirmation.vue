@@ -1,47 +1,50 @@
 <template>
-    <div class="confirmationModal">
-        <div class="modal-box">
-            <h3>{{ title }}</h3>
-            <!-- The modal component body -->
-            <button @click="$emit('confirm')">Yea Nigga</button>
-            <button @click="$emit('cancel')">No Fuck You </button>
+    <div class="modal-overlay" @click="$emit('close')">
+        <div class="modal-content">
+            <h3>Delete this {{ deleteElement }}</h3>
+            <button @click="$emit('close')" class="btn">Close</button>
+            <button @click="$emit('confirm', element)" class="btn btn-danger">Delete</button>
         </div>
     </div>
 </template>
-
+  
 <script>
-import { defineEmits } from 'vue';
-
 export default {
-    name: "ConfirmationDialog",
+    // eslint-disable-next-line vue/multi-word-component-names
+    name: "Modal",
+    emits: ["close", "confirm"],
     props: {
-        title: String,
-    },
-    setup() {
-        const emit = defineEmits(['confirm', 'cancel'])
-        return {
-            emit
-        }
+        deleteElement: String,
+        element: Object,
     }
-}
+};
 </script>
-
-<style scoped>
-.my-modal {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    position: fixed;
+  
+<style>
+.modal-overlay {
+    position: absolute;
     top: 0;
-    right: 0;
     bottom: 0;
     left: 0;
-    background-color: #cecece89;
-    transition-property: background-color, border-color, color, fill, stroke,
-        opacity, box-shadow, transform;
-    transition-duration: 0.15s;
-    transition-duration: 0.2s;
-    transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
-    z-index: 100;
+    right: 0;
+    display: grid;
+    justify-content: center;
+    align-items: center;
+    background-color: rgba(0, 0, 0, 0.3);
+}
+
+.modal-content {
+    background: white !important;
+    font-family: "Fondamento", cursive;
+    padding: 20px;
+    border-radius: 12px !important;
+    border: 2px;
+    display: inline-block;
+    /* min-height: 300px; */
+    margin: 1rem;
+    position: relative;
+    /* min-width: 300px; */
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.26), 0 3px 6px rgba(0, 0, 0, 0.36);
+    justify-self: center;
 }
 </style>

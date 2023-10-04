@@ -5,7 +5,7 @@
             <h6 class="card-text text-secondary">Unit - {{ sectionData.unit }}</h6>
             <hr>
             <div class="d-flex justify-content-end">
-                <button class="btn" @click="deleteSectionHandler">
+                <button class="btn" @click="$emit('deleteSection')">
                     <font-awesome-icon :icon="['fas', 'trash-can']" class="faa-horizontal animated-hover"
                         style="color: #c01c28;" />
                 </button>
@@ -18,22 +18,18 @@
 </template>
 
 <script>
-
 export default {
     name: "SectionCard",
     components: {
-
     },
     props: {
         sectionData: Object,
     },
-
     setup() {
         function deleteSectionHandler() {
         }
-
         return {
-            deleteSectionHandler
+            deleteSectionHandler,
         }
     }
 }
