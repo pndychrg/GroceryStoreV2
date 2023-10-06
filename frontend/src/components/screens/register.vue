@@ -3,8 +3,18 @@
         <div class="auth-inner card">
             <form @submit.prevent="submitHandler">
                 <h3>Register</h3>
+                <div class="btn-group mb-2" role="group" aria-label="User Role Radio Button Group" style="width: 100%;">
+                    <input type="radio" v-model="state.role" value="user" class="btn-check" name="btnradio" id="userChekced"
+                        autocomplete="off" checked>
+                    <label class="btn btn-outline-primary" for="userChekced" style="width: 40%;">User</label>
+
+                    <input type="radio" class="btn-check" v-model="state.role" value="notApproved" name="btnradio"
+                        id="storeManagerChecked" autocomplete="off">
+                    <label class="btn btn-outline-secondary" for="storeManagerChecked" style="width: 50;">Store
+                        Manager</label>
+                </div>
                 <br>
-                <div class="form-group">
+                <div class="form-group ">
                     <label for="name">Name</label>
                     <input type="text" class="form-control" placeholder="Name" v-model="state.name">
                 </div>
@@ -39,12 +49,13 @@ export default {
             name: '',
             username: '',
             password: '',
+            role: "user",
         });
 
 
         async function submitHandler() {
-
-            await store.registerUser(state.name, state.username, state.password)
+            console.log(state.role)
+            await store.registerUser(state.name, state.username, state.password, state.role)
         }
 
         return {

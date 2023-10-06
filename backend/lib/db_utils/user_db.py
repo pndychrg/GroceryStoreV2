@@ -11,20 +11,20 @@ class UserDB:
         else:
             return False
 
-    def registerUser(self, name, username, password):
+    def registerUser(self, name, username, password, role='user'):
         if (self.checkUserExists(username=username)):
-            return None
+            return None, "User already exists with same name"
         # if user not exists with same username
         try:
             user = User(name=name, username=username,
-                        password=password, role='user')
+                        password=password, role=role)
             db.session.add(user)
             db.session.commit()
-            return user
+            return user, "User Registered"
         except SQLAlchemyError as e:
             error = str(e.__dict__['orig'])
             print(error, flush=True)
-            raise e
+            return None, "Database error occured"
 
     def loginUser(self, username, password):
         # try catch for sqlalchemy errors

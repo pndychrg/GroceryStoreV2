@@ -19,5 +19,6 @@ class User(db.Model):
             "id": self.id,
             "name": self.name,
             "username": self.username,
-            "role": self.role
+            "role": self.role,
+            "profile_data": self.profile_data
         }

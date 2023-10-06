@@ -38,10 +38,9 @@ export const userStateStore = defineStore("store", {
 
         const token = response.data.token;
         //saving the token in localStorage
-        TokenService.saveToken(token);
-
         // extracting user from token
         this.user = JSON.parse(atob(token.split(".")[1])).sub;
+        TokenService.saveToken(token);
         this.isAuthenticated = true;
         console.log(toRaw(this.user));
         showSuccessToast("Welcome " + this.user.name);
@@ -53,11 +52,12 @@ export const userStateStore = defineStore("store", {
       }
     },
 
-    async registerUser(name, username, password) {
+    async registerUser(name, username, password, role = "user") {
       const data = {
         name,
         username,
         password,
+        role,
       };
       try {
         const response = await axios.post("/user", data);

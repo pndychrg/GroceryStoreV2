@@ -47,7 +47,6 @@ export default {
         // Use a computed property for isAuthenticated
         const isAuthenticated = computed(() => store.isAuthenticated);
         const logoutMethod = store.logoutUser;
-
         // calculating the dashboard link according to user role
         const dashboardLink = computed(() => {
             return '/' + store.user.role + '/dashboard'
