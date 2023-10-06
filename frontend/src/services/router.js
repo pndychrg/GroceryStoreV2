@@ -6,7 +6,7 @@ import { ROLES } from "./roles";
 import { userStateStore } from "./stateManager";
 import AdminDashboard from "../components/screens/admin/dashboard.vue";
 import AccessDenied from "../components/screens/accessDenied.vue";
-
+import NotApproved from "../components/screens/storeManager_notApproved.vue";
 const routes = [
   {
     name: "home",
@@ -30,6 +30,12 @@ const routes = [
     path: "/accessDenied",
     component: AccessDenied,
     meta: { requireAuth: true },
+  },
+  {
+    name: "notApproved",
+    path: "/notApproved",
+    component: NotApproved,
+    meta: { requireAuth: true, roles: [ROLES.NOT_APPROVED] },
   },
   {
     name: "login",

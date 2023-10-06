@@ -43,9 +43,15 @@ export const userStateStore = defineStore("store", {
         TokenService.saveToken(token);
         this.isAuthenticated = true;
         console.log(toRaw(this.user));
-        showSuccessToast("Welcome " + this.user.name);
-        // console.log(toRaw(this.user));
-        router.push("/");
+        // different route for notApproved store manager
+        if (this.user.role == "notApproved") {
+          showSuccessToast("Your application is not still approved");
+          router.push("/notApproved");
+        } else {
+          showSuccessToast("Welcome " + this.user.name);
+          // console.log(toRaw(this.user));
+          router.push("/");
+        }
       } catch (e) {
         showErrorToast(e.response.data.message);
         console.log(e.response.data.message);
@@ -67,8 +73,16 @@ export const userStateStore = defineStore("store", {
         this.user = JSON.parse(atob(response.data.token.split(".")[1])).sub;
         this.isAuthenticated = true;
         console.log(this.user);
-        showSuccessToast(`Welcome to Grocery Store. ${this.user.name}`);
-        router.push("/");
+
+        // till above is fine but now changing the toast and router for notApproved Store Manager
+        if (role == "storeManager") {
+          showSuccessToast(`Your application is submitted. ${this.user.name}`);
+          // push to not approved screen
+          router.push("/notApproved");
+        } else {
+          showSuccessToast(`Welcome to Grocery Store. ${this.user.name}`);
+          router.push("/");
+        }
       } catch (e) {
         showErrorToast(e.response.data.message);
       }

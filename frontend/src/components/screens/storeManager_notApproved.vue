@@ -1,12 +1,11 @@
 <template>
     <div>
-        You don't have access to that page
-        Go Home <RouterLink to="/">Home</RouterLink>
+        Your store manager application is yet to be accepted
     </div>
 </template>
 <script>
 export default {
-    name: "StoreManagerNotAprrovedScreen"
+    name: "NotApproved"
 }
 </script>
 

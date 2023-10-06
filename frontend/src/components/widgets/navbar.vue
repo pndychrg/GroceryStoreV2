@@ -16,17 +16,27 @@
                     </li>
                 </ul>
                 <ul class="navbar-nav ml-auto" v-if="isAuthenticated">
-                    <li class="nav-item">
-                        <RouterLink :to='dashboardLink' class="btn btn-dark profile-button">
-                            <font-awesome-icon :icon="['fas', 'user']" class="faa-horizontal animated-hover" />
-                        </RouterLink>
-                    </li>
-                    <li class="nav-item">
-                        <button @click="logoutMethod" class="nav-link">
-                            <font-awesome-icon :icon="['fas', 'arrow-right-from-bracket']"
-                                class="faa-horizontal animated-hover" />
-                        </button>
-                    </li>
+                    <div class="row" v-if="isNotApproved">
+                        <li class="nav-item">
+                            <button @click="logoutMethod" class="nav-link">
+                                <font-awesome-icon :icon="['fas', 'arrow-right-from-bracket']"
+                                    class="faa-horizontal animated-hover" />
+                            </button>
+                        </li>
+                    </div>
+                    <div class="row" v-else>
+                        <li class="nav-item col">
+                            <RouterLink :to='dashboardLink' class="btn btn-dark profile-button">
+                                <font-awesome-icon :icon="['fas', 'user']" class="faa-horizontal animated-hover" />
+                            </RouterLink>
+                        </li>
+                        <li class="nav-item col">
+                            <button @click="logoutMethod" class="nav-link">
+                                <font-awesome-icon :icon="['fas', 'arrow-right-from-bracket']"
+                                    class="faa-horizontal animated-hover" />
+                            </button>
+                        </li>
+                    </div>
                 </ul>
             </div>
         </div>
@@ -46,6 +56,14 @@ export default {
         const routeName = ref(router.currentRoute.value.name);
         // Use a computed property for isAuthenticated
         const isAuthenticated = computed(() => store.isAuthenticated);
+        const isNotApproved = computed(() => {
+            // checking if the roles is "notApproved"
+            if (store.user.role == "notApproved") {
+                return true;
+            } else {
+                return false;
+            }
+        })
         const logoutMethod = store.logoutUser;
         // calculating the dashboard link according to user role
         const dashboardLink = computed(() => {
@@ -55,7 +73,8 @@ export default {
             routeName,
             isAuthenticated,
             logoutMethod,
-            dashboardLink
+            dashboardLink,
+            isNotApproved
         };
     },
     components: { RouterLink }
