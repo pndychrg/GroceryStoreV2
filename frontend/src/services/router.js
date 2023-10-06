@@ -4,6 +4,7 @@ import LoginComponent from "../components/screens/login.vue";
 import RegisterComponent from "../components/screens/register.vue";
 import { ROLES } from "./roles";
 import { userStateStore } from "./stateManager";
+import SectionsPage from "../components/screens/admin/sections.vue";
 import AdminDashboard from "../components/screens/admin/dashboard.vue";
 import AccessDenied from "../components/screens/accessDenied.vue";
 import NotApproved from "../components/screens/storeManager_notApproved.vue";
@@ -17,6 +18,13 @@ const routes = [
       requireAuth: true,
       roles: [ROLES.ADMIN, ROLES.STORE_MANAGER, ROLES.USER],
     },
+  },
+  {
+    name: "sectionsPage",
+    path: "/sections",
+    alias: "/sections",
+    component: SectionsPage,
+    meta: { requireAuth: true, roles: [ROLES.ADMIN, ROLES.STORE_MANAGER] },
   },
   {
     name: "adminDashboard",
