@@ -3,7 +3,6 @@ from flask_restful import Resource, request, reqparse, abort
 from flask_jwt_extended import create_access_token, jwt_required
 from lib.methods.validators import Validators
 from lib.db_utils.user_db import UserDB
-from flask import make_response, jsonify
 
 
 # initializing User DB methods
@@ -28,7 +27,7 @@ class UserAPI(Resource):
         if (Validators.username(data['username']) == False):
             return {'message': "username can only contain alphabets and numbers"}, 400
         # if all validations are successfull then add in database
-        response = userDB.registerUser(
+        response, message = userDB.registerUser(
             name=data['name'], username=data['username'], password=data['password'])
         if response:
             # generating the token according to user
@@ -36,7 +35,7 @@ class UserAPI(Resource):
                 identity=response.toJson(), expires_delta=timedelta(hours=8))
             return {"token": token}, 200
         else:
-            return {'message': "username already in use"}, 400
+            return {'message': message}, 400
 
     def get(self):
         username = request.args.get("username")
