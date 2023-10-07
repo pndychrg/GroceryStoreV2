@@ -22,10 +22,13 @@ def create_app():
     # importing all api resources
     from lib.api.user import UserAPI
     from lib.api.sections import SectionAPI, GetAllSections
+    from lib.api.approve_managers import ApproveManagerAPI
+
     # registering all the api resources
     api.add_resource(UserAPI, '/user')
     api.add_resource(SectionAPI, '/section')
     api.add_resource(GetAllSections, '/sections')
+    api.add_resource(ApproveManagerAPI, '/unapproved')
     # api docs init code
     SWAGGER_URL = '/api/docs'
     API_URL = '/static/docs/swagger.yaml'

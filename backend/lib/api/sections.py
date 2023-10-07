@@ -2,7 +2,7 @@ from flask_restful import Resource, request, reqparse
 from flask_jwt_extended import get_jwt_identity, jwt_required
 from lib.db_utils.sections import SectionDB
 from lib.methods.validators import Validators
-from lib.methods.decorators import checkJWTForAdmin
+from lib.methods.decorators import checkJWTForAdminOrManager
 # init Section DB
 sectionDB = SectionDB()
 
@@ -24,7 +24,7 @@ update_section_parser.add_argument(
 class SectionAPI(Resource):
 
     @jwt_required()
-    @checkJWTForAdmin
+    @checkJWTForAdminOrManager
     def get(self):
         # getting the section id from the request parameters
         section_id = request.args.get("section_id")
@@ -35,7 +35,7 @@ class SectionAPI(Resource):
             return {'message': message}, 400
 
     @jwt_required()
-    @checkJWTForAdmin
+    @checkJWTForAdminOrManager
     def post(self):
         current_user = get_jwt_identity()
         data = create_section_parser.parse_args()
@@ -52,7 +52,7 @@ class SectionAPI(Resource):
             return {"message": message}, 400
 
     @jwt_required()
-    @checkJWTForAdmin
+    @checkJWTForAdminOrManager
     def put(self):
         # getting section id from params
         section_id = request.args.get("section_id")
@@ -72,7 +72,7 @@ class SectionAPI(Resource):
             return {"message": message}, 400
 
     @jwt_required()
-    @checkJWTForAdmin
+    @checkJWTForAdminOrManager
     def delete(self):
         # getting the section id from params
         section_id = request.args.get("section_id")
@@ -92,7 +92,7 @@ class SectionAPI(Resource):
 class GetAllSections(Resource):
 
     @jwt_required()
-    @checkJWTForAdmin
+    @checkJWTForAdminOrManager
     def get(self):
         user = get_jwt_identity()
         print(user, flush=True)

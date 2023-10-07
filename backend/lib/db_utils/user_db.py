@@ -41,3 +41,15 @@ class UserDB:
             error = str(e.__dict__['orig'])
             print(error, flush=True)
             raise e
+
+    def getUnapproved(self):
+        # try catch for sqlalchemy errors
+        try:
+            unapprovedStoreManagers = User.query.filter_by(
+                role='notApproved').all()
+            if unapprovedStoreManagers:
+                return unapprovedStoreManagers
+        except SQLAlchemyError as e:
+            error = str(e.__dict__['orig'])
+            print(error, flush=True)
+            raise e
