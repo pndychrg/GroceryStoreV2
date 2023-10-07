@@ -1,6 +1,9 @@
 <template>
     <nav class="navbar navbar-expand fixed-top">
         <div class="container-fluid">
+            <button v-if="isAuthenticated" @click="showSidebar" id="sidebarButton" class="btn ">
+                <font-awesome-icon :icon="['fas', 'bars']" class="faa-bounce animated-hover" />
+            </button>
             <RouterLink to="/" class="navbar-brand">
                 <img src="@/assets/logo.png" alt="Bootstrap" width="30" height="24">
                 Grocery Store
@@ -41,15 +44,20 @@
             </div>
         </div>
     </nav>
+    <teleport to="#modal-root">
+        <Sidebar v-show="isSidebarShown" @close="showSidebar" />
+    </teleport>
 </template>
 
 <script>
 import { ref, computed } from 'vue';
 import { RouterLink, useRouter } from 'vue-router';
 import { userStateStore } from '@/services/stateManager';
+import Sidebar from '@/components/widgets/sidebar/sidebar.vue'
 export default {
     // eslint-disable-next-line vue/multi-word-component-names
     name: 'Navbar',
+    components: { RouterLink, Sidebar },
     setup() {
         const store = userStateStore();
         const router = useRouter();
@@ -69,15 +77,24 @@ export default {
         const dashboardLink = computed(() => {
             return '/' + store.user.role + '/dashboard'
         });
+
+
+        //sidebar setup
+        const isSidebarShown = ref(false);
+        const showSidebar = () => {
+            isSidebarShown.value = !isSidebarShown.value
+        }
+
         return {
             routeName,
             isAuthenticated,
             logoutMethod,
             dashboardLink,
-            isNotApproved
+            isNotApproved,
+            isSidebarShown,
+            showSidebar
         };
     },
-    components: { RouterLink }
 }
 </script>
 

@@ -6,6 +6,7 @@ import {
   faXmark,
   faTrashCan,
   faPenToSquare,
+  faBars,
 } from "@fortawesome/free-solid-svg-icons";
 
 // adding icons to library
@@ -15,5 +16,6 @@ export const iconLib = library.add(
   faUser,
   faXmark,
   faTrashCan,
-  faPenToSquare
+  faPenToSquare,
+  faBars
 );
