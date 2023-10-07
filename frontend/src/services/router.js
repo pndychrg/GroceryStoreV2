@@ -4,7 +4,7 @@ import LoginComponent from "../components/screens/login.vue";
 import RegisterComponent from "../components/screens/register.vue";
 import { ROLES } from "./roles";
 import { userStateStore } from "./stateManager";
-import SectionsPage from "../components/screens/admin/sections.vue";
+import SectionsPage from "../components/screens/sections.vue";
 import AdminDashboard from "../components/screens/admin/dashboard.vue";
 import AccessDenied from "../components/screens/accessDenied.vue";
 import NotApproved from "../components/screens/storeManager_notApproved.vue";

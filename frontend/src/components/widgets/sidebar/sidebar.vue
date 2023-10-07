@@ -8,7 +8,11 @@
             </h2>
             <!-- here, three sections of buttons/tags would be present seperate for user/admin/storemanager -->
             <!-- ADMIN Sidebar -->
-            <SidebarLink route="/sections" tag="Sections" icon="arrow-right-from-bracket" @close="$emit('close')" />
+            <div v-if="store.user?.role == 'admin'">
+
+                <SidebarLink v-for="link in adminLinks" :key="link" :route="link.route" :tag="link.tag" :icon="link.icon"
+                    @close="$emit('close')" />
+            </div>
             <button @click="$emit('close')" class="btn text-start btn-danger ">
                 <font-awesome-icon :icon="['fas', 'xmark']" /> Close
             </button>
@@ -36,9 +40,20 @@ export default {
                 emit('close');
             }
         }
+
+        // Creating admin links here
+        const adminLinks = [
+            {
+                route: '/sections',
+                tag: "Sections",
+                icon: 'arrow-right-from-bracket'
+            }
+        ]
+
         return {
             closeSidebar,
             store,
+            adminLinks
         }
     }
 }
