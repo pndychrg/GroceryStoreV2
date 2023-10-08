@@ -7,6 +7,7 @@ def checkJWTForAdmin(f):
     @wraps(f)
     def wrap(*args, **kwargs):
         current_user = get_jwt_identity()
+        print(current_user.get('role'), flush=True)
         if current_user.get("role") == "admin":
             return f(*args, **kwargs)
         else:

@@ -47,6 +47,11 @@ export default {
                 route: '/sections',
                 tag: "Sections",
                 icon: 'arrow-right-from-bracket'
+            },
+            {
+                route: '/admin/approveManager',
+                tag: "Approve Manager",
+                icon: 'arrow-right-from-bracket'
             }
         ]
 

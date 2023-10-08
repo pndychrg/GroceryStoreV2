@@ -35,7 +35,7 @@ import SectionForm from '@/components/widgets/forms/section_form.vue'
 
 import { onMounted, ref } from 'vue';
 import { sectionMethods } from '@/services/HTTPRequests/sectionMethods'
-import SectionCard from '@/components/widgets/section_card.vue';
+import SectionCard from '@/components/widgets/cards/section_card.vue';
 export default {
     name: 'SectionsPage',
     components: {

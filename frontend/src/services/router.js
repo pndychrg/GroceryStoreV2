@@ -8,6 +8,7 @@ import SectionsPage from "../components/screens/sections.vue";
 import AdminDashboard from "../components/screens/admin/dashboard.vue";
 import AccessDenied from "../components/screens/accessDenied.vue";
 import NotApproved from "../components/screens/storeManager_notApproved.vue";
+import ApproveManager from "../components/screens/admin/approve_manager.vue";
 const routes = [
   {
     name: "home",
@@ -44,6 +45,12 @@ const routes = [
     path: "/notApproved",
     component: NotApproved,
     meta: { requireAuth: true, roles: [ROLES.NOT_APPROVED] },
+  },
+  {
+    name: "approveManager",
+    path: "/admin/approveManager",
+    component: ApproveManager,
+    meta: { requireAuth: true, roles: [ROLES.ADMIN] },
   },
   {
     name: "login",
