@@ -1,5 +1,6 @@
-import { showSuccessToast } from "@/static/js/toasts";
+import { showInfoToast } from "@/static/js/toasts";
 import {
+  httpDeleteRequest,
   // httpDeleteRequest,
   httpGetAllRequest,
   httpPostRequest,
@@ -22,7 +23,21 @@ export const unapprovedManagersMethods = {
         manager_id,
       });
       if (response) {
-        showSuccessToast(response.message);
+        showInfoToast(response.message);
+      }
+      return response;
+    } catch (e) {
+      console.log(e);
+    }
+  },
+
+  async rejectManager(manager_id) {
+    try {
+      const response = await httpDeleteRequest("/unapproved", {
+        manager_id: manager_id,
+      });
+      if (response) {
+        showInfoToast(response.message);
       }
       return response;
     } catch (e) {

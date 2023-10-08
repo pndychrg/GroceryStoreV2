@@ -1,7 +1,7 @@
 // roles.js
 export const ROLES = {
   USER: "user",
-  STORE_MANAGER: "store_manager",
+  STORE_MANAGER: "manager",
   ADMIN: "admin",
-  NOT_APPROVED: "notApproved",
+  NOT_APPROVED: "unApproved",
 };

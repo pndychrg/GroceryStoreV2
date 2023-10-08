@@ -1,15 +1,14 @@
 <template>
     <div>
         <h3>Approve Manager</h3>
-        <div class="managers-wrapper row m-2 ">
-            <div v-if="unapprovedManagers.length > 0">
-                <div v-for="manager in unapprovedManagers" :key="manager.id" class="managerCard card">
-                    <ManagerCard :managerData="manager" @approved="handleApproval(manager.id)" />
-                </div>
+        <div class="managers-wrapper row m-2 " v-if="unapprovedManagers?.length > 0">
+            <div v-for="manager in unapprovedManagers" :key="manager.id" class="managerCard card">
+                <ManagerCard :managerData="manager" @approved="handleApproval(manager.id)"
+                    @rejected="handleRejection(manager.id)" />
             </div>
-            <div v-else>
-                No manager requested
-            </div>
+        </div>
+        <div v-else>
+            No manager requested
         </div>
     </div>
 </template>
@@ -37,14 +36,18 @@ export default {
         }
 
         const handleApproval = async (manager_id) => {
-            try {
-                const response = await unapprovedManagersMethods.approveManager(manager_id);
-                // if manager is approved then remove it from frontend list
-                unapprovedManagers.value = unapprovedManagers.value.filter(manager => manager.id != manager_id)
-                console.log(response);
-            } catch (e) {
-                console.error(e)
-            }
+            const response = await unapprovedManagersMethods.approveManager(manager_id);
+            // if manager is approved then remove it from frontend list
+            unapprovedManagers.value = unapprovedManagers.value.filter(manager => manager.id != manager_id)
+            console.log(response);
+
+        }
+
+        const handleRejection = async (manager_id) => {
+            const response = await unapprovedManagersMethods.rejectManager(manager_id);
+            // TODO remove manager if deleted
+            unapprovedManagers.value = unapprovedManagers.value.filter(manager => manager.id != manager_id)
+            console.log(response);
         }
 
         onMounted(() => {
@@ -53,7 +56,8 @@ export default {
 
         return {
             unapprovedManagers,
-            handleApproval
+            handleApproval,
+            handleRejection
         }
     },
 }

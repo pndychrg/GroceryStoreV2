@@ -5,7 +5,7 @@
             <h6 class="card-text text-secondary">{{ managerData.username }}</h6>
             <hr>
             <div class="d-flex justify-content-end">
-                <button class="btn">
+                <button class="btn" @click="$emit('rejected')">
                     <font-awesome-icon :icon="['fas', 'xmark']" class="faa-horizontal animated-hover"
                         style="color: #c01c28;" />
                 </button>
