@@ -34,3 +34,17 @@ class ApproveManagerAPI(Resource):
             return {'message': message}, 200
         else:
             return {'message': message}, 400
+
+    @jwt_required()
+    @checkJWTForAdmin
+    def delete(self):
+        # getting the manager_id from request args
+        manager_id = request.args.get("manager_id")
+        if manager_id:
+            response, message = userDB.rejectManager(manager_id=manager_id)
+            if response:
+                return {'message': message}, 200
+            else:
+                return {'message': message}, 400
+        else:
+            return {'message': "manager_id not found"}, 400

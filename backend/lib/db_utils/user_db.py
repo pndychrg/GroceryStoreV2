@@ -66,3 +66,18 @@ class UserDB:
             error = str(e.__dict__['orig'])
             print(error, flush=True)
             raise e
+
+    def rejectManager(self, manager_id):
+        try:
+            manager = User.query.get(manager_id)
+            if manager and manager.role == 'unApproved':
+                # TODO here I'm deleting the manager outright
+                # TODO change this in future
+                db.session.delete(manager)
+                db.session.commit()
+                return True, "Store Manager rejected"
+            return False, "manager not found"
+        except SQLAlchemyError as e:
+            error = str(e.__dict__['orig'])
+            print(error, flush=True)
+            raise e
