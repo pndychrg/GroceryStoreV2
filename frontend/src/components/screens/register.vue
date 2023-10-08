@@ -8,7 +8,7 @@
                         autocomplete="off" checked>
                     <label class="btn btn-outline-primary" for="userChekced" style="width: 40%;">User</label>
 
-                    <input type="radio" class="btn-check" v-model="state.role" value="notApproved" name="btnradio"
+                    <input type="radio" class="btn-check" v-model="state.role" value="unApproved" name="btnradio"
                         id="storeManagerChecked" autocomplete="off">
                     <label class="btn btn-outline-secondary" for="storeManagerChecked" style="width: 50;">Store
                         Manager</label>
@@ -51,7 +51,6 @@ export default {
             password: '',
             role: "user",
         });
-
 
         async function submitHandler() {
             console.log(state.role)

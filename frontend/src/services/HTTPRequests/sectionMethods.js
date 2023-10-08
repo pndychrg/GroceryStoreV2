@@ -2,6 +2,7 @@ import {
   httpDeleteRequest,
   httpGetAllRequest,
   httpPostRequest,
+  htttpPutRequest,
 } from "../axios";
 import { showSuccessToast } from "@/static/js/toasts";
 
@@ -34,6 +35,21 @@ export const sectionMethods = {
       return response;
     } catch (e) {
       console.log(e);
+    }
+  },
+
+  async updateSection(section_id, data) {
+    try {
+      const response = await htttpPutRequest("/section", data, {
+        section_id: section_id,
+      });
+      if (response) {
+        showSuccessToast("Section Updated");
+      }
+      return response;
+    } catch (e) {
+      console.log(e);
+      return null;
     }
   },
 };

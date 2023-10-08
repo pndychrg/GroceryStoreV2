@@ -6,11 +6,12 @@
             <hr>
             <div class="d-flex justify-content-end">
                 <button class="btn">
-                    <font-awesome-icon :icon="['fas', 'trash-can']" class="faa-horizontal animated-hover"
+                    <font-awesome-icon :icon="['fas', 'xmark']" class="faa-horizontal animated-hover"
                         style="color: #c01c28;" />
                 </button>
-                <button class="btn ">
-                    <font-awesome-icon :icon="['fas', 'pen-to-square']" class="faa-horizontal animated-hover" />
+                <button class="btn " @click="$emit('approved')">
+                    <font-awesome-icon :icon="['fas', 'check']" class="faa-horizontal animated-hover"
+                        style="color: green;" />
                 </button>
             </div>
         </div>

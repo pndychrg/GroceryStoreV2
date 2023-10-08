@@ -46,9 +46,22 @@ class UserDB:
         # try catch for sqlalchemy errors
         try:
             unapprovedStoreManagers = User.query.filter_by(
-                role='notApproved').all()
+                role='unApproved').all()
             if unapprovedStoreManagers:
                 return unapprovedStoreManagers
+        except SQLAlchemyError as e:
+            error = str(e.__dict__['orig'])
+            print(error, flush=True)
+            raise e
+
+    def approveManager(self, manager_id):
+        try:
+            manager = User.query.get(manager_id)
+            if manager and manager.role == 'unApproved':
+                manager.role = 'manager'
+                db.session.commit()
+                return True, "Store Manager Accepted"
+            return False, "manager not found"
         except SQLAlchemyError as e:
             error = str(e.__dict__['orig'])
             print(error, flush=True)

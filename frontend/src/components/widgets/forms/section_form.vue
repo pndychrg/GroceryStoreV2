@@ -74,6 +74,9 @@ export default {
                     emit('section-added', response)
                 }
             } else {
+                const response = await sectionMethods.updateSection(props.initialData.id, dataObject)
+                // console.log(response);
+                emit('section-edited', response)
                 console.log("Update button clicked")
             }
 

@@ -2,8 +2,13 @@
     <div>
         <h3>Approve Manager</h3>
         <div class="managers-wrapper row m-2 ">
-            <div v-for="manager in unapprovedManagers" :key="manager.id" class="managerCard card">
-                <ManagerCard :managerData="manager" />
+            <div v-if="unapprovedManagers.length > 0">
+                <div v-for="manager in unapprovedManagers" :key="manager.id" class="managerCard card">
+                    <ManagerCard :managerData="manager" @approved="handleApproval(manager.id)" />
+                </div>
+            </div>
+            <div v-else>
+                No manager requested
             </div>
         </div>
     </div>
@@ -25,11 +30,20 @@ export default {
 
         const fetchUnapprovedManagers = async () => {
             try {
-                const unapprovedManagersFetched = await unapprovedManagersMethods.fetchAllUnapprovedManagers()
-                unapprovedManagers.value = unapprovedManagersFetched
-                console.log(unapprovedManagers.value)
+                unapprovedManagers.value = await unapprovedManagersMethods.fetchAllUnapprovedManagers()
             } catch (e) {
                 console.error("Error fetching managers")
+            }
+        }
+
+        const handleApproval = async (manager_id) => {
+            try {
+                const response = await unapprovedManagersMethods.approveManager(manager_id);
+                // if manager is approved then remove it from frontend list
+                unapprovedManagers.value = unapprovedManagers.value.filter(manager => manager.id != manager_id)
+                console.log(response);
+            } catch (e) {
+                console.error(e)
             }
         }
 
@@ -38,7 +52,8 @@ export default {
         })
 
         return {
-            unapprovedManagers
+            unapprovedManagers,
+            handleApproval
         }
     },
 }

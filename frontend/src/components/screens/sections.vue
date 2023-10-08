@@ -69,7 +69,13 @@ export default {
             selectedSection.value = null
         }
 
-        const handleEditSectionEvent = (editedSection) => {
+        const handleEditSectionEvent = async (editedSection) => {
+            sections.value.map((section, index) => {
+                if (section.id == editedSection?.id) {
+                    sections.value[index] = editedSection
+                }
+            })
+            formClosed()
             console.log("Section edited", editedSection);
         }
 

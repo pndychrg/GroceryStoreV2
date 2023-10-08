@@ -6,6 +6,11 @@ from lib.methods.decorators import checkJWTForAdmin
 # init User DB
 userDB = UserDB()
 
+# approveManager
+approveManager_parser = reqparse.RequestParser()
+approveManager_parser.add_argument(
+    "manager_id", type=int, help="This field cannot be blank", required=True)
+
 
 class ApproveManagerAPI(Resource):
 
@@ -13,6 +18,19 @@ class ApproveManagerAPI(Resource):
     @checkJWTForAdmin
     def get(self):
         unApprovedUser = userDB.getUnapproved()
-        response = [user.toJson() for user in unApprovedUser]
-
+        if unApprovedUser:
+            response = [user.toJson() for user in unApprovedUser]
+        else:
+            response = []
         return response, 200
+
+    @jwt_required()
+    @checkJWTForAdmin
+    def post(self):
+        data = approveManager_parser.parse_args()
+        response, message = userDB.approveManager(
+            manager_id=data['manager_id'])
+        if response:
+            return {'message': message}, 200
+        else:
+            return {'message': message}, 400

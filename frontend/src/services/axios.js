@@ -18,6 +18,7 @@ export const httpGetAllRequest = async (path) => {
 };
 
 export const httpPostRequest = async (path, data) => {
+  console.log("response data", data);
   try {
     const response = await axios.post(path, data);
     return response.data;
@@ -25,6 +26,22 @@ export const httpPostRequest = async (path, data) => {
     console.log(e.response.data.message);
     showErrorToast(e.response.data.message);
     return null;
+  }
+};
+
+// export const httpDeleteRequest = async (path,data) => {
+
+// }
+export const htttpPutRequest = async (path, data, params) => {
+  try {
+    const response = await axios.put(path, data, {
+      params: params,
+    });
+    return response.data;
+  } catch (e) {
+    console.log(e.response.data.message);
+    showErrorToast(e.response.data.message);
+    throw new Error(e.response.data.message);
   }
 };
 
