@@ -57,6 +57,7 @@ class SectionDB:
         # because if section id is same, then essentially same section name is being supplied
         if existingSection and (existingSection.id != int(section_id)):
             return False, "A Section already exists with new name provided"
+        print("section Id", section_id, flush=True)
         section, message = self.getSectionById(section_id=section_id)
         if section:
             section.name = name

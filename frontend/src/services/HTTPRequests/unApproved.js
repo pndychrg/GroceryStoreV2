@@ -14,6 +14,7 @@ export const unapprovedManagersMethods = {
       return data;
     } catch (e) {
       console.log(e);
+      return null;
     }
   },
 

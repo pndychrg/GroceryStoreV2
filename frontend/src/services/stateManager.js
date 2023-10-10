@@ -4,6 +4,7 @@ import router from "./router";
 import { TokenService } from "./tokenService";
 import { showSuccessToast, showErrorToast } from "@/static/js/toasts";
 import { toRaw } from "vue";
+import { updateToken } from "./axios";
 
 export const userStateStore = defineStore("store", {
   state: () => {
@@ -42,6 +43,7 @@ export const userStateStore = defineStore("store", {
         this.user = JSON.parse(atob(token.split(".")[1])).sub;
         TokenService.saveToken(token);
         this.isAuthenticated = true;
+        updateToken();
         console.log(toRaw(this.user));
         // different route for notApproved store manager
         if (this.user.role == "notApproved") {
@@ -53,8 +55,8 @@ export const userStateStore = defineStore("store", {
           router.push("/");
         }
       } catch (e) {
-        showErrorToast(e.response.data.message);
-        console.log(e.response.data.message);
+        showErrorToast(e.response.data.msg);
+        console.log(e.response.data.msg);
       }
     },
 
@@ -84,7 +86,7 @@ export const userStateStore = defineStore("store", {
           router.push("/");
         }
       } catch (e) {
-        showErrorToast(e.response.data.message);
+        showErrorToast(e.response.data.msg);
       }
     },
 

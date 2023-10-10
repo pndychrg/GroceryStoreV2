@@ -18,6 +18,7 @@ class ApproveSectionRequests(Resource):
             # fetch the sectionRequest from database
             sectionRequest, message = sectionDB.getSectionRequestById(
                 section_id=section_id)
+            # print(sectionRequest.toJson(), flush=True)
             # check what is the request
             # if the section request is add then add the sectionRequest to section database
             if sectionRequest.request == 'add':
@@ -50,7 +51,8 @@ class ApproveSectionRequests(Resource):
                 if response:
                     # as it is approved then clear it from the sectionRequest table
                     sectionDB.deleteSectionRequestById(sectionRequest.id)
-                    return response.toJson(), 200
+                    # here response will be True
+                    return response, 200
                 else:
                     return {'msg': message}, 400
 

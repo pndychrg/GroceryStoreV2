@@ -89,8 +89,6 @@ class GetAllSections(Resource):
     @jwt_required()
     @checkJWTForAdminOrManager
     def get(self):
-        user = get_jwt_identity()
-        print(user, flush=True)
         all_sections = sectionDB.getAllSections()
         # creating the json response
         response_json = [section.toJson() for section in all_sections]
@@ -134,7 +132,6 @@ class SectionRequestsAPI(Resource):
         section_id = request.args.get("section_id")
         if section_id:
             response, msg = sectionDB.getSectionRequestById(section_id)
-
             if response:
                 return response.toJson(), 200
             else:
@@ -145,6 +142,5 @@ class SectionRequestsAPI(Resource):
             if response:
                 return [section.toJson() for section in response], 200
             else:
-                return {'msg': msg}, 400
-
+                return [], 200
     # TODO add sectionRequest put and delete methods here for managers to edit the sectionRequest before being updated

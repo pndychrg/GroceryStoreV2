@@ -3,9 +3,13 @@ import axios from "axios";
 import { TokenService } from "./tokenService";
 
 axios.defaults.baseURL = "http://127.0.0.1:5000";
-axios.defaults.headers.common["Authorization"] =
-  "Bearer " + TokenService.getToken();
 
+// Function to update the auth header with the token
+const updateAuthHeader = () => {
+  axios.defaults.headers.common["Authorization"] =
+    "Bearer " + TokenService.getToken();
+};
+updateAuthHeader();
 export const httpGetAllRequest = async (path) => {
   try {
     const response = await axios.get(path);
@@ -14,6 +18,19 @@ export const httpGetAllRequest = async (path) => {
     console.log(e);
     showErrorToast(e.response.data.msg);
     throw new Error(e.response.data.msg);
+  }
+};
+
+export const httpGetRequest = async (path, params) => {
+  try {
+    const response = await axios.get(path, {
+      params: params,
+    });
+    return response.data;
+  } catch (e) {
+    console.log(e);
+    showErrorToast(e.response.data.msg);
+    return null;
   }
 };
 
@@ -28,9 +45,6 @@ export const httpPostRequest = async (path, data) => {
   }
 };
 
-// export const httpDeleteRequest = async (path,data) => {
-
-// }
 export const htttpPutRequest = async (path, data, params) => {
   try {
     const response = await axios.put(path, data, {
@@ -55,4 +69,8 @@ export const httpDeleteRequest = async (path, params) => {
     showErrorToast(e.response.data.msg);
     throw new Error(e.response.data.msg);
   }
+};
+
+export const updateToken = () => {
+  updateAuthHeader();
 };

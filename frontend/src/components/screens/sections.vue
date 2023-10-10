@@ -23,7 +23,7 @@
                 Section Requests
             </h2>
             <div v-for="section in sectionRequests" :key="section.id" class="SectionCard card">
-                <SectionCard :sectionData="section" />
+                <SectionRequestCard :sectionRequestData="section" @sectionrequest-approved="handleApprovedSectionUpdate" />
             </div>
         </div>
 
@@ -43,12 +43,14 @@ import { userStateStore } from '@/services/stateManager';
 import { onMounted, ref } from 'vue';
 import { sectionMethods } from '@/services/HTTPRequests/sectionMethods'
 import SectionCard from '@/components/widgets/cards/section_card.vue';
+import SectionRequestCard from '@/components/widgets/cards/section_request_card.vue'
 export default {
     name: 'SectionsPage',
     components: {
         SectionCard,
         SectionForm,
         ConfirmationModal,
+        SectionRequestCard,
     },
     setup() {
         const store = userStateStore()
@@ -66,7 +68,27 @@ export default {
             isSectionFormShown.value = true
             selectedSection.value = section
         }
+        const handleApprovedSection = (approvedSection, sectionRequestData) => {
 
+
+            if (sectionRequestData.request == 'add') {
+                sections.value.unshift(approvedSection);
+            }
+            else if (sectionRequestData.request == 'edit') {
+                sections.value.map((section, index) => {
+                    if (section.id == approvedSection?.id) {
+                        sections.value[index] = approvedSection
+
+                    }
+                })
+            }
+            else {
+                sections.value = sections.value.filter(s => s.id !== sectionRequestData.reg_section_id);
+            }
+            // removing the section requeset from section request list
+            sectionRequests.value = sectionRequests.value.filter(s => s !== sectionRequestData);
+
+        }
         const formClosed = () => {
             isSectionFormShown.value = false
             selectedSection.value = null
@@ -143,6 +165,7 @@ export default {
             showAddSectionForm,
             showEditSectionForm,
             selectedSection,
+            handleApprovedSectionUpdate: handleApprovedSection,
         }
     }
 }
