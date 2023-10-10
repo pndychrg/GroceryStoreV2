@@ -24,7 +24,7 @@ update_section_parser.add_argument(
 class SectionAPI(Resource):
 
     @jwt_required()
-    @checkJWTForAdminOrManager
+    @checkJWTForAdmin
     def get(self):
         # getting the section id from the request parameters
         section_id = request.args.get("section_id")
@@ -35,7 +35,7 @@ class SectionAPI(Resource):
             return {'msg': msg}, 400
 
     @jwt_required()
-    @checkJWTForAdminOrManager
+    @checkJWTForAdmin
     def post(self):
         data = create_section_parser.parse_args()
         response, msg = sectionDB.addSection(
@@ -47,7 +47,7 @@ class SectionAPI(Resource):
             return {"msg": msg}, 400
 
     @jwt_required()
-    @checkJWTForAdminOrManager
+    @checkJWTForAdmin
     def put(self):
         # getting section id from params
         section_id = request.args.get("section_id")
@@ -67,7 +67,7 @@ class SectionAPI(Resource):
             return {"msg": msg}, 400
 
     @jwt_required()
-    @checkJWTForAdminOrManager
+    @checkJWTForAdmin
     def delete(self):
         # getting the section id from params
         section_id = request.args.get("section_id")
@@ -120,7 +120,6 @@ class SectionRequestsAPI(Resource):
     @checkJWTForManager
     def post(self):
         data = create_section_request_parser.parse_args()
-
         response, msg = sectionDB.addSectionRequest(
             name=data['name'], unit=data['unit'], request=data['request'], reg_section_id=data['reg_section_id'])
 

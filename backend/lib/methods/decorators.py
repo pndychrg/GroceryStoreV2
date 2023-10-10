@@ -11,7 +11,7 @@ def checkJWTForAdmin(f):
         if current_user.get("role") == "admin":
             return f(*args, **kwargs)
         else:
-            return {"message": "Access Denied for Resource"}, 401
+            return {"msg": "Access Denied for Resource"}, 401
     return wrap
 
 
@@ -25,7 +25,7 @@ def checkJWTForAdminOrManager(f):
 
         else:
             return {
-                "message": "Access Denied for Resource"
+                "msg": "Access Denied for Resource"
             }, 401
     return wrap
 
@@ -40,6 +40,6 @@ def checkJWTForManager(f):
 
         else:
             return {
-                'message': 'Access Denied for Resource'
+                'msg': 'Access Denied for Resource'
             }, 401
     return wrap

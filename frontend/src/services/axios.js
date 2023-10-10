@@ -12,19 +12,18 @@ export const httpGetAllRequest = async (path) => {
     return response.data;
   } catch (e) {
     console.log(e);
-    showErrorToast(e.response.data.message);
-    throw new Error(e.response.data.message);
+    showErrorToast(e.response.data.msg);
+    throw new Error(e.response.data.msg);
   }
 };
 
 export const httpPostRequest = async (path, data) => {
-  console.log("response data", data);
   try {
     const response = await axios.post(path, data);
     return response.data;
   } catch (e) {
-    console.log(e.response.data.message);
-    showErrorToast(e.response.data.message);
+    console.log(e.response);
+    showErrorToast(e.response.data.msg);
     return null;
   }
 };
@@ -39,9 +38,9 @@ export const htttpPutRequest = async (path, data, params) => {
     });
     return response.data;
   } catch (e) {
-    console.log(e.response.data.message);
-    showErrorToast(e.response.data.message);
-    throw new Error(e.response.data.message);
+    console.log(e.response.data.msg);
+    showErrorToast(e.response.data.msg);
+    throw new Error(e.response.data.msg);
   }
 };
 
@@ -52,8 +51,8 @@ export const httpDeleteRequest = async (path, params) => {
     });
     return response.data;
   } catch (e) {
-    console.log(e.response.data.message);
-    showErrorToast(e.response.data.message);
-    throw new Error(e.response.data.message);
+    console.log(e.response.data.msg);
+    showErrorToast(e.response.data.msg);
+    throw new Error(e.response.data.msg);
   }
 };

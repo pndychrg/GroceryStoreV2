@@ -2,6 +2,7 @@
     <div class="admin-dashboard">
         <h3>Sections Page</h3>
         <div class=" row m-2 border-dark-subtle sections-wrapper border-2 border">
+            <!-- TODO check here why row is used -->
             <div class="row">
                 <h2 class="col text-start">
                     Sections
@@ -15,10 +16,16 @@
                 <SectionCard :sectionData="section" @deleteSection="showDelete(section)"
                     @editSection="showEditSectionForm(section)" />
             </div>
-
-
         </div>
 
+        <div class="row m-2 border-dark-subtle sections-wrapper border border-2">
+            <h2 class="text-start">
+                Section Requests
+            </h2>
+            <div v-for="section in sectionRequests" :key="section.id" class="SectionCard card">
+                <SectionCard :sectionData="section" />
+            </div>
+        </div>
 
         <teleport to="#modal-root">
             <ConfirmationModal v-show="isDeleteModalShown" deleteElement="Section" :element="selectedSection"
@@ -32,7 +39,7 @@
 <script>
 import ConfirmationModal from '@/components/widgets/confirmation.vue'
 import SectionForm from '@/components/widgets/forms/section_form.vue'
-
+import { userStateStore } from '@/services/stateManager';
 import { onMounted, ref } from 'vue';
 import { sectionMethods } from '@/services/HTTPRequests/sectionMethods'
 import SectionCard from '@/components/widgets/cards/section_card.vue';
@@ -44,7 +51,9 @@ export default {
         ConfirmationModal,
     },
     setup() {
+        const store = userStateStore()
         const sections = ref([]);
+        const sectionRequests = ref([]);
         const selectedSection = ref(null);
         // const formTitle = ref('Add Section')
         // const submitButtonText
@@ -64,9 +73,15 @@ export default {
         }
 
         const handleAddSectionEvent = (newSection) => {
-            sections.value.unshift(newSection);
-            isSectionFormShown.value = false
-            selectedSection.value = null
+            if (store.user.role == 'admin') {
+                sections.value.unshift(newSection);
+                isSectionFormShown.value = false
+                selectedSection.value = null
+            } else {
+                sectionRequests.value.unshift(newSection);
+                isSectionFormShown.value = false;
+                selectedSection.value = null
+            }
         }
 
         const handleEditSectionEvent = async (editedSection) => {
@@ -89,9 +104,12 @@ export default {
 
         const deleteSection = async (section) => {
             try {
-                await sectionMethods.deleteSection(section.id);
-
-                sections.value = sections.value.filter(s => s !== section);
+                const response = await sectionMethods.deleteSection(section);
+                if (response && store.user.role == 'admin') {
+                    sections.value = sections.value.filter(s => s !== section);
+                } else if (response && store.user.role == 'manager') {
+                    sectionRequests.value.unshift(response);
+                }
 
             } catch (e) {
                 console.log(e)
@@ -103,6 +121,7 @@ export default {
             try {
                 const sectionsData = await sectionMethods.fetchAllSections();
                 sections.value = sectionsData;
+                sectionRequests.value = await sectionMethods.fetchAllSectionRequests()
             } catch (e) {
                 console.error('Error fetching sections', e);
             }
@@ -113,6 +132,7 @@ export default {
         })
         return {
             sections,
+            sectionRequests,
             isSectionFormShown,
             formClosed,
             handleAddSectionEvent,

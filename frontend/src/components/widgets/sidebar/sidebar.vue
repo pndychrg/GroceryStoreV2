@@ -9,8 +9,11 @@
             <!-- here, three sections of buttons/tags would be present seperate for user/admin/storemanager -->
             <!-- ADMIN Sidebar -->
             <div v-if="store.user?.role == 'admin'">
-
                 <SidebarLink v-for="link in adminLinks" :key="link" :route="link.route" :tag="link.tag" :icon="link.icon"
+                    @close="$emit('close')" />
+            </div>
+            <div v-if="store.user?.role == 'manager'">
+                <SidebarLink v-for="link in managerLinks" :key="link" :route="link.route" :tag="link.tag" :icon="link.icon"
                     @close="$emit('close')" />
             </div>
             <button @click="$emit('close')" class="btn text-start btn-danger ">
@@ -54,11 +57,19 @@ export default {
                 icon: 'arrow-right-from-bracket'
             }
         ]
+        const managerLinks = [
+            {
+                route: '/sections',
+                tag: "Sections",
+                icon: 'arrow-right-from-bracket'
+            }
+        ]
 
         return {
             closeSidebar,
             store,
-            adminLinks
+            adminLinks,
+            managerLinks
         }
     }
 }
