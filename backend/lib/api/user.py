@@ -26,11 +26,11 @@ class UserAPI(Resource):
     def post(self):
         data = create_user_parser.parse_args()
         if (Validators.name(data['name'])):
-            return {'message': "Name can only contain alphabets"}, 400
+            return {'msg': "Name can only contain alphabets"}, 400
         if (Validators.username(data['username']) == False):
-            return {'message': "username can only contain alphabets and numbers"}, 400
+            return {'msg': "username can only contain alphabets and numbers"}, 400
         # if all validations are successfull then add in database
-        response, message = userDB.registerUser(
+        response, msg = userDB.registerUser(
             name=data['name'], username=data['username'], password=data['password'], role=data['role'] if data['role'] else "user")
         if response:
             # generating the token according to user
@@ -38,7 +38,7 @@ class UserAPI(Resource):
                 identity=response.toJson(), expires_delta=timedelta(hours=8))
             return {"token": token}, 200
         else:
-            return {'message': message}, 400
+            return {'msg': msg}, 400
 
     def get(self):
         username = request.args.get("username")
@@ -46,19 +46,19 @@ class UserAPI(Resource):
 
         # check if username and password are present or not
         if (username == None):
-            return {'message': "username not found in request"}, 400
+            return {'msg': "username not found in request"}, 400
         if (password == None):
-            return {'message': "password not found in request"}, 400
+            return {'msg': "password not found in request"}, 400
         if (Validators.username(username=username) == False):
-            return {'message': "username can only contain alphabets and numbers"}, 400
+            return {'msg': "username can only contain alphabets and numbers"}, 400
 
         # if all validations are successfull then add in database
         response = userDB.loginUser(username=username, password=password)
-        # resonse[0] = message from db(user if true) , response[1] = boolean T/F
+        # resonse[0] = msg from db(user if true) , response[1] = boolean T/F
         if response[1]:
             # generating the token
             token = create_access_token(
                 identity=response[0].toJson(), expires_delta=timedelta(hours=8))
             return {'token': token}, 200
         else:
-            return {'message': response[0]}, 400
+            return {'msg': response[0]}, 400

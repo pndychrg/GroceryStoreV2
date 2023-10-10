@@ -2,7 +2,7 @@ from flask_restful import Resource, request, reqparse
 from flask_jwt_extended import get_jwt_identity, jwt_required
 from lib.db_utils.sections import SectionDB
 from lib.methods.validators import Validators
-from lib.methods.decorators import checkJWTForAdminOrManager
+from lib.methods.decorators import *
 # init Section DB
 sectionDB = SectionDB()
 
@@ -28,28 +28,23 @@ class SectionAPI(Resource):
     def get(self):
         # getting the section id from the request parameters
         section_id = request.args.get("section_id")
-        section, message = sectionDB.getSectionById(section_id)
+        section, msg = sectionDB.getSectionById(section_id)
         if (section):
             return section.toJson(), 200
         else:
-            return {'message': message}, 400
+            return {'msg': msg}, 400
 
     @jwt_required()
     @checkJWTForAdminOrManager
     def post(self):
-        current_user = get_jwt_identity()
         data = create_section_parser.parse_args()
-        if (Validators.name(data['name'])):
-            return {"message": "Name can only contain alphabets"}, 404
-        if (Validators.checkStringForNull(data['unit'])):
-            return {"message": "Unit can't be null"}, 400
-        response, message = sectionDB.addSection(
+        response, msg = sectionDB.addSection(
             name=data['name'].strip(), unit=data['unit'].strip()
         )
         if response:
             return response.toJson(), 200
         else:
-            return {"message": message}, 400
+            return {"msg": msg}, 400
 
     @jwt_required()
     @checkJWTForAdminOrManager
@@ -57,19 +52,19 @@ class SectionAPI(Resource):
         # getting section id from params
         section_id = request.args.get("section_id")
         if (section_id == None):
-            return {"message": "section_id not found"}, 400
+            return {"msg": "section_id not found"}, 400
         data = update_section_parser.parse_args()
         if (Validators.name(data['name'])):
-            return {"message": "Name can only contain alphabets"}, 400
+            return {"msg": "Name can only contain alphabets"}, 400
         if (Validators.checkStringForNull(data['unit'])):
-            return {"message": "Unit can't be null"}, 400
+            return {"msg": "Unit can't be null"}, 400
 
-        response, message = sectionDB.updateSection(
+        response, msg = sectionDB.updateSection(
             section_id=section_id, name=data['name'].strip(), unit=data['unit'].strip())
         if response:
             return response.toJson(), 200
         else:
-            return {"message": message}, 400
+            return {"msg": msg}, 400
 
     @jwt_required()
     @checkJWTForAdminOrManager
@@ -77,16 +72,16 @@ class SectionAPI(Resource):
         # getting the section id from params
         section_id = request.args.get("section_id")
         if (section_id == None):
-            return {"message": "section_id not found"}, 400
+            return {"msg": "section_id not found"}, 400
         # validation
         if (Validators.checkForInt(section_id) == False):
-            return {"message": "section_id validation failed"}, 400
+            return {"msg": "section_id validation failed"}, 400
         # deleting the section
-        response, message = sectionDB.deleteSection(section_id=section_id)
+        response, msg = sectionDB.deleteSection(section_id=section_id)
         if (response):
             return response, 200
         else:
-            return {'message': message}, 400
+            return {'msg': msg}, 400
 
 
 class GetAllSections(Resource):
@@ -101,3 +96,55 @@ class GetAllSections(Resource):
         response_json = [section.toJson() for section in all_sections]
 
         return response_json, 200
+
+
+# for POST Method
+create_section_request_parser = reqparse.RequestParser()
+create_section_request_parser.add_argument(
+    "name", type=str, help='This field cannot be blank', required=True
+)
+create_section_request_parser.add_argument(
+    'unit', type=str, help='This field cannot be blank', required=True
+)
+create_section_request_parser.add_argument(
+    "request", type=str, help='This field cannot be blank', required=True
+)
+create_section_request_parser.add_argument(
+    "reg_section_id", type=str, help='This field cannot be blank', required=True
+)
+
+
+class SectionRequestsAPI(Resource):
+
+    @jwt_required()
+    @checkJWTForManager
+    def post(self):
+        data = create_section_request_parser.parse_args()
+
+        response, msg = sectionDB.addSectionRequest(
+            name=data['name'], unit=data['unit'], request=data['request'], reg_section_id=data['reg_section_id'])
+
+        if response:
+            return response.toJson(), 200
+        else:
+            return {'msg': msg}, 400
+
+    @jwt_required()
+    @checkJWTForManager
+    def get(self):
+        # getting section_id from request args
+        section_id = request.args.get("section_id")
+        if section_id:
+            response, msg = sectionDB.getSectionRequestById(section_id)
+
+            if response:
+                return response.toJson(), 200
+            else:
+                return {'msg': msg}, 400
+        else:
+            # send all section requests
+            response, msg = sectionDB.getAllSectionRequests()
+            if response:
+                return [section.toJson() for section in response], 200
+            else:
+                return {'msg': msg}, 400

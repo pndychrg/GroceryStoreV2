@@ -28,12 +28,12 @@ class ApproveManagerAPI(Resource):
     @checkJWTForAdmin
     def post(self):
         data = approveManager_parser.parse_args()
-        response, message = userDB.approveManager(
+        response, msg = userDB.approveManager(
             manager_id=data['manager_id'])
         if response:
-            return {'message': message}, 200
+            return {'msg': msg}, 200
         else:
-            return {'message': message}, 400
+            return {'msg': msg}, 400
 
     @jwt_required()
     @checkJWTForAdmin
@@ -41,10 +41,10 @@ class ApproveManagerAPI(Resource):
         # getting the manager_id from request args
         manager_id = request.args.get("manager_id")
         if manager_id:
-            response, message = userDB.rejectManager(manager_id=manager_id)
+            response, msg = userDB.rejectManager(manager_id=manager_id)
             if response:
-                return {'message': message}, 200
+                return {'msg': msg}, 200
             else:
-                return {'message': message}, 400
+                return {'msg': msg}, 400
         else:
-            return {'message': "manager_id not found"}, 400
+            return {'msg': "manager_id not found"}, 400

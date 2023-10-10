@@ -2,6 +2,7 @@ from models.section import Section
 from extensions import db
 from sqlalchemy.exc import SQLAlchemyError
 from lib.methods.validators import Validators
+from models.section_req import SectionRequest
 
 
 class SectionDB:
@@ -14,11 +15,10 @@ class SectionDB:
             return False
 
     def addSection(self, name, unit):
-        if (Validators.checkStringForNull(name)):
+        if (Validators.name(name)):
             return None, "Name can't be empty"
         if (Validators.checkStringForNull(unit)):
             return None, "Unit can't be empty"
-
         #  check if section exists with same name
         if (self.checkIfSectionExists(name) != False):
             return None, "Section with same name already exists"
@@ -69,3 +69,40 @@ class SectionDB:
     def getAllSections(self):
         sections = Section.query.all()
         return sections
+
+    # these functions are used for manager requesting changes in sections
+
+    def getAllSectionRequests(self):
+        sections = SectionRequest.query.all()
+        if sections:
+            return sections, "section found"
+        else:
+            return None, "section not found"
+
+    def addSectionRequest(self, name, unit, request, reg_section_id=None):
+        if (Validators.name(name=name)):
+            return None, "invalid name"
+
+        if (Validators.checkStringForNull(unit)):
+            return None, "unit can't be empty"
+        # check if section already exists with same name
+        # this check will be done in sections table
+        # if (self.checkIfSectionRequestExists(name) != False):
+        #     return None, "section with same name already exists"
+        try:
+            new_section = SectionRequest(
+                name=name, unit=unit, request=request, reg_section_id=reg_section_id)
+
+            db.session.add(new_section)
+            db.session.commit()
+            return new_section, "Section Request Added"
+        except SQLAlchemyError as e:
+            return None, str(e)
+
+    def getSectionRequestById(self, section_id):
+        if Validators.checkForInt(section_id):
+            section = SectionRequest.query.get(section_id)
+            return section, "Section Found"
+
+        else:
+            return None, "invalid section_id"
