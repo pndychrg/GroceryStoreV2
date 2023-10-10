@@ -115,7 +115,6 @@ create_section_request_parser.add_argument(
 
 
 class SectionRequestsAPI(Resource):
-
     @jwt_required()
     @checkJWTForManager
     def post(self):
@@ -129,7 +128,7 @@ class SectionRequestsAPI(Resource):
             return {'msg': msg}, 400
 
     @jwt_required()
-    @checkJWTForManager
+    @checkJWTForAdminOrManager
     def get(self):
         # getting section_id from request args
         section_id = request.args.get("section_id")
@@ -147,3 +146,5 @@ class SectionRequestsAPI(Resource):
                 return [section.toJson() for section in response], 200
             else:
                 return {'msg': msg}, 400
+
+    # TODO add sectionRequest put and delete methods here for managers to edit the sectionRequest before being updated

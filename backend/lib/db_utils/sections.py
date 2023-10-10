@@ -106,3 +106,23 @@ class SectionDB:
 
         else:
             return None, "invalid section_id"
+
+    def deleteSectionRequestById(self, section_id):
+        # fetch section from section requests table
+        section, message = self.getSectionRequestById(section_id=section_id)
+        # if section is found
+        if section:
+            db.session.delete(section)
+            db.session.commit()
+            return True, "Section Request deleted"
+        else:
+            return False, "Section not found"
+
+    def deleteSectionRequest(self, sectionRequest):
+        try:
+            db.session.delete(SectionRequest)
+            db.session.commit()
+            return True, "Section Request deleted"
+        except SQLAlchemyError as e:
+            print(e)
+            return False, "error occured"
