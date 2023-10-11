@@ -62,7 +62,12 @@ export default {
                 emit('sectionrequest-approved', response, props.sectionRequestData);
             }
         }
-        const handleRejection = () => {
+        const handleRejection = async () => {
+            const response = await sectionRequestMethodsForAdmin.rejectSectionRequest(props.sectionRequestData.id);
+            if (response) {
+                console.log(response);
+                emit('sectionrequest-rejected', response, props.sectionRequestData);
+            }
             console.log("rejection")
         }
 

@@ -23,7 +23,8 @@
                 Section Requests
             </h2>
             <div v-for="section in sectionRequests" :key="section.id" class="SectionCard card">
-                <SectionRequestCard :sectionRequestData="section" @sectionrequest-approved="handleApprovedSectionUpdate" />
+                <SectionRequestCard :sectionRequestData="section" @sectionrequest-approved="handleApprovedSection"
+                    @sectionrequest-rejected="handleRejectedSection" />
             </div>
         </div>
 
@@ -88,6 +89,14 @@ export default {
             // removing the section requeset from section request list
             sectionRequests.value = sectionRequests.value.filter(s => s !== sectionRequestData);
 
+        }
+
+        const handleRejectedSection = (response, sectionRequestData) => {
+            // if the response is true
+            // delete the section request
+            if (response) {
+                sectionRequests.value = sectionRequests.value.filter(s => s !== sectionRequestData);
+            }
         }
         const formClosed = () => {
             isSectionFormShown.value = false
@@ -165,7 +174,8 @@ export default {
             showAddSectionForm,
             showEditSectionForm,
             selectedSection,
-            handleApprovedSectionUpdate: handleApprovedSection,
+            handleApprovedSection,
+            handleRejectedSection
         }
     }
 }
