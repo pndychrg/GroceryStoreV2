@@ -24,7 +24,7 @@ export const unapprovedManagersMethods = {
         manager_id,
       });
       if (response) {
-        showInfoToast(response.message);
+        showInfoToast(response.msg);
       }
       return response;
     } catch (e) {

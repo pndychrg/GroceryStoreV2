@@ -92,4 +92,34 @@ export const sectionMethods = {
       return null;
     }
   },
+
+  async updateSectionRequest(section_request_id, data) {
+    try {
+      const response = await htttpPutRequest("/section/request", data, {
+        section_request_id: section_request_id,
+      });
+      if (response) {
+        showSuccessToast("Section Request Updated");
+      }
+      return response;
+    } catch (e) {
+      console.log(e);
+      return null;
+    }
+  },
+
+  async deleteSectionRequest(section_request_id) {
+    try {
+      const response = await httpDeleteRequest("/section/request", {
+        section_request_id,
+      });
+      if (response) {
+        showSuccessToast("Section Request Deleted");
+      }
+      return response;
+    } catch (e) {
+      console.log(e);
+      return null;
+    }
+  },
 };

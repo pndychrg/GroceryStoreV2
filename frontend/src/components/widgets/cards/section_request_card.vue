@@ -30,11 +30,11 @@
                 </button>
             </div>
             <div v-else class="d-flex justify-content-end">
-                <button class="btn" @click="$emit('deleteSection')">
+                <button class="btn" @click="$emit('deleteSectionRequest')">
                     <font-awesome-icon :icon="['fas', 'trash-can']" class="faa-horizontal animated-hover"
                         style="color: #c01c28;" />
                 </button>
-                <button class="btn" @click="$emit('editSection')">
+                <button class="btn" @click="$emit('editSectionRequest')">
                     <font-awesome-icon :icon="['fas', 'pen-to-square']" class="faa-horizontal animated-hover" />
                 </button>
             </div>
@@ -53,6 +53,10 @@ export default {
     },
     setup(props, { emit }) {
         const store = userStateStore();
+
+        // handling editing and deleting the section request by store manager
+
+
 
         // handling approval and rejection from admin here
         const handleApproval = async () => {

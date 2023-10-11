@@ -13,8 +13,8 @@
             </div>
 
             <div v-for="section in sections" :key="section.id" class="SectionCard card">
-                <SectionCard :sectionData="section" @deleteSection="showDelete(section)"
-                    @editSection="showEditSectionForm(section)" />
+                <SectionCard :sectionData="section" @deleteSection="showDelete(section, 'section')"
+                    @editSection="showEditSectionForm(section, 'section')" />
             </div>
         </div>
 
@@ -23,16 +23,19 @@
                 Section Requests
             </h2>
             <div v-for="section in sectionRequests" :key="section.id" class="SectionCard card">
-                <SectionRequestCard :sectionRequestData="section" @sectionrequest-approved="handleApprovedSection"
-                    @sectionrequest-rejected="handleRejectedSection" />
+                <SectionRequestCard :sectionRequestData="section"
+                    @deleteSectionRequest="showDelete(section, 'sectionRequest')"
+                    @editSectionRequest="showEditSectionForm(section, 'sectionRequest')"
+                    @sectionrequest-approved="handleApprovedSection" @sectionrequest-rejected="handleRejectedSection" />
             </div>
         </div>
 
         <teleport to="#modal-root">
             <ConfirmationModal v-show="isDeleteModalShown" deleteElement="Section" :element="selectedSection"
                 @close="isDeleteModalShown = false" @confirm="deleteSection" />
-            <SectionForm v-show="isSectionFormShown" :initialData="selectedSection" @close="formClosed"
-                @section-added="handleAddSectionEvent" @section-edited="handleEditSectionEvent" />
+            <SectionForm v-show="isSectionFormShown" :initialData="selectedSection" :itemType="itemType" @close="formClosed"
+                @section-added="handleAddSectionEvent" @section-edited="handleEditSectionEvent"
+                @sectionRequest-edited="handleEditSectionRequestEvent" />
         </teleport>
     </div>
 </template>
@@ -58,20 +61,26 @@ export default {
         const sections = ref([]);
         const sectionRequests = ref([]);
         const selectedSection = ref(null);
-        // const formTitle = ref('Add Section')
-        // const submitButtonText
-        // add - edit section form values
+        const itemType = ref(null);
         const isSectionFormShown = ref(false);
         const showAddSectionForm = () => {
             isSectionFormShown.value = true
         }
-        const showEditSectionForm = (section) => {
+        const showEditSectionForm = (section, item) => {
             isSectionFormShown.value = true
             selectedSection.value = section
+            itemType.value = item
         }
+
+        const handleEditSectionRequestEvent = (editedSectionRequest) => {
+            sectionRequests.value.map((section, index) => {
+                if (section.id == editedSectionRequest?.id) {
+                    sectionRequests.value[index] = editedSectionRequest
+                }
+            });
+        }
+
         const handleApprovedSection = (approvedSection, sectionRequestData) => {
-
-
             if (sectionRequestData.request == 'add') {
                 sections.value.unshift(approvedSection);
             }
@@ -90,7 +99,6 @@ export default {
             sectionRequests.value = sectionRequests.value.filter(s => s !== sectionRequestData);
 
         }
-
         const handleRejectedSection = (response, sectionRequestData) => {
             // if the response is true
             // delete the section request
@@ -102,7 +110,6 @@ export default {
             isSectionFormShown.value = false
             selectedSection.value = null
         }
-
         const handleAddSectionEvent = (newSection) => {
             if (store.user.role == 'admin') {
                 sections.value.unshift(newSection);
@@ -114,8 +121,7 @@ export default {
                 selectedSection.value = null
             }
         }
-
-        const handleEditSectionEvent = async (editedSection) => {
+        const handleEditSectionEvent = (editedSection) => {
             sections.value.map((section, index) => {
                 if (section.id == editedSection?.id) {
                     sections.value[index] = editedSection
@@ -124,30 +130,37 @@ export default {
             formClosed()
             console.log("Section edited", editedSection);
         }
-
         // Delete Section functions and values
         const isDeleteModalShown = ref(false);
-        const showDelete = (sectionData) => {
+        const showDelete = (sectionData, item) => {
             selectedSection.value = sectionData
+            itemType.value = item
             isDeleteModalShown.value = true
             console.log("From dashboard", sectionData);
         }
 
         const deleteSection = async (section) => {
-            try {
-                const response = await sectionMethods.deleteSection(section);
-                if (response && store.user.role == 'admin') {
-                    sections.value = sections.value.filter(s => s !== section);
-                } else if (response && store.user.role == 'manager') {
-                    sectionRequests.value.unshift(response);
+            if (itemType.value === 'section') {
+                try {
+                    const response = await sectionMethods.deleteSection(section);
+                    if (response && store.user.role == 'admin') {
+                        sections.value = sections.value.filter(s => s !== section);
+                    } else if (response && store.user.role == 'manager') {
+                        sectionRequests.value.unshift(response);
+                    }
+
+                } catch (e) {
+                    console.log(e)
                 }
-
-            } catch (e) {
-                console.log(e)
+            } else {
+                const response = await sectionMethods.deleteSectionRequest(
+                    section.id
+                );
+                if (response) {
+                    sectionRequests.value = sectionRequests.value.filter(s => s !== section);
+                }
             }
-            console.log("section delete confirmed", section)
         }
-
         const fetchSectionsData = async () => {
             try {
                 const sectionsData = await sectionMethods.fetchAllSections();
@@ -175,7 +188,9 @@ export default {
             showEditSectionForm,
             selectedSection,
             handleApprovedSection,
-            handleRejectedSection
+            handleEditSectionRequestEvent,
+            handleRejectedSection,
+            itemType,
         }
     }
 }

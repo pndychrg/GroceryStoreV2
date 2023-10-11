@@ -111,6 +111,15 @@ create_section_request_parser.add_argument(
     "reg_section_id", type=str, help='This field cannot be blank', required=True
 )
 
+# creating update parser for section request
+update_sectionrequest_parser = reqparse.RequestParser()
+update_sectionrequest_parser.add_argument(
+    "name", type=str, help="This field cannot be blank", required=True
+)
+update_sectionrequest_parser.add_argument(
+    "unit", type=str, help='This field cannot be blank', required=True
+)
+
 
 class SectionRequestsAPI(Resource):
     @jwt_required()
@@ -144,3 +153,39 @@ class SectionRequestsAPI(Resource):
             else:
                 return [], 200
     # TODO add sectionRequest put and delete methods here for managers to edit the sectionRequest before being updated
+
+    @jwt_required()
+    @checkJWTForManager
+    def put(self):
+        # getting the section_request_id from the params
+        section_request_id = request.args.get('section_request_id')
+
+        if section_request_id:
+            data = update_sectionrequest_parser.parse_args()
+            # getting the section from databas
+            response, message = sectionDB.updateSectionRequest(
+                section_req_id=section_request_id,
+                name=data['name'].strip(),
+                unit=data['unit'].strip()
+            )
+            if response:
+                return response.toJson(), 200
+            else:
+                return {'msg': message}, 400
+        else:
+            return {'msg': "section_request_id not found"}, 400
+
+    @jwt_required()
+    @checkJWTForManager
+    def delete(self):
+        # getting the section_request_id from the params
+        section_request_id = request.args.get("section_request_id")
+        if section_request_id:
+            response, message = sectionDB.deleteSectionRequestById(
+                section_id=section_request_id)
+            if response:
+                return True, 200
+            else:
+                return {'msg': message}, 400
+        else:
+            return {'msg': "section_request_id not found"}, 400

@@ -2,7 +2,7 @@
     <div class="modal-overlay">
         <div class="modal-content text-start">
             <div class="modal-header">
-                <h4 class="modal-title">{{ formTitle }}</h4>
+                <h4 class="modal-title">{{ formTitle }} {{ itemType }}</h4>
             </div>
             <div class="section-form ">
                 <form @submit.prevent="submitHandler">
@@ -40,6 +40,7 @@ export default {
     name: "SectionFormModal",
     emits: ["close", "section-edited", "section-added"],
     props: {
+        itemType: String,
         initialData: Object
     },
     setup(props, { emit }) {
@@ -64,36 +65,45 @@ export default {
         })
 
         const submitHandler = async () => {
-            const store = userStateStore()
-            if (store.user.role == 'admin') {
-                const dataObject = {
-                    "name": formData.name,
-                    "unit": formData.unit,
-                }
-                if (props.initialData == null) {
-                    // backend request
+            const dataObject = {
+                "name": formData.name,
+                "unit": formData.unit,
+            }
+            if (props.itemType === 'section') {
+                const store = userStateStore()
+                if (store.user.role == 'admin') {
+                    if (props.initialData == null) {
+                        // backend request
+                        const response = await sectionMethods.addSection(dataObject)
+                        if (response) {
+                            emit('section-added', response)
+                        }
+                    } else {
+                        const response = await sectionMethods.updateSection(props.initialData.id, dataObject)
+                        // console.log(response);
+                        emit('section-edited', response)
+                        console.log("Update button clicked")
+                    }
+                } else {
+                    const dataObject = {
+                        "name": formData.name,
+                        "unit": formData.unit,
+                        "request": props.initialData == null ? 'add' : 'edit',
+                        "reg_section_id": props.initialData?.id ?? null,
+                    }
                     const response = await sectionMethods.addSection(dataObject)
                     if (response) {
                         emit('section-added', response)
                     }
-                } else {
-                    const response = await sectionMethods.updateSection(props.initialData.id, dataObject)
-                    // console.log(response);
-                    emit('section-edited', response)
-                    console.log("Update button clicked")
                 }
-            } else {
-                const dataObject = {
-                    "name": formData.name,
-                    "unit": formData.unit,
-                    "request": props.initialData == null ? 'add' : 'edit',
-                    "reg_section_id": props.initialData?.id ?? null,
-                }
-                const response = await sectionMethods.addSection(dataObject)
+            }
+            else {
+                const response = await sectionMethods.updateSectionRequest(
+                    props.initialData.id, dataObject
+                );
                 if (response) {
-                    emit('section-added', response)
+                    emit('sectionRequest-edited', response);
                 }
-
             }
 
         }

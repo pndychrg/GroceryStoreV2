@@ -1,6 +1,6 @@
 from models.section import Section
 from extensions import db
-from sqlalchemy.exc import SQLAlchemyError
+from sqlalchemy.exc import SQLAlchemyError, IntegrityError
 from lib.methods.validators import Validators
 from models.section_req import SectionRequest
 
@@ -97,8 +97,37 @@ class SectionDB:
             db.session.add(new_section)
             db.session.commit()
             return new_section, "Section Request Added"
+        except IntegrityError as e:
+            return None, "Section Request with same name already exists"
         except SQLAlchemyError as e:
-            return None, str(e)
+            return None, str(e.__dict__['orig'])
+
+    def updateSectionRequest(self, section_req_id, name, unit):
+        # validation for name
+        if (Validators.name(name=name)):
+            return None, "invalid name"
+
+        # validation for unit
+        if (Validators.checkStringForNull(unit)):
+            return None, "unit can't be empty"
+
+        # now checking if a section already exists with same name
+        # existingSection = self.checkIfSectionExists(name=name)
+        # if a section with same name exists already then we will check if reg_section_id matches with it or not
+        # if existingSection and reg_section_id and existingSection.id != reg_section_id:
+        #     return False, "A section already exists with new name provided"
+        try:
+            sectionRequest, message = self.getSectionRequestById(
+                section_id=section_req_id)
+            if sectionRequest:
+                sectionRequest.name = name
+                sectionRequest.unit = unit
+                db.session.commit()
+                return sectionRequest, "Section Request Updated"
+            else:
+                return None, message
+        except SQLAlchemyError as e:
+            return None, str(e.__dict__['orig'])
 
     def getSectionRequestById(self, section_id):
         if Validators.checkForInt(section_id):
