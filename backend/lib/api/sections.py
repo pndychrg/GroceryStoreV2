@@ -1,5 +1,5 @@
 from flask_restful import Resource, request, reqparse
-from flask_jwt_extended import get_jwt_identity, jwt_required
+from flask_jwt_extended import jwt_required
 from lib.db_utils.sections import SectionDB
 from lib.methods.validators import Validators
 from lib.methods.decorators import *
@@ -54,6 +54,7 @@ class SectionAPI(Resource):
         if (section_id == None):
             return {"msg": "section_id not found"}, 400
         data = update_section_parser.parse_args()
+        # TODO move these parsers to db_utils function
         if (Validators.name(data['name'])):
             return {"msg": "Name can only contain alphabets"}, 400
         if (Validators.checkStringForNull(data['unit'])):

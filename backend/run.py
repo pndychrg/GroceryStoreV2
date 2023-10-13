@@ -24,6 +24,7 @@ def create_app():
     from lib.api.sections import SectionAPI, GetAllSections, SectionRequestsAPI
     from lib.api.approve_managers import ApproveManagerAPI
     from lib.api.approve_sectionRequests import ApproveSectionRequests
+    from lib.api.products import ProductsAPI
     # registering all the api resources
     api.add_resource(UserAPI, '/user')
     api.add_resource(SectionAPI, '/section')
@@ -31,6 +32,7 @@ def create_app():
     api.add_resource(ApproveManagerAPI, '/unapproved')
     api.add_resource(SectionRequestsAPI, '/section/request')
     api.add_resource(ApproveSectionRequests, '/section/approve')
+    api.add_resource(ProductsAPI, '/product')
     # api docs init code
     SWAGGER_URL = '/api/docs'
     API_URL = '/static/docs/swagger.yaml'
