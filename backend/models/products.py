@@ -8,7 +8,8 @@ class Product(db.Model):
     rate = db.Column(db.Integer)
     manufactureDate = db.Column(db.DateTime)
     expiryDate = db.Column(db.DateTime)
-    section_id = db.Column(db.Integer, db.ForeignKey('section.id'))
+    section_id = db.Column(db.Integer, db.ForeignKey(
+        'section.id'), nullable=False)
     # getting section details
     section = db.relationship(
         "Section", backref=db.backref('section'))
@@ -19,7 +20,7 @@ class Product(db.Model):
             "name": self.name,
             "rate": self.rate,
             "availableAmount": self.availableAmount,
-            "manufactureDate": self.manufactureDate,
-            "expiryDate": self.expiryDate,
+            "manufactureDate": self.manufactureDate.strftime('%Y-%m-%d') if self.manufactureDate != None else None,
+            "expiryDate": self.expiryDate.strftime('%Y-%m-%d') if self.expiryDate != None else None,
             "section": self.section.toJson()
         }

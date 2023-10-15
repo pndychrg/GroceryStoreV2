@@ -16,7 +16,7 @@ create_product_parser.add_argument(
     'rate', type=int, help='This field cannot be blank', required=True
 )
 create_product_parser.add_argument(
-    'section_id', type=int, help='This field cannot be blank', required=True
+    'section_id', type=int, help='This field section cannot be blank', required=True
 )
 create_product_parser.add_argument(
     "manufactureDate", type=str, help='This field cannot be blank', required=True
@@ -38,10 +38,11 @@ class ProductsAPI(Resource):
         # TODO add getProductBysectionID
         # TODO add getProductByProductID
         products = productDB.getAllProducts()
-        if products:
-            return [product.toJson() for product in products], 200
-        else:
-            [], 200
+        # print(products, flush=True)
+        # if products:
+        return [product.toJson() for product in products], 200
+        # else:
+        #     [], 200
 
     @jwt_required()
     @checkJWTForManager

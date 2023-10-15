@@ -40,10 +40,17 @@ class SectionDB:
         section, message = self.getSectionById(section_id=section_id)
         # TODO check if section doesn't contain products
         # if section and len(section.products) == 0:
+
         if section:
-            db.session.delete(section)
-            db.session.commit()
-            return True, "Section Deleted"
+            try:
+                db.session.delete(section)
+                db.session.commit()
+                return True, "Section Deleted"
+            except IntegrityError as e:
+                return None, "Section Contains Products"
+            except SQLAlchemyError as e:
+                return None, str(e.__dict__['orig'])
+
         # elif section and len(section.products) > 0:
         #     return False
         else:

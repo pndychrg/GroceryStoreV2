@@ -61,7 +61,7 @@ export default {
         const sections = ref([]);
         const sectionRequests = ref([]);
         const selectedSection = ref(null);
-        const itemType = ref(null);
+        const itemType = ref("section");
         const isSectionFormShown = ref(false);
         const showAddSectionForm = () => {
             isSectionFormShown.value = true

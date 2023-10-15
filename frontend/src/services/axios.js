@@ -17,7 +17,8 @@ export const httpGetAllRequest = async (path) => {
   } catch (e) {
     console.log(e);
     showErrorToast(e.response.data.msg);
-    throw new Error(e.response.data.msg);
+    // throw new Error(e.response.data.msg);
+    return null;
   }
 };
 
@@ -54,7 +55,7 @@ export const htttpPutRequest = async (path, data, params) => {
   } catch (e) {
     console.log(e.response.data.msg);
     showErrorToast(e.response.data.msg);
-    throw new Error(e.response.data.msg);
+    return null;
   }
 };
 
@@ -67,7 +68,8 @@ export const httpDeleteRequest = async (path, params) => {
   } catch (e) {
     console.log(e.response.data.msg);
     showErrorToast(e.response.data.msg);
-    throw new Error(e.response.data.msg);
+    // throw new Error(e.response.data.msg);
+    return null;
   }
 };
 

@@ -62,6 +62,11 @@ export default {
                 route: '/sections',
                 tag: "Sections",
                 icon: 'arrow-right-from-bracket'
+            },
+            {
+                route: '/products',
+                tag: "Products",
+                icon: 'arrow-right-from-bracket'
             }
         ]
 

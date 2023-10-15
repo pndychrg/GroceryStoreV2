@@ -1,3 +1,6 @@
+from datetime import date
+
+
 class Validators:
 
     def name(name):
@@ -24,6 +27,14 @@ class Validators:
 
     def checkForInt(variable):
         if type(variable) == int or variable.isnumeric():
+            return True
+        else:
+            return False
+
+    def checkDate(date_text):
+        if (date_text == None or len(date_text) == 0):
+            return True
+        if (date.fromisoformat(date_text)):
             return True
         else:
             return False

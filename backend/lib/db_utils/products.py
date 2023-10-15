@@ -2,6 +2,7 @@ from models.products import Product
 from lib.methods.validators import Validators
 from extensions import db
 from sqlalchemy.exc import SQLAlchemyError, IntegrityError
+from datetime import datetime
 
 
 class ProductDB:
@@ -36,18 +37,36 @@ class ProductDB:
         if (Validators.checkForInt(rate) == False):
             return None, "invalid rate"
 
-        # TODO manufacture date and expiry date validation
+        if (Validators.checkDate(manufactureDate) == False):
+            return None, "invalid manufacture date"
+        else:
+            manufactureDate = datetime.strptime(
+                manufactureDate, "%Y-%m-%d").date() if (manufactureDate != None) and (len(manufactureDate) != 0) else None
 
-        new_product = Product(
-            name=name, availableAmount=availableAmount, rate=rate, manufactureDate=manufactureDate,
-            expiryDate=expiryDate,
-            section_id=section_id
-        )
+        if (Validators.checkDate(expiryDate) == False):
+            return None, "invalid expiry date"
+        else:
+            expiryDate = datetime.strptime(
+                expiryDate, "%Y-%m-%d").date() if (expiryDate != None) and (len(expiryDate) == 0) else None
 
-        db.session.add(new_product)
-        db.session.commit()
+        try:
+            new_product = Product(
+                name=name,
+                availableAmount=availableAmount,
+                rate=rate,
+                manufactureDate=manufactureDate,
+                expiryDate=expiryDate,
+                section_id=section_id
+            )
 
-        return new_product, "Product Added"
+            db.session.add(new_product)
+            db.session.commit()
+
+            return new_product, "Product Added"
+        except IntegrityError as e:
+            return None, "Product with same name already exists"
+        except SQLAlchemyError as e:
+            return None, str(e.__dict__['orig'])
 
     def deleteProductById(self, product_id):
         # fetching the product from the database
@@ -72,6 +91,11 @@ class ProductDB:
             return None, "invalid rate"
 
         # TODO manufacture date and expiry date validation
+        if (Validators.checkDate(manufactureDate)):
+            return None, "invalid manufacture date"
+
+        if (Validators.checkDate(expiryDate)):
+            return None, "invalid expiry date"
 
         try:
             product, message = self.getProductById(product_id)
