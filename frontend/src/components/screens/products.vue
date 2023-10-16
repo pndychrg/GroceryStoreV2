@@ -14,11 +14,15 @@
             </div>
 
             <div v-for="product in products" :key="product.id" class="ProductCard card">
-                <ProductCard :productData="product" @edit-product="showEditProductForm(product)" />
+                <ProductCard :productData="product" @edit-product="showEditProductForm(product)"
+                    @delete-product="showDeleteConfirmation(product)" />
             </div>
         </div>
 
         <teleport to="#modal-root">
+            <ConfirmationModal v-show="isDeleteModalShown" deleteElement="Product" :element="selectedProduct"
+                @close="isDeleteModalShown = false" @confirm="deleteProduct" />
+
             <ProductForm v-show="isProductFormShown" :initialData="selectedProduct" @close="formClosed"
                 :sectionsData="sections" @product-added="handleProductAdded" @product-edited="handleProductEdited" />
         </teleport>
@@ -32,12 +36,13 @@ import { onMounted, ref } from 'vue';
 import ProductCard from '@/components/widgets/cards/product_card.vue'
 import ProductForm from '@/components/widgets/forms/product_form.vue'
 import { sectionMethods } from '@/services/HTTPRequests/sectionMethods';
+import ConfirmationModal from '../widgets/confirmation.vue';
 export default {
     name: "ProductPage",
     components: {
         ProductCard,
         ProductForm,
-
+        ConfirmationModal
     },
     setup() {
 
@@ -48,14 +53,16 @@ export default {
         const fetchProductsData = async () => {
             const productsData = await productMethods.fetchAllProducts();
             products.value = productsData;
-
+        }
+        const isDeleteModalShown = ref(false);
+        const showDeleteConfirmation = (productData) => {
+            selectedProduct.value = productData
+            isDeleteModalShown.value = true;
         }
         const fetchSectionsData = async () => {
             const sectionsData = await sectionMethods.fetchAllSections();
             sections.value = sectionsData;
         }
-
-
         const formClosed = async () => {
             isProductFormShown.value = false;
             selectedProduct.value = null;
@@ -84,6 +91,16 @@ export default {
             console.log("product edited", editedProduct)
         }
 
+        const deleteProduct = async (deletedProduct) => {
+            console.log(deletedProduct)
+            const response = await productMethods.deleteProduct(deletedProduct);
+            if (response) {
+                products.value = products.value.filter(s => s !== deletedProduct)
+            }
+
+
+        }
+
         onMounted(() => {
             fetchProductsData();
             fetchSectionsData();
@@ -97,7 +114,10 @@ export default {
             formClosed,
             sections,
             handleProductAdded,
-            handleProductEdited
+            handleProductEdited,
+            isDeleteModalShown,
+            showDeleteConfirmation,
+            deleteProduct
         }
     }
 }

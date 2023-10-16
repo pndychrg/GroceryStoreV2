@@ -32,9 +32,9 @@ export const productMethods = {
     return response;
   },
 
-  async deleteProduct(product_id) {
+  async deleteProduct(product) {
     const response = await httpDeleteRequest("/product", {
-      product_id: product_id,
+      product_id: product.id,
     });
     if (response) {
       showSuccessToast("Product Deleted");

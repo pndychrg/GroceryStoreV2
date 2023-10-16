@@ -19,7 +19,7 @@
                     productData.expiryDate }}
             </p>
             <div class="d-flex justify-content-end">
-                <button class="btn">
+                <button class="btn" @click="$emit('delete-product')">
                     <font-awesome-icon :icon="['fas', 'trash-can']" class="faa-horizontal animated-hover"
                         style="color: #c01c28;" />
                 </button>
