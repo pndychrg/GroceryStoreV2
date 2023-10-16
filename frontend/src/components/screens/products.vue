@@ -14,14 +14,13 @@
             </div>
 
             <div v-for="product in products" :key="product.id" class="ProductCard card">
-                <ProductCard :productData="product" />
+                <ProductCard :productData="product" @edit-product="showEditProductForm(product)" />
             </div>
         </div>
 
         <teleport to="#modal-root">
             <ProductForm v-show="isProductFormShown" :initialData="selectedProduct" @close="formClosed"
-                :sectionsData="sections" @product-added="handleProductAdded" />
-
+                :sectionsData="sections" @product-added="handleProductAdded" @product-edited="handleProductEdited" />
         </teleport>
 
     </div>
@@ -74,6 +73,17 @@ export default {
             products.value?.unshift(newProduct);
             formClosed()
         }
+
+        const handleProductEdited = (editedProduct) => {
+            products.value.map((product, index) => {
+                if (product.id == editedProduct.id) {
+                    products.value[index] = editedProduct
+                }
+            })
+            formClosed()
+            console.log("product edited", editedProduct)
+        }
+
         onMounted(() => {
             fetchProductsData();
             fetchSectionsData();
@@ -86,7 +96,8 @@ export default {
             showEditProductForm,
             formClosed,
             sections,
-            handleProductAdded
+            handleProductAdded,
+            handleProductEdited
         }
     }
 }

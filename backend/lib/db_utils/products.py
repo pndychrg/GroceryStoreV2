@@ -33,7 +33,6 @@ class ProductDB:
 
         if (Validators.checkForInt(availableAmount) == False):
             return None, "invalid available amount"
-
         if (Validators.checkForInt(rate) == False):
             return None, "invalid rate"
 
@@ -47,8 +46,7 @@ class ProductDB:
             return None, "invalid expiry date"
         else:
             expiryDate = datetime.strptime(
-                expiryDate, "%Y-%m-%d").date() if (expiryDate != None) and (len(expiryDate) == 0) else None
-
+                expiryDate, "%Y-%m-%d").date() if (expiryDate != None) and (len(expiryDate) != 0) else None
         try:
             new_product = Product(
                 name=name,
@@ -84,19 +82,23 @@ class ProductDB:
         if (Validators.name(name=name)):
             return None, "invalid name"
 
-        if (Validators.checkForInt(availableAmount)):
+        if (Validators.checkForInt(availableAmount) == False):
             return None, "invalid available amount"
 
-        if (Validators.checkForInt(rate)):
+        if (Validators.checkForInt(rate) == False):
             return None, "invalid rate"
 
-        # TODO manufacture date and expiry date validation
-        if (Validators.checkDate(manufactureDate)):
+        if (Validators.checkDate(manufactureDate) == False):
             return None, "invalid manufacture date"
+        else:
+            manufactureDate = datetime.strptime(
+                manufactureDate, "%Y-%m-%d").date() if (manufactureDate != None) and (len(manufactureDate) != 0) else None
 
-        if (Validators.checkDate(expiryDate)):
+        if (Validators.checkDate(expiryDate) == False):
             return None, "invalid expiry date"
-
+        else:
+            expiryDate = datetime.strptime(
+                expiryDate, "%Y-%m-%d").date() if (expiryDate != None) and (len(expiryDate) != 0) else None
         try:
             product, message = self.getProductById(product_id)
             if product:

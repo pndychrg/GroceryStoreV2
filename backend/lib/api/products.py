@@ -48,19 +48,23 @@ class ProductsAPI(Resource):
     @checkJWTForManager
     def post(self):
         data = create_product_parser.parse_args()
-        response, msg = productDB.addProduct(
-            name=data['name'].strip(),
-            availableAmount=data['availableAmount'],
-            rate=data['rate'],
-            manufactureDate=data['manufactureDate'],
-            expiryDate=data['expiryDate'],
-            section_id=data['section_id']
-        )
+        # TODO create better method for section_id validaiton
+        if data['section_id']:
+            response, msg = productDB.addProduct(
+                name=data['name'].strip(),
+                availableAmount=data['availableAmount'],
+                rate=data['rate'],
+                manufactureDate=data['manufactureDate'],
+                expiryDate=data['expiryDate'],
+                section_id=data['section_id']
+            )
 
-        if response:
-            return response.toJson(), 200
+            if response:
+                return response.toJson(), 200
+            else:
+                return {'msg': msg}, 400
         else:
-            return {'msg': msg}, 400
+            return {'msg': "section_id not found"}, 400
 
     @jwt_required()
     @checkJWTForManager

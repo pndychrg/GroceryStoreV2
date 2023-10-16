@@ -81,14 +81,19 @@ export default {
             section_id: null,
         })
 
-        const handleCancel = () => {
+        const clearForm = () => {
             Object.assign(formData, {
                 name: "",
                 availableAmount: null,
                 rate: null,
                 manufactureDate: null,
                 expiryDate: null,
+                section_id: null
             })
+        }
+
+        const handleCancel = () => {
+            clearForm()
             emit('close');
         }
 
@@ -101,12 +106,25 @@ export default {
                 "expiryDate": formData.expiryDate,
                 "section_id": formData.section_id,
             }
-            const response = await productMethods.addProduct(
-                dataObject
-            );
-            if (response) {
-                emit('product-added', response);
+            if (props.initialData == null) {
+                const response = await productMethods.addProduct(
+                    dataObject
+                );
+                if (response) {
+                    clearForm()
+                    emit('product-added', response);
+                }
+            } else {
+                console.log(dataObject);
+                const response = await productMethods.updateProduct(
+                    props.initialData.id, dataObject
+                );
+                if (response) {
+                    clearForm()
+                    emit('product-edited', response);
+                }
             }
+
             // console.log(formData);
         }
 
@@ -119,6 +137,7 @@ export default {
                 }
             }
             return {
+
                 title: "Edit Product",
                 buttonText: "Update"
             }
@@ -131,7 +150,7 @@ export default {
                 formData.rate = newData.rate;
                 formData.manufactureDate = newData.manufactureDate;
                 formData.expiryDate = newData.expiryDate;
-                formData.section_id = newData.section_id;
+                formData.section_id = newData.section.id;
             }
         })
 
