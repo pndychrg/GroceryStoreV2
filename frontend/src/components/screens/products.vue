@@ -14,7 +14,7 @@
             </div>
 
             <div v-for="product in products" :key="product.id" class="ProductCard card">
-                <ProductCard :productData="product" @edit-product="showEditProductForm(product)"
+                <ProductCard loggedInRole="manager" :productData="product" @edit-product="showEditProductForm(product)"
                     @delete-product="showDeleteConfirmation(product)" />
             </div>
         </div>

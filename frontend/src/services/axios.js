@@ -41,7 +41,7 @@ export const httpPostRequest = async (path, data) => {
     return response.data;
   } catch (e) {
     console.log(e.response);
-    showErrorToast(e.response.data.msg);
+    showErrorToast(e?.response?.data.msg ?? "Error Occured");
     return null;
   }
 };

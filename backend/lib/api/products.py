@@ -2,7 +2,7 @@ from lib.db_utils.products import ProductDB
 from extensions import db
 from flask_restful import Resource, reqparse, request
 from flask_jwt_extended import jwt_required
-from lib.methods.decorators import checkJWTForManager
+from lib.methods.decorators import checkJWTForManager, checkJWTForUserOrManager
 
 # for POST Method
 create_product_parser = reqparse.RequestParser()
@@ -33,7 +33,7 @@ productDB = ProductDB()
 class ProductsAPI(Resource):
 
     @jwt_required()
-    @checkJWTForManager
+    @checkJWTForUserOrManager
     def get(self):
         # TODO add getProductBysectionID
         # TODO add getProductByProductID

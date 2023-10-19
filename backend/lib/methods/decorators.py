@@ -43,3 +43,32 @@ def checkJWTForManager(f):
                 'msg': 'Access Denied for Resource'
             }, 401
     return wrap
+
+
+def checkJWTForUser(f):
+    @wraps(f)
+    def wrap(*args, **kwargs):
+        current_user = get_jwt_identity()
+        if current_user.get("role") == 'user':
+            return f(*args, **kwargs)
+
+        else:
+            return {
+                'msg': 'Access Denied for Resource'
+            }, 401
+    return wrap
+
+
+def checkJWTForUserOrManager(f):
+    @wraps(f)
+    def wrap(*args, **kwargs):
+        current_user = get_jwt_identity()
+        if current_user.get('role') == 'user' or current_user.get('role') == 'manager':
+            return f(*args, **kwargs)
+
+        else:
+            return {
+                'msg': "Access Denied for Resource"
+            }, 401
+
+    return wrap

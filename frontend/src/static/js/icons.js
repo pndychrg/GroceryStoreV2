@@ -8,6 +8,7 @@ import {
   faPenToSquare,
   faBars,
   faCheck,
+  faCartPlus,
 } from "@fortawesome/free-solid-svg-icons";
 
 // adding icons to library
@@ -19,5 +20,6 @@ export const iconLib = library.add(
   faTrashCan,
   faPenToSquare,
   faBars,
-  faCheck
+  faCheck,
+  faCartPlus
 );
