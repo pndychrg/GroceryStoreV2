@@ -57,11 +57,13 @@ class CartDB:
             return None, "Product not found"
 
     def removeFromCart(self, product_id, user_id):
+        print(product_id, user_id, flush=True)
         product_inCart = Cart.query.filter_by(
-            user_id=user_id, product_id=product_id)
+            user_id=user_id, product_id=product_id).first()
         if product_inCart:
             db.session.delete(product_inCart)
             db.session.commit()
+
             return True, "Cart Item Deleted"
         else:
             return False, "Cart Item not found"

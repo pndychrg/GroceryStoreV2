@@ -58,12 +58,10 @@ class CartAPI(Resource):
         product_id = request.args.get('product_id')
         if product_id:
             response, msg = cartDB.removeFromCart(
-                product_id == product_id, user_id=userFromToken.get('id'))
+                product_id=product_id, user_id=userFromToken.get('id'))
             if response:
                 return response, 200
             else:
                 return {'msg': msg}, 400
         else:
             return {'msg': 'cart_id not found'}, 400
-
-    

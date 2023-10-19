@@ -5,18 +5,29 @@
             <ProductCard v-for="product in products" :key="product.id" :productData="product" loggedInRole="user"
                 class="ProductCard card" @add-to-cart="handleCart" :cartData="getCartData(product.id)" />
         </div>
+
+        <button class="btn btn-lg floating-container btn-outline-danger cartFloatingButton" type="button" @click="showCart">
+            <font-awesome-icon :icon="['fas', 'fa-cart-plus']" class="faa-horizontal animated-hover " />
+        </button>
+
+        <teleport to="#modal-root">
+            <CartModal v-show="isCartShown" :cart="cartDetails?.cart" :cartSum="cartDetails?.sum"
+                @close="isCartShown = false" @remove-cart-item="removeCartItem" />
+        </teleport>
     </div>
 </template>
 
 <script>
+import CartModal from "@/components/widgets/cart.vue"
 import { productMethods } from '@/services/HTTPRequests/productMethods';
 import ProductCard from '@/components/widgets/cards/product_card.vue';
-import { onMounted, ref } from 'vue';
+import { onMounted, ref, computed } from 'vue';
 import { cartMethods } from '@/services/HTTPRequests/cartMethods';
 export default {
     name: 'UserHome',
     components: {
-        ProductCard
+        ProductCard,
+        CartModal
     },
     setup() {
         const products = ref([]);
@@ -38,10 +49,21 @@ export default {
             const response = await cartMethods.addToCart(dataObject)
 
             if (response) {
-                console.log(response);
+                // console.log(response);
+                cartDetails.value.cart.unshift(response);
+                cartDetails.value.sum += response.totalSum;
             }
         }
 
+        const productCartData = computed(
+            function (product_id) {
+                if (cartDetails.value && cartDetails.value.cart) {
+                    return cartDetails.value.cart.find(cartElement => cartElement.product.id === product_id);
+                } else {
+                    return null;
+                }
+            }
+        )
         const getCartData = (product_id) => {
             if (cartDetails.value && cartDetails.value.cart) {
                 return cartDetails.value.cart.find(cartElement => cartElement.product.id === product_id);
@@ -50,15 +72,34 @@ export default {
             }
         }
 
+
+        const removeCartItem = async (cartItem) => {
+            // console.log(cartItem)
+            const response = await cartMethods.deleteCartProduct(cartItem)
+            if (response) {
+                cartDetails.value.cart = cartDetails.value.cart.filter(s => s !== cartItem)
+
+            }
+        }
         onMounted(() => {
             fetchProductsData()
             fetchCartForUser()
         })
 
+        // Cart opening
+        const isCartShown = ref(false);
+        const showCart = () => {
+            isCartShown.value = true;
+        }
         return {
             products,
             handleCart,
-            getCartData
+            getCartData,
+            isCartShown,
+            showCart,
+            cartDetails,
+            removeCartItem,
+            productCartData
         }
     }
 
@@ -77,12 +118,46 @@ export default {
 }
 
 
-.ProductCard {
-    border: none;
-    box-shadow: 3px 3px 5px rgba(34, 35, 58, 0.2);
-    border-radius: 15px;
-    transition: all .3s;
+.card {
     width: 18rem;
     margin: 10px;
+    border: none;
+    background: #fff;
+    box-shadow: 0 6px 10px rgba(0, 0, 0, .08), 0 0 6px rgba(0, 0, 0, .05);
+    transition: .3s transform cubic-bezier(.155, 1.105, .295, 1.12), .3s box-shadow, .3s -webkit-transform cubic-bezier(.155, 1.105, .295, 1.12);
+
+    cursor: pointer;
+}
+
+.card:hover {
+    transform: scale(1.05);
+    box-shadow: 0 10px 20px rgba(0, 0, 0, .12), 0 4px 8px rgba(0, 0, 0, .06);
+}
+
+.floating-container {
+
+    /* border-radius: 15px;
+    border: 2px solid red; */
+    /* position: fixed; */
+    position: fixed;
+    bottom: 10px;
+    right: 0px;
+    /* float: right; */
+    margin-right: 25px;
+    box-shadow: 0 6px 10px rgba(0, 0, 0, .08), 0 0 6px rgba(0, 0, 0, .05);
+    transition: .3s transform cubic-bezier(.155, 1.105, .295, 1.12), .3s box-shadow, .3s -webkit-transform cubic-bezier(.155, 1.105, .295, 1.12);
+}
+
+.floating-container:hover {
+    transform: scale(1.05);
+    box-shadow: 0 10px 20px rgba(0, 0, 0, .12), 0 4px 8px rgba(0, 0, 0, .06);
+}
+
+.cartFloatingButton {
+    color: #4D6DE3;
+}
+
+.cartFloatingButton:hover {
+    color: white;
 }
 </style>

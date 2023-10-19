@@ -17,6 +17,7 @@
                 <br>
                 Expiry Date : {{
                     productData.expiryDate }}
+                <br>
             </p>
             <div class="d-flex justify-content-end" v-if="loggedInRole == 'manager'">
                 <button class="btn" @click="$emit('delete-product')">
@@ -28,8 +29,8 @@
                 </button>
 
             </div>
-            <div v-else class="d-flex justify-content-end">
-                <form @submit.prevent="$emit('add-to-cart', cartForm)" class="row">
+            <div v-else class="d-flex justify-content-end ">
+                <form @submit.prevent="$emit('add-to-cart', cartForm)" class="row end-0">
                     <input type="number" v-model="cartForm.numOfProduct" class="form-control mb-2 col" required
                         :max="productData.availableAmount" min="1">
                     <button class="btn col-auto" type="submit">
@@ -59,9 +60,7 @@ export default {
         });
 
         watch(() => props.cartData, (newCartData) => {
-            if (newCartData) {
-                cartForm.numOfProduct = newCartData.numOfProduct
-            }
+            cartForm.numOfProduct = newCartData?.numOfProduct ?? null;
         });
 
         return {

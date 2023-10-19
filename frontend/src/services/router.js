@@ -10,7 +10,6 @@ import AccessDenied from "../components/screens/accessDenied.vue";
 import NotApproved from "../components/screens/storeManager_notApproved.vue";
 import ApproveManager from "../components/screens/admin/approve_manager.vue";
 import ProductPage from "../components/screens/products.vue";
-
 const routes = [
   {
     name: "home",
