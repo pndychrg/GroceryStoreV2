@@ -5,6 +5,7 @@ from sqlalchemy.exc import SQLAlchemyError, IntegrityError
 from datetime import datetime
 
 
+
 class ProductDB:
 
     def getAllProducts(self):
