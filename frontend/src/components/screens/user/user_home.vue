@@ -3,7 +3,8 @@
         <h2>Browse Products</h2>
         <div class="row m-2 products-wrapper">
             <ProductCard v-for="product in products" :key="product.id" :productData="product" loggedInRole="user"
-                class="ProductCard card" @add-to-cart="handleCart" :cartData="getCartData(product.id)" />
+                class="card" :class="{ 'card-unavailable': product.availableAmount == 0 }" @add-to-cart="handleCart"
+                :cartData="getCartData(product.id)" />
         </div>
 
         <button class="btn btn-lg floating-container btn-outline-danger cartFloatingButton" type="button" @click="showCart">
@@ -12,7 +13,7 @@
 
         <teleport to="#modal-root">
             <CartModal v-show="isCartShown" :cart="cartDetails?.cart" :cartSum="cartDetails?.sum"
-                @close="isCartShown = false" @remove-cart-item="removeCartItem" />
+                @close="isCartShown = false" @remove-cart-item="removeCartItem" @buy-all="buyAllItems" />
         </teleport>
     </div>
 </template>
@@ -20,6 +21,7 @@
 <script>
 import CartModal from "@/components/widgets/cart.vue"
 import { productMethods } from '@/services/HTTPRequests/productMethods';
+import { buyMethods } from "@/services/HTTPRequests/buyMethods";
 import ProductCard from '@/components/widgets/cards/product_card.vue';
 import { onMounted, ref, computed } from 'vue';
 import { cartMethods } from '@/services/HTTPRequests/cartMethods';
@@ -81,6 +83,19 @@ export default {
 
             }
         }
+
+        const buyAllItems = async () => {
+            const response = await buyMethods.buyAllCartItems();
+            if (response) {
+                console.log(response)
+                cartDetails.value = {}
+                // closing the cart
+                isCartShown.value = false;
+                // updating the home screen after buying so that updated available amount is shown
+                // TODO YOU CAN DO IT THROUGH FRONTEND ONLY TRY THAT METHOD FOR BETTER PERFORMANCE
+                fetchProductsData()
+            }
+        }
         onMounted(() => {
             fetchProductsData()
             fetchCartForUser()
@@ -99,7 +114,8 @@ export default {
             showCart,
             cartDetails,
             removeCartItem,
-            productCartData
+            productCartData,
+            buyAllItems
         }
     }
 
@@ -127,6 +143,15 @@ export default {
     transition: .3s transform cubic-bezier(.155, 1.105, .295, 1.12), .3s box-shadow, .3s -webkit-transform cubic-bezier(.155, 1.105, .295, 1.12);
 
     cursor: pointer;
+}
+
+.card-unavailable {
+    box-shadow: 0 6px 10px rgba(255, 0, 0, .10), 0 0 6px rgba(255, 0, 0, .15) !important;
+}
+
+.card-unavailable:hover {
+    transform: scale(1.05);
+    box-shadow: 0 10px 20px rgba(255, 0, 0, .12), 0 4px 8px rgba(255, 0, 0, .06) !important;
 }
 
 .card:hover {

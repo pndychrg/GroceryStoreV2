@@ -1,5 +1,5 @@
 <template>
-    <div class="section-card">
+    <div class="">
         <div class="card-body text-start">
             <h5 class="card-title">
                 {{ productData.name }}
@@ -30,7 +30,8 @@
 
             </div>
             <div v-else class="d-flex justify-content-end ">
-                <form @submit.prevent="$emit('add-to-cart', cartForm)" class="row end-0">
+                <form @submit.prevent="$emit('add-to-cart', cartForm)" class="row end-0"
+                    v-if="productData.availableAmount > 0">
                     <input type="number" v-model="cartForm.numOfProduct" class="form-control mb-2 col" required
                         :max="productData.availableAmount" min="1">
                     <button class="btn col-auto" type="submit">
@@ -38,6 +39,7 @@
                             style="color: #4D6DE3;" />
                     </button>
                 </form>
+                <button v-else disabled class="btn btn-danger">Unavailable </button>
             </div>
         </div>
     </div>
