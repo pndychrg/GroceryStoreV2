@@ -1,3 +1,4 @@
+import base64
 from extensions import db
 
 
@@ -6,6 +7,7 @@ class Product(db.Model):
     name = db.Column(db.String(100), unique=True, nullable=False)
     availableAmount = db.Column(db.Integer, nullable=False, default=1)
     rate = db.Column(db.Integer)
+    img = db.Column(db.LargeBinary)
     manufactureDate = db.Column(db.DateTime)
     expiryDate = db.Column(db.DateTime)
     section_id = db.Column(db.Integer, db.ForeignKey(
@@ -22,5 +24,6 @@ class Product(db.Model):
             "availableAmount": self.availableAmount,
             "manufactureDate": self.manufactureDate.strftime('%Y-%m-%d') if self.manufactureDate != None else None,
             "expiryDate": self.expiryDate.strftime('%Y-%m-%d') if self.expiryDate != None else None,
-            "section": self.section.toJson()
+            "section": self.section.toJson(),
+            "img": base64.b64encode(self.img).decode('utf-8') if self.img != None else None,
         }

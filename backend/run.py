@@ -25,6 +25,7 @@ def create_app():
     from lib.api.approve_managers import ApproveManagerAPI
     from lib.api.approve_sectionRequests import ApproveSectionRequests
     from lib.api.products import ProductsAPI
+    from lib.api.products import ProductImage
     from lib.api.cart import CartAPI
     from lib.api.buy import BuyAPI
     # registering all the api resources
@@ -35,6 +36,7 @@ def create_app():
     api.add_resource(SectionRequestsAPI, '/section/request')
     api.add_resource(ApproveSectionRequests, '/section/approve')
     api.add_resource(ProductsAPI, '/product')
+    api.add_resource(ProductImage, '/product/img')
     api.add_resource(CartAPI, '/cart')
     api.add_resource(BuyAPI, '/buy')
     # api docs init code

@@ -6,19 +6,33 @@
             <div class="row">
                 <h2 class="col text-start">
                     Products
-
                     <button class="btn btn-primary" type="button" @click="showAddProductForm">
                         Add Product
                     </button>
                 </h2>
             </div>
-
             <div v-for="product in products" :key="product.id" class="ProductCard card">
                 <ProductCard loggedInRole="manager" :productData="product" @edit-product="showEditProductForm(product)"
-                    @delete-product="showDeleteConfirmation(product)" />
+                    @delete-product="showDeleteConfirmation(product)"
+                    @show-addimagemodal="showAddProductImageModal(product)" />
             </div>
         </div>
-
+        <div v-show="isModalVisible" :class="{ 'modal': isModalVisible, 'hidden': !isModalVisible }">
+            <div class="modal-dialog modal-dialog-centered">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title">
+                            Add Product Image For Product : {{ selectedProduct?.name }}
+                        </h5>
+                        <button type="button" class="btn-close" @click="closeAddProductImageModal"></button>
+                    </div>
+                    <div class="modal-footer form">
+                        <input type="file" class="formFile" @change="handleFileUpload">
+                        <button @click="uploadImage" class="btn">Upload</button>
+                    </div>
+                </div>
+            </div>
+        </div>
         <teleport to="#modal-root">
             <ConfirmationModal v-show="isDeleteModalShown" deleteElement="Product" :element="selectedProduct"
                 @close="isDeleteModalShown = false" @confirm="deleteProduct" />
@@ -97,9 +111,32 @@ export default {
             if (response) {
                 products.value = products.value.filter(s => s !== deletedProduct)
             }
-
-
         }
+
+        // Image Methods
+        const isModalVisible = ref(false);
+        const productImage = ref(null);
+        const showAddProductImageModal = (product) => {
+            selectedProduct.value = product;
+            isModalVisible.value = true;
+        }
+        const closeAddProductImageModal = () => {
+            selectedProduct.value = null;
+            isModalVisible.value = false;
+        };
+        const handleFileUpload = (event) => {
+            // Handle file selection
+            productImage.value = event.target.files[0];
+            // console.log(productImage.value)
+        };
+        const uploadImage = async () => {
+            // console.log(selectedProduct.value.id);
+            const response = await productMethods.addProductImage(selectedProduct.value, productImage.value);
+            console.log(response);
+            // update the img according to response
+            // Handle image upload
+            closeAddProductImageModal(); // Close the modal after uploading
+        };
 
         onMounted(() => {
             fetchProductsData();
@@ -117,7 +154,13 @@ export default {
             handleProductEdited,
             isDeleteModalShown,
             showDeleteConfirmation,
-            deleteProduct
+            deleteProduct,
+            productImage,
+            showAddProductImageModal,
+            handleFileUpload,
+            uploadImage,
+            isModalVisible,
+            closeAddProductImageModal
         }
     }
 }
@@ -139,7 +182,40 @@ export default {
     box-shadow: 3px 3px 5px rgba(34, 35, 58, 0.2);
     border-radius: 15px;
     transition: all .3s;
-    width: 18rem;
+
+    max-width: 540px;
     margin: 10px;
+}
+
+
+.modal {
+    display: block;
+    position: fixed;
+    /* Stay in place */
+    z-index: 1;
+    /* Sit on top */
+    left: 0;
+    top: 0;
+    width: 100%;
+    /* Full width */
+    height: 100%;
+    /* Full height */
+    overflow: auto;
+    /* Enable scroll if needed */
+    background-color: rgb(0, 0, 0);
+    /* Fallback color */
+    background-color: rgba(0, 0, 0, 0.4);
+    /* Black w/ opacity */
+}
+
+.modal-content {
+    background-color: #fefefe;
+    margin: 15% auto;
+    /* 15% from the top and centered */
+    padding: 20px;
+    border: 1px solid #888;
+    width: max-content;
+    /* Could be more or less, depending on screen size */
+
 }
 </style>

@@ -5,7 +5,6 @@ from sqlalchemy.exc import SQLAlchemyError, IntegrityError
 from datetime import datetime
 
 
-
 class ProductDB:
 
     def getAllProducts(self):
@@ -118,3 +117,13 @@ class ProductDB:
             return None, "Section Request with same name already exists"
         except SQLAlchemyError as e:
             return None, str(e.__dict__['orig'])
+
+    def addProductImage(self, product_id, image):
+        # fetching the product from product id
+        product, msg = self.getProductById(product_id=product_id)
+        if product:
+            product.img = image
+            db.session.commit()
+            return product, "Image Uploaded Successfully"
+        else:
+            return None, "Product not found"

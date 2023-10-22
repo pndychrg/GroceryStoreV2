@@ -3,6 +3,7 @@ import {
   httpGetAllRequest,
   httpPostRequest,
   htttpPutRequest,
+  httpPostImageRequest,
 } from "../axios";
 
 import { showSuccessToast } from "@/static/js/toasts";
@@ -38,6 +39,19 @@ export const productMethods = {
     });
     if (response) {
       showSuccessToast("Product Deleted");
+    }
+    return response;
+  },
+
+  async addProductImage(product, image) {
+    const formData = new FormData();
+    formData.append("image", image);
+    const response = await httpPostImageRequest(
+      `/product/img?product_id=${product.id}`,
+      formData
+    );
+    if (response) {
+      showSuccessToast("Image Updated Successfully");
     }
     return response;
   },

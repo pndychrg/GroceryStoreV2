@@ -73,6 +73,21 @@ export const httpDeleteRequest = async (path, params) => {
   }
 };
 
+export const httpPostImageRequest = async (path, formData) => {
+  try {
+    const response = await axios.post(path, formData, {
+      headers: {
+        "Content-Type": "multipart/form-data",
+      },
+    });
+    return response.data;
+  } catch (e) {
+    console.log(e.response.data.msg);
+    showErrorToast(e.response.data.msg);
+    return null;
+  }
+};
+
 export const updateToken = () => {
   updateAuthHeader();
 };

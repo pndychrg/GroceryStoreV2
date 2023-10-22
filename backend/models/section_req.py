@@ -11,7 +11,7 @@ class SectionRequest(db.Model):
     request = db.Column(db.String(200))
     name = db.Column(db.String(100), unique=True)
     unit = db.Column(db.String(100))
-    section_icon = db.Column(db.LargeBinary)
+    # section_icon = db.Column(db.LargeBinary)
     section = db.relationship("Section", backref=db.backref('section_request'))
 
     def toJson(self):
@@ -21,5 +21,5 @@ class SectionRequest(db.Model):
             'unit': self.unit,
             'reg_section_id':self.reg_section_id,
             'request':self.request,
-            'section_icon': self.section_icon
+            # 'section_icon': self.section_icon
         }

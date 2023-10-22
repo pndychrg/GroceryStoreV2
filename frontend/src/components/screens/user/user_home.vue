@@ -2,9 +2,11 @@
     <div>
         <h2>Browse Products</h2>
         <div class="row m-2 products-wrapper">
-            <ProductCard v-for="product in products" :key="product.id" :productData="product" loggedInRole="user"
-                class="card" :class="{ 'card-unavailable': product.availableAmount == 0 }" @add-to-cart="handleCart"
-                :cartData="getCartData(product.id)" />
+            <div v-for="product in products" :key="product.id" class="card"
+                :class="{ 'card-unavailable': product.availableAmount == 0 }">
+                <ProductCard :productData="product" loggedInRole="user" @add-to-cart="handleCart"
+                    :cartData="getCartData(product.id)" />
+            </div>
         </div>
 
         <button class="btn btn-lg floating-container btn-outline-danger cartFloatingButton" type="button" @click="showCart">
@@ -140,13 +142,13 @@ export default {
 
 
 .card {
-    width: 18rem;
+    /* width: 180rem; */
+    max-width: 540px;
     margin: 10px;
     border: none;
     background: #fff;
     box-shadow: 0 6px 10px rgba(0, 0, 0, .08), 0 0 6px rgba(0, 0, 0, .05);
     transition: .3s transform cubic-bezier(.155, 1.105, .295, 1.12), .3s box-shadow, .3s -webkit-transform cubic-bezier(.155, 1.105, .295, 1.12);
-
     cursor: pointer;
 }
 

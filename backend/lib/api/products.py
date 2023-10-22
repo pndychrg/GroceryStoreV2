@@ -3,6 +3,8 @@ from extensions import db
 from flask_restful import Resource, reqparse, request
 from flask_jwt_extended import jwt_required
 from lib.methods.decorators import checkJWTForManager, checkJWTForUserOrManager
+from werkzeug.datastructures import FileStorage
+
 
 # for POST Method
 create_product_parser = reqparse.RequestParser()
@@ -103,3 +105,50 @@ class ProductsAPI(Resource):
                 return {'msg': msg}, 400
         else:
             return {'msg': 'product_id not found'}, 400
+
+
+add_product_img = reqparse.RequestParser()
+add_product_img.add_argument('image', type=FileStorage, location='files',
+                             required=True, help='This Field cannot be blank')
+
+
+class ProductImage(Resource):
+
+    @jwt_required()
+    @checkJWTForManager
+    def post(self):
+
+        # fetching the product id from the request
+        product_id = request.args.get('product_id')
+        data = add_product_img.parse_args()
+        # uploaded image
+        uploaded_img = data.get('image')
+        if product_id:
+            if uploaded_img:
+                if allowed_image(uploaded_img.filename):
+                    # read the image file as bytes
+                    img_data = uploaded_img.read()
+                    if img_data:
+                        response, msg = productDB.addProductImage(
+                            product_id=product_id,
+                            image=img_data
+                        )
+                        if response:
+                            return response.toJson(), 200
+                        else:
+                            return {'msg': msg}, 400
+                    else:
+                        return {'msg': 'Image Data is empty'}, 400
+                else:
+                    return {'msg': "Invalid image format"}, 400
+            else:
+                return {'msg': 'Image File not found'}, 400
+        else:
+            return {'msg': "product_id not found"}, 400
+
+
+ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg', 'gif'}
+
+
+def allowed_image(filename):
+    return '.' in filename and filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
