@@ -1,5 +1,5 @@
 import { showSuccessToast } from "@/static/js/toasts";
-import { httpPostRequest } from "../axios";
+import { httpPostRequest, httpGetAllRequest } from "../axios";
 
 export const buyMethods = {
   async buyAllCartItems() {
@@ -8,5 +8,14 @@ export const buyMethods = {
       showSuccessToast("All Items are bought successfully");
     }
     return response;
+  },
+
+  async getAllBills() {
+    const response = await httpGetAllRequest("/buy");
+    if (response) {
+      return response;
+    } else {
+      return [];
+    }
   },
 };

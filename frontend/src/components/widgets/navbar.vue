@@ -29,7 +29,7 @@
                     </div>
                     <div class="row" v-else>
                         <li class="nav-item col">
-                            <RouterLink :to='dashboardLink' class="btn btn-dark profile-button">
+                            <RouterLink to='/dashboard' class="btn btn-dark profile-button">
                                 <font-awesome-icon :icon="['fas', 'user']" class="faa-horizontal animated-hover" />
                             </RouterLink>
                         </li>
@@ -73,10 +73,7 @@ export default {
             }
         })
         const logoutMethod = store.logoutUser;
-        // calculating the dashboard link according to user role
-        const dashboardLink = computed(() => {
-            return '/' + store.user.role + '/dashboard'
-        });
+
 
 
         //sidebar setup
@@ -89,7 +86,6 @@ export default {
             routeName,
             isAuthenticated,
             logoutMethod,
-            dashboardLink,
             isNotApproved,
             isSidebarShown,
             showSidebar

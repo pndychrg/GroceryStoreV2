@@ -5,11 +5,11 @@ import RegisterComponent from "../components/screens/register.vue";
 import { ROLES } from "./roles";
 import { userStateStore } from "./stateManager";
 import SectionsPage from "../components/screens/sections.vue";
-import AdminDashboard from "../components/screens/admin/dashboard.vue";
 import AccessDenied from "../components/screens/accessDenied.vue";
 import NotApproved from "../components/screens/storeManager_notApproved.vue";
 import ApproveManager from "../components/screens/admin/approve_manager.vue";
 import ProductPage from "../components/screens/products.vue";
+import Dashboard from "../components/screens/dashboard.vue";
 const routes = [
   {
     name: "home",
@@ -29,11 +29,10 @@ const routes = [
     meta: { requireAuth: true, roles: [ROLES.ADMIN, ROLES.STORE_MANAGER] },
   },
   {
-    name: "adminDashboard",
-    path: "/admin/dashboard",
-    alias: "/adminDashboard",
-    component: AdminDashboard,
-    meta: { requireAuth: true, roles: [ROLES.ADMIN] },
+    name: "dashboard",
+    path: "/dashboard",
+    component: Dashboard,
+    meta: { requireAuth: true },
   },
   {
     name: "accessDenied",

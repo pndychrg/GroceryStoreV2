@@ -18,5 +18,6 @@ class Bill(db.Model):
             "id": self.id,
             "orders": [order.toJson() for order in self.orders],
             "date": self.date.strftime('%Y-%m-%d') if self.date != None else None,
-            "finalAmount": self.finalAmount
+            "finalAmount": self.finalAmount,
+            "billAmount": self.billAmount,
         }

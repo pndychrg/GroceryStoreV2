@@ -23,3 +23,17 @@ class BuyAPI(Resource):
             return response.toJson(), 200
         else:
             return {'msg': msg}, 400
+
+    @jwt_required()
+    @checkJWTForUser
+    def get(self):
+
+        # getting the user_id from jwt token
+        user_id = get_jwt_identity().get('id')
+
+        response = shopDB.getBillsForUser(user_id=user_id)
+
+        if response:
+            return [bill.toJson() for bill in response], 200
+        else:
+            return [], 200

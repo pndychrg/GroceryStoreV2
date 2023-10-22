@@ -1,20 +1,22 @@
 <template>
-    <div>
+    <div class="dashboard">
         <AdminDashboard v-if="loggedInRole == 'admin'" />
-        <UserHome v-else-if="loggedInRole == 'user'" />
+        <UserDashboard v-else-if="loggedInRole == 'user'" />
     </div>
 </template>
 
 <script>
 import AdminDashboard from '@/components/screens/admin/admin_dashboard.vue'
-import UserHome from '@/components/screens/user/user_home.vue'
+import UserDashboard from '@/components/screens/user/user_dashboard.vue'
 import { userStateStore } from '@/services/stateManager';
 import { computed } from 'vue';
 export default {
-    name: 'HomeComponent',
+    // eslint-disable-next-line vue/multi-word-component-names
+    name: "Dashboard",
     components: {
         AdminDashboard,
-        UserHome,
+        UserDashboard,
+
     },
     setup() {
         const store = userStateStore()
@@ -31,4 +33,8 @@ export default {
 }
 </script>
 
-<style scoped></style>
+<style scoped>
+.dashboard {
+    background-color: white;
+}
+</style>
