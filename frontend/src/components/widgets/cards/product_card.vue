@@ -1,8 +1,11 @@
 <template>
-    <div class="row g-0">
-        <div class="col-md-4 ">
-            <img v-if="productData.img != null" :src="imageData" class="rounded-start card-img image " alt="Base64 Image">
-            <img v-else src="" alt="" class="rounded-start card-img placeholder img-fluid" aria-hidden="true">
+    <div class="row g-0 ">
+        <div class="col-md-4 align-self-center">
+            <img v-if="productData.img != null" :src="imageData" class="rounded-start card-img image img-fluid "
+                alt="Base64 Image">
+            <img v-else src="@/assets/img_notavailable.jpeg" alt="" class="rounded-start card-img  img-fluid"
+                aria-hidden="true">
+
         </div>
         <!-- <img src="..." class="card-img-top" alt="..."> -->
         <div class="col-md-8 p-2">

@@ -11,16 +11,42 @@
 
         <button class="btn btn-lg floating-container btn-outline-danger cartFloatingButton" type="button" @click="showCart">
             <font-awesome-icon :icon="['fas', 'fa-cart-plus']" class="faa-horizontal animated-hover " />
-            <span v-if="cartDetails.cart?.length > 0"
+            <span v-if="cartDetails?.cart?.length > 0"
                 class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
                 {{ cartDetails.cart.length }}
             </span>
 
         </button>
 
+        <!-- Button trigger modal -->
+        <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal"
+            id="buyConfirmation">
+            Launch demo modal
+        </button>
+
+        <!-- Modal -->
+        <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered ">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h1 class="modal-title fs-5" id="exampleModalLabel">Buy Confirmation</h1>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body text-start">
+                        <h5>Confirm and Pay for all the goods</h5>
+                        <p>Total Order Sum = {{ cartDetails.sum }}</p>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                        <button type="button" class="btn btn-primary" @click="buyAllItems">Buy</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
         <teleport to="#modal-root">
             <CartModal v-show="isCartShown" :cart="cartDetails?.cart" :cartSum="cartDetails?.sum"
-                @close="isCartShown = false" @remove-cart-item="removeCartItem" @buy-all="buyAllItems" />
+                @close="isCartShown = false" @remove-cart-item="removeCartItem" @buy-all="buyModalSHow" />
         </teleport>
     </div>
 </template>
@@ -103,6 +129,14 @@ export default {
                 fetchProductsData()
             }
         }
+
+        const buyModalSHow = () => {
+            // check if products are available in cart
+            if (cartDetails.value.cart.length > 0) {
+                document.getElementById("buyConfirmation").click()
+            }
+            // document.getElementById("exampleModal").modal('show')
+        }
         onMounted(() => {
             fetchProductsData()
             fetchCartForUser()
@@ -122,7 +156,8 @@ export default {
             cartDetails,
             removeCartItem,
             productCartData,
-            buyAllItems
+            buyAllItems,
+            buyModalSHow
         }
     }
 

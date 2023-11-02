@@ -45,7 +45,8 @@
                 <h4 class="col-auto float-end">$ {{ cartSum }}</h4>
             </div>
             <div class="d-grid gap-2">
-                <button class="btn btn-primary" type="button" @click="$emit('buy-all')">Checkout</button>
+                <button v-if="isCartEmpty" class="btn btn-primary" type="button" @click="$emit('buy-all')">Checkout</button>
+                <button v-else class="btn btn-primary" type="button" @click="$emit('buy-all')" disabled>Checkout</button>
             </div>
         </div>
 
@@ -53,7 +54,7 @@
 </template>
 
 <script>
-// import { watch } from 'vue';
+import { computed } from 'vue';
 
 export default {
     name: "CartPage",
@@ -67,8 +68,18 @@ export default {
                 emit('close');
             }
         }
+
+        const isCartEmpty = computed(() => {
+            if (props.cart?.length > 0) {
+                return true;
+            } else {
+                return false;
+            }
+        });
+
         return {
-            closeCart
+            closeCart,
+            isCartEmpty
         }
     }
 }
