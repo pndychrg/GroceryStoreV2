@@ -19,18 +19,20 @@
         </button>
 
         <!-- Button trigger modal -->
-        <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal"
+        <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#buyConfirmationModal"
             id="buyConfirmation">
             Launch demo modal
         </button>
 
         <!-- Modal -->
-        <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal fade" id="buyConfirmationModal" tabindex="-1" aria-labelledby="exampleModalLabel"
+            aria-hidden="true">
             <div class="modal-dialog modal-dialog-centered ">
                 <div class="modal-content">
                     <div class="modal-header">
                         <h1 class="modal-title fs-5" id="exampleModalLabel">Buy Confirmation</h1>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"
+                            id="closeBuyConfirmation"></button>
                     </div>
                     <div class="modal-body text-start">
                         <h5>Confirm and Pay for all the goods</h5>
@@ -126,7 +128,9 @@ export default {
                 isCartShown.value = false;
                 // updating the home screen after buying so that updated available amount is shown
                 // TODO YOU CAN DO IT THROUGH FRONTEND ONLY TRY THAT METHOD FOR BETTER PERFORMANCE
+                document.getElementById("closeBuyConfirmation").click()
                 fetchProductsData()
+
             }
         }
 
