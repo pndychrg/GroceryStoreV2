@@ -15,13 +15,6 @@
                 class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
                 {{ cartDetails.cart.length }}
             </span>
-
-        </button>
-
-        <!-- Button trigger modal -->
-        <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#buyConfirmationModal"
-            id="buyConfirmation">
-            Launch demo modal
         </button>
 
         <!-- Modal -->
@@ -47,8 +40,8 @@
         </div>
 
         <teleport to="#modal-root">
-            <CartModal v-show="isCartShown" :cart="cartDetails?.cart" :cartSum="cartDetails?.sum"
-                @close="isCartShown = false" @remove-cart-item="removeCartItem" @buy-all="buyModalSHow" />
+            <CartModal v-show="isCartShown" :cart="cartDetails?.cart" :cartSum="cartDetails?.sum" @close="showCart"
+                @remove-cart-item="removeCartItem" @buy-all="buyModalSHow" />
         </teleport>
     </div>
 </template>
@@ -60,6 +53,7 @@ import { buyMethods } from "@/services/HTTPRequests/buyMethods";
 import ProductCard from '@/components/widgets/cards/product_card.vue';
 import { onMounted, ref, computed } from 'vue';
 import { cartMethods } from '@/services/HTTPRequests/cartMethods';
+import { UIStateStore } from "@/services/uiStateManager";
 export default {
     name: 'UserHome',
     components: {
@@ -67,6 +61,7 @@ export default {
         CartModal
     },
     setup() {
+        const uiStore = UIStateStore()
         const products = ref([]);
         const cartDetails = ref({});
         const fetchProductsData = async () => {
@@ -134,7 +129,7 @@ export default {
             }
         }
 
-        const buyModalSHow = () => {
+        const buyModalShow = () => {
             // check if products are available in cart
             if (cartDetails.value.cart.length > 0) {
                 document.getElementById("buyConfirmation").click()
@@ -149,7 +144,8 @@ export default {
         // Cart opening
         const isCartShown = ref(false);
         const showCart = () => {
-            isCartShown.value = true;
+            uiStore.toggleModal();
+            isCartShown.value = !isCartShown.value;
         }
         return {
             products,
@@ -161,7 +157,7 @@ export default {
             removeCartItem,
             productCartData,
             buyAllItems,
-            buyModalSHow
+            buyModalSHow: buyModalShow
         }
     }
 

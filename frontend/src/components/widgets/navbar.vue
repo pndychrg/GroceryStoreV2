@@ -53,6 +53,7 @@
 import { ref, computed } from 'vue';
 import { RouterLink, useRouter } from 'vue-router';
 import { userStateStore } from '@/services/stateManager';
+import { UIStateStore } from '@/services/uiStateManager';
 import Sidebar from '@/components/widgets/sidebar/sidebar.vue'
 export default {
     // eslint-disable-next-line vue/multi-word-component-names
@@ -60,6 +61,7 @@ export default {
     components: { RouterLink, Sidebar },
     setup() {
         const store = userStateStore();
+        const UIStore = UIStateStore();
         const router = useRouter();
         const routeName = ref(router.currentRoute.value.name);
         // Use a computed property for isAuthenticated
@@ -74,11 +76,10 @@ export default {
         })
         const logoutMethod = store.logoutUser;
 
-
-
         //sidebar setup
         const isSidebarShown = ref(false);
         const showSidebar = () => {
+            UIStore.toggleModal()
             isSidebarShown.value = !isSidebarShown.value
         }
 

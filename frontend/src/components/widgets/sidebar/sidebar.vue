@@ -26,6 +26,7 @@
 <script>
 import { userStateStore } from '@/services/stateManager';
 import SidebarLink from './sidebar_link.vue';
+// import { UIStateStore } from '@/services/uiStateManager';
 export default {
     // eslint-disable-next-line vue/multi-word-component-names
     name: "Sidebar",
@@ -37,6 +38,7 @@ export default {
     ],
     setup(props, { emit }) {
         const store = userStateStore()
+        // const uiStore = UIStateStore();
         const closeSidebar = ($event) => {
             //clicking on the modal button through javascript
             if ($event.target.classList.contains('sidebar-overlay')) {
@@ -94,7 +96,9 @@ export default {
     position: fixed;
     top: 0;
     left: 0;
-    height: 97%;
+    height: 100%;
     width: 288px;
+    margin: 0px;
+    border-radius: 0px 10px 10px 0px !important;
 }
 </style>
