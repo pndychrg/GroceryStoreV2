@@ -127,3 +127,20 @@ class ProductDB:
             return product, "Image Uploaded Successfully"
         else:
             return None, "Product not found"
+
+    def search_products(self, name=None, section_id=None, manufacture_date=None, rate=None):
+
+        query = Product.query
+        if name:
+            query = query.filter(Product.name.like(f"%{name}%"))
+        if section_id:
+            query = query.filter(Product.section_id == section_id)
+        if rate:
+            query = query.filter(Product.rate <= rate)
+        if manufacture_date:
+            # converting the manufacture_date
+            manufacture_date = datetime.strptime(manufacture_date, "%Y-%m-%d")
+            query = query.filter(Product.manufactureDate <= manufacture_date)
+
+        products = query.all()
+        return products, "Products found"

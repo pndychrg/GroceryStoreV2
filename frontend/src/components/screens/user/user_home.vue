@@ -11,9 +11,9 @@
 
         <button class="btn btn-lg floating-container btn-outline-danger cartFloatingButton" type="button" @click="showCart">
             <font-awesome-icon :icon="['fas', 'fa-cart-plus']" class="faa-horizontal animated-hover " />
-            <span v-if="cartDetails?.cart?.length > 0"
+            <span v-if="cartDetails.cart != null && cartDetails.cart.length > 0"
                 class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
-                {{ cartDetails.cart.length }}
+                {{ cartDetails?.cart?.length }}
             </span>
         </button>
 
@@ -63,7 +63,10 @@ export default {
     setup() {
         const uiStore = UIStateStore()
         const products = ref([]);
-        const cartDetails = ref({});
+        const cartDetails = ref({
+            cart: null,
+            sum: null,
+        });
         const fetchProductsData = async () => {
             const productsData = await productMethods.fetchAllProducts();
             products.value = productsData;
