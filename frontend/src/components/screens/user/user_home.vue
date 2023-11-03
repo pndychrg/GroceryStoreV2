@@ -1,6 +1,11 @@
 <template>
     <div>
-        <h2>Browse Products</h2>
+        <h2>Browse Products
+            <button class="ms-2 btn btn-lg" data-bs-toggle="modal" data-bs-target="#searchModal"
+                id="openSearchModalButton"><font-awesome-icon :icon="['fas', 'magnifying-glass']"
+                    class="faa-horizontal animated-hover " style="color: #4D6DE3;" />
+            </button>
+        </h2>
         <div class="row m-2 products-wrapper">
             <div v-for="product in products" :key="product.id" class="card"
                 :class="{ 'card-unavailable': product.availableAmount == 0 }">
@@ -38,6 +43,7 @@
                 </div>
             </div>
         </div>
+        <SearchProductModal />
 
         <teleport to="#modal-root">
             <CartModal v-show="isCartShown" :cart="cartDetails?.cart" :cartSum="cartDetails?.sum" @close="showCart"
@@ -54,11 +60,13 @@ import ProductCard from '@/components/widgets/cards/product_card.vue';
 import { onMounted, ref, computed } from 'vue';
 import { cartMethods } from '@/services/HTTPRequests/cartMethods';
 import { UIStateStore } from "@/services/uiStateManager";
+import SearchProductModal from "@/components/widgets/search_products.vue"
 export default {
     name: 'UserHome',
     components: {
         ProductCard,
-        CartModal
+        CartModal,
+        SearchProductModal
     },
     setup() {
         const uiStore = UIStateStore()
@@ -142,6 +150,10 @@ export default {
         onMounted(() => {
             fetchProductsData()
             fetchCartForUser()
+
+            //js code to open search modal
+            //not for production
+            document.getElementById("openSearchModalButton").click()
         })
 
         // Cart opening

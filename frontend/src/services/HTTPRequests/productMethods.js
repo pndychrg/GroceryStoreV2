@@ -4,6 +4,7 @@ import {
   httpPostRequest,
   htttpPutRequest,
   httpPostImageRequest,
+  httpGetRequest,
 } from "../axios";
 
 import { showSuccessToast } from "@/static/js/toasts";
@@ -53,6 +54,15 @@ export const productMethods = {
     if (response) {
       showSuccessToast("Image Updated Successfully");
     }
+    return response;
+  },
+
+  async searchForProduct(data) {
+    const response = await httpGetRequest("/product/search", data);
+
+    // if(response){
+
+    // }
     return response;
   },
 };

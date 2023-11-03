@@ -10,6 +10,7 @@ import {
   faCheck,
   faCartPlus,
   faImage,
+  faMagnifyingGlass,
 } from "@fortawesome/free-solid-svg-icons";
 
 // adding icons to library
@@ -23,5 +24,6 @@ export const iconLib = library.add(
   faBars,
   faCheck,
   faCartPlus,
-  faImage
+  faImage,
+  faMagnifyingGlass
 );
