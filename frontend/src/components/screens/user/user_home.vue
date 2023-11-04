@@ -43,7 +43,7 @@
                 </div>
             </div>
         </div>
-        <SearchProductModal />
+        <SearchProductModal @add-to-cart="handleCart" />
 
         <teleport to="#modal-root">
             <CartModal v-show="isCartShown" :cart="cartDetails?.cart" :cartSum="cartDetails?.sum" @close="showCart"
@@ -172,7 +172,8 @@ export default {
             removeCartItem,
             productCartData,
             buyAllItems,
-            buyModalSHow: buyModalShow
+            buyModalSHow: buyModalShow,
+            
         }
     }
 

@@ -29,6 +29,7 @@ def create_app():
     from lib.api.cart import CartAPI
     from lib.api.buy import BuyAPI
     from lib.api.search_products import SearchProductsAPI
+    from lib.api.favourites import FavouritesAPI
     # registering all the api resources
     api.add_resource(UserAPI, '/user')
     api.add_resource(SectionAPI, '/section')
@@ -41,6 +42,9 @@ def create_app():
     api.add_resource(CartAPI, '/cart')
     api.add_resource(BuyAPI, '/buy')
     api.add_resource(SearchProductsAPI, '/product/search')
+    api.add_resource(FavouritesAPI, '/favourite/<product_id>',
+                     endpoint="favourite")
+    api.add_resource(FavouritesAPI,'/favourite')
     # api docs init code
     SWAGGER_URL = '/api/docs'
     API_URL = '/static/docs/swagger.yaml'
