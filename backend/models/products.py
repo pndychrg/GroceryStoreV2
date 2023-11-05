@@ -12,6 +12,8 @@ class Product(db.Model):
     expiryDate = db.Column(db.DateTime)
     section_id = db.Column(db.Integer, db.ForeignKey(
         'section.id'), nullable=False)
+    avg_rating = db.Column(db.Integer)
+    description = db.Column(db.String())
     # getting section details
     section = db.relationship(
         "Section", backref=db.backref('section'))

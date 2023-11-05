@@ -10,13 +10,13 @@
             <div v-for="product in products" :key="product.id" class="card"
                 :class="{ 'card-unavailable': product.availableAmount == 0 }">
                 <ProductCard :productData="product" loggedInRole="user" @add-to-cart="handleCart"
-                    :cartData="getCartData(product.id)" />
+                    :cartData="getCartData(product.id)" @add-to-favourite="addProductToFavourite" />
             </div>
         </div>
 
         <button class="btn btn-lg floating-container btn-outline-danger cartFloatingButton" type="button" @click="showCart">
             <font-awesome-icon :icon="['fas', 'fa-cart-plus']" class="faa-horizontal animated-hover " />
-            <span v-if="cartDetails.cart != null && cartDetails.cart.length > 0"
+            <span v-if="cartDetails?.cart != null && cartDetails.cart.length > 0"
                 class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
                 {{ cartDetails?.cart?.length }}
             </span>
@@ -43,6 +43,14 @@
                 </div>
             </div>
         </div>
+
+        <!-- Button trigger modal -->
+        <button type="button" class="btn btn-primary" id="buyConfirmation" data-bs-toggle="modal"
+            data-bs-target="#buyConfirmationModal" hidden>
+            Launch static backdrop modal
+        </button>
+
+
         <SearchProductModal @add-to-cart="handleCart" />
 
         <teleport to="#modal-root">
@@ -60,6 +68,7 @@ import ProductCard from '@/components/widgets/cards/product_card.vue';
 import { onMounted, ref, computed } from 'vue';
 import { cartMethods } from '@/services/HTTPRequests/cartMethods';
 import { UIStateStore } from "@/services/uiStateManager";
+import { favouriteMethods } from "@/services/HTTPRequests/favouriteMethods";
 import SearchProductModal from "@/components/widgets/search_products.vue"
 export default {
     name: 'UserHome',
@@ -81,7 +90,10 @@ export default {
         }
         const fetchCartForUser = async () => {
             const cartData = await cartMethods.fetchAllCartProducts();
-            cartDetails.value = cartData;
+            if (cartData != null) {
+
+                cartDetails.value = cartData;
+            }
         }
         const handleCart = async (cartForm) => {
             const dataObject = {
@@ -147,13 +159,11 @@ export default {
             }
             // document.getElementById("exampleModal").modal('show')
         }
+
+
         onMounted(() => {
             fetchProductsData()
             fetchCartForUser()
-
-            //js code to open search modal
-            //not for production
-            document.getElementById("openSearchModalButton").click()
         })
 
         // Cart opening
@@ -162,6 +172,15 @@ export default {
             uiStore.toggleModal();
             isCartShown.value = !isCartShown.value;
         }
+
+        // adding to favourite
+        //TODO add remove from cart also which can be then activated if the product is already in cart
+
+        const addProductToFavourite = async (product) => {
+            await favouriteMethods.addToFavourite(product.id);
+        }
+
+
         return {
             products,
             handleCart,
@@ -173,7 +192,8 @@ export default {
             productCartData,
             buyAllItems,
             buyModalSHow: buyModalShow,
-            
+            addProductToFavourite,
+
         }
     }
 

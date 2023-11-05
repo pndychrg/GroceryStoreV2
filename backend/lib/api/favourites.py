@@ -44,3 +44,19 @@ class FavouritesAPI(Resource):
             response, msg = favouritesMethods.getFavouritesForUser(
                 user_id=user.get('id'))
             return [favProduct.product.toJson() for favProduct in response], 200
+
+    @jwt_required()
+    @checkJWTForUser
+    def delete(self, product_id=None):
+        # getting the user from access token
+        user = get_jwt_identity()
+        if product_id:
+            response, msg = favouritesMethods.removeFromFavourites(
+                user_id=user.get('id'), product_id=product_id)
+
+            if response:
+                return response, 200
+            else:
+                return {'msg': msg}, 400
+        else:
+            return {'msg': 'product_id not found'}, 400

@@ -6,7 +6,6 @@
             <img v-else src="@/assets/img_notavailable.jpeg" alt="" class="rounded-start card-img  img-fluid"
                 aria-hidden="true">
         </div>
-        <!-- <img src="..." class="card-img-top" alt="..."> -->
         <div class="col-md-8 p-2">
             <div class="card-body text-start">
                 <h5 class="card-title">
@@ -17,6 +16,12 @@
                         <button class="btn" @click="$emit('show-addimagemodal')">
                             <font-awesome-icon :icon="['fas', 'image']" class="faa-horizontal animated-hover"
                                 style="color: #4D6DE3;" />
+                        </button>
+                    </span>
+                    <span class="float-end" v-if="loggedInRole === 'user'">
+                        <button class="btn" @click="$emit('add-to-favourite', productData)">
+                            <font-awesome-icon :icon="['fas', 'heart']" class="faa-horizontal animated-hover"
+                                style="color: #FF5733 ;" />
                         </button>
                     </span>
                 </h5>

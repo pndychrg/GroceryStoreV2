@@ -5,33 +5,48 @@
             <div v-for="bill in bills" :key="bill.id" class="bill-card card">
                 <BillCard :bill="bill" />
             </div>
+
+            <div v-for="product in products" :key="product.id" class="card">
+                <ProductCard :productData="product" />
+            </div>
         </div>
     </div>
 </template>
 
 <script>
 import { buyMethods } from '@/services/HTTPRequests/buyMethods';
+import { favouriteMethods } from '@/services/HTTPRequests/favouriteMethods';
 import { onMounted, ref } from 'vue';
 import BillCard from '@/components/widgets/cards/bill_card.vue'
+import ProductCard from '@/components/widgets/cards/product_card.vue';
 export default {
     name: "UserDashboard",
     components: {
         BillCard,
+        ProductCard,
     },
     setup() {
         const bills = ref([]);
-
+        const products = ref([]);
         const fetchAllBills = async () => {
             const response = await buyMethods.getAllBills()
             bills.value = response;
         }
 
+        const fetchAllFavouriteProducts = async () => {
+            const response = await favouriteMethods.fetchAllFavouriteForUser();
+
+            products.value = response;
+        }
+
         onMounted(() => {
             fetchAllBills();
+            fetchAllFavouriteProducts();
         })
 
         return {
-            bills
+            bills,
+            products
         }
     }
 }

@@ -59,10 +59,8 @@ export const productMethods = {
 
   async searchForProduct(data) {
     const response = await httpGetRequest("/product/search", data);
-
-    // if(response){
-
-    // }
     return response;
   },
+
+  
 };
