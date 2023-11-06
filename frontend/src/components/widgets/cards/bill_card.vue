@@ -1,5 +1,5 @@
 <template>
-    <div class="card-body text-start" @click="showOrderProductDetails(bill)">
+    <div class="card-body text-start" @click="$emit('show-billDetails', bill)">
         <h5 class="card-title text-spaced-between">
             <span>
                 Bill ID :
@@ -38,50 +38,18 @@
             </button> -->
             <!-- TODO add coupon code and details here and update the total amount -->
         </div>
-        <h6 class="card-text mb-2 ">Products Bought</h6>
-        <div class="order-container collapse" :id="'productDetails' + bill.id">
-            <div class="order-card " v-for="order in bill.orders" :key="order.id">
-                <h6 class="product-title">{{ order.product.name }}</h6>
-                <h6 class="text-body-secondary product-subtitle">{{ order.product.section.name }}
-                </h6>
-                <div class="product-text row">
-                    <p class="col-auto">
-                        Rate : {{ order.product.rate }} / {{ order.product.section.unit }}
-                    </p>
-                    <p class="col-auto">
-                        {{ order.numOfProduct }} {{ order.product.section.unit }}
-                    </p>
-                    <p class="col-auto">
-                        Sum : {{ order.totalSum }}
-                    </p>
-                </div>
-            </div>
-        </div>
     </div>
 </template>
 
 <script>
+
 // import { ref } from 'vue';
 export default {
     name: 'BillCard',
     props: {
         bill: Object
     },
-    setup() {
 
-        const showOrderProductDetails = (bill) => {
-            const productDetailsElement = document.getElementById("productDetails" + bill.id);
-            if (productDetailsElement.classList.contains("show")) {
-                productDetailsElement.classList.remove("show");
-            } else {
-                productDetailsElement.classList.add("show");
-            }
-        }
-
-        return {
-            showOrderProductDetails
-        }
-    }
 }
 </script>
 
