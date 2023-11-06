@@ -6,7 +6,7 @@
                 <BillCard :bill="bill" />
             </div>
 
-            <div v-for="product in products" :key="product.id" class="card">
+            <div v-for="product in favProducts" :key="product.id" class="card">
                 <ProductCard :productData="product" />
             </div>
         </div>
@@ -27,7 +27,7 @@ export default {
     },
     setup() {
         const bills = ref([]);
-        const products = ref([]);
+        const favProducts = ref([]);
         const fetchAllBills = async () => {
             const response = await buyMethods.getAllBills()
             bills.value = response;
@@ -36,7 +36,7 @@ export default {
         const fetchAllFavouriteProducts = async () => {
             const response = await favouriteMethods.fetchAllFavouriteForUser();
 
-            products.value = response;
+            favProducts.value = response;
         }
 
         onMounted(() => {
@@ -46,7 +46,7 @@ export default {
 
         return {
             bills,
-            products
+            favProducts
         }
     }
 }

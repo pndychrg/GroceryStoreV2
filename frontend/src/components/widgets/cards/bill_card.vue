@@ -1,5 +1,5 @@
 <template>
-    <div class="card-body text-start">
+    <div class="card-body text-start" @click="showOrderProductDetails(bill)">
         <h5 class="card-title text-spaced-between">
             <span>
                 Bill ID :
@@ -33,11 +33,13 @@
                     {{ bill.finalAmount }}
                 </span>
             </h6>
+            <!-- <button class="btn" @click="showOrderProductDetails(bill)">
+                Show Product Details
+            </button> -->
             <!-- TODO add coupon code and details here and update the total amount -->
         </div>
-        <hr>
-        <h6 class="card-text mb-2">Products Bought</h6>
-        <div class="order-container">
+        <h6 class="card-text mb-2 ">Products Bought</h6>
+        <div class="order-container collapse" :id="'productDetails' + bill.id">
             <div class="order-card " v-for="order in bill.orders" :key="order.id">
                 <h6 class="product-title">{{ order.product.name }}</h6>
                 <h6 class="text-body-secondary product-subtitle">{{ order.product.section.name }}
@@ -52,19 +54,33 @@
                     <p class="col-auto">
                         Sum : {{ order.totalSum }}
                     </p>
-
                 </div>
-
             </div>
         </div>
     </div>
 </template>
 
 <script>
+// import { ref } from 'vue';
 export default {
     name: 'BillCard',
     props: {
         bill: Object
+    },
+    setup() {
+
+        const showOrderProductDetails = (bill) => {
+            const productDetailsElement = document.getElementById("productDetails" + bill.id);
+            if (productDetailsElement.classList.contains("show")) {
+                productDetailsElement.classList.remove("show");
+            } else {
+                productDetailsElement.classList.add("show");
+            }
+        }
+
+        return {
+            showOrderProductDetails
+        }
     }
 }
 </script>
@@ -72,6 +88,10 @@ export default {
 <style scoped>
 .order-card {
     font-size: smaller;
+    border: 1px solid black;
+    border-radius: 12px;
+    padding: 12px;
+    margin: 12px;
 }
 
 h6 {
