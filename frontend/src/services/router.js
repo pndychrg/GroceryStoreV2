@@ -6,10 +6,11 @@ import { ROLES } from "./roles";
 import { userStateStore } from "./stateManager";
 import SectionsPage from "../components/screens/sections.vue";
 import AccessDenied from "../components/screens/accessDenied.vue";
-import NotApproved from "../components/screens/storeManager_notApproved.vue";
+import NotApproved from "../components/screens/admin/storeManager_notApproved.vue";
 import ApproveManager from "../components/screens/admin/approve_manager.vue";
-import ProductPage from "../components/screens/products.vue";
+import ProductPage from "../components/screens/storemanager/products.vue";
 import Dashboard from "../components/screens/dashboard.vue";
+import CouponPage from "../components/screens/storemanager/coupons.vue";
 const routes = [
   {
     name: "home",
@@ -33,6 +34,12 @@ const routes = [
     path: "/dashboard",
     component: Dashboard,
     meta: { requireAuth: true },
+  },
+  {
+    name: "CouponPage",
+    path: "/coupons",
+    component: CouponPage,
+    meta: { requireAuth: true, roles: [ROLES.STORE_MANAGER] },
   },
   {
     name: "accessDenied",

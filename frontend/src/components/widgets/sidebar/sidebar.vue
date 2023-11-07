@@ -69,6 +69,11 @@ export default {
                 route: '/products',
                 tag: "Products",
                 icon: 'arrow-right-from-bracket'
+            },
+            {
+                route: '/coupons',
+                tag: "Coupons",
+                icon: "arrow-right-from-bracket",
             }
         ]
 

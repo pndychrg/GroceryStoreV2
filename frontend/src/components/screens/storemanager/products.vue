@@ -50,7 +50,7 @@ import { onMounted, ref } from 'vue';
 import ProductCard from '@/components/widgets/cards/product_card.vue'
 import ProductForm from '@/components/widgets/forms/product_form.vue'
 import { sectionMethods } from '@/services/HTTPRequests/sectionMethods';
-import ConfirmationModal from '../widgets/confirmation.vue';
+import ConfirmationModal from '@/components/widgets/confirmation.vue';
 export default {
     name: "ProductPage",
     components: {
