@@ -31,6 +31,7 @@ def create_app():
     from lib.api.search_products import SearchProductsAPI
     from lib.api.favourites import FavouritesAPI
     from lib.api.rating import RatingsAPI
+    from lib.api.coupons import CouponAPI
     # registering all the api resources
     api.add_resource(UserAPI, '/user')
     api.add_resource(SectionAPI, '/section')
@@ -49,6 +50,8 @@ def create_app():
     api.add_resource(
         RatingsAPI, '/product/rating/<product_id>', endpoint='rating')
     api.add_resource(RatingsAPI, "/product/rating")
+    api.add_resource(CouponAPI, '/coupon')
+    api.add_resource(CouponAPI, '/coupon/<coupon_id>', endpoint='coupon')
     # api docs init code
     SWAGGER_URL = '/api/docs'
     API_URL = '/static/docs/swagger.yaml'

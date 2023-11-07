@@ -39,6 +39,11 @@
                                     {{ order.totalSum }}
                                 </span>
                             </p>
+                            <hr>
+                            <div class="card-footer border border-1 p-2 rounded">
+                                <h6>Rate Product</h6>
+                                <StarRating :product_id="order.product.id" />
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -58,19 +63,31 @@
 </template>
 
 <script>
+import { ref } from 'vue';
+import StarRating from '@/components/widgets/star_rating.vue';
 export default {
     name: "BillDetailsModal",
     props: {
         bill: Object,
     },
+    components: {
+        StarRating,
+    },
     setup(props, { emit }) {
+
+        const rating = ref(null);
+        const setRating = (starRating) => {
+            rating.value = starRating
+        }
         const closeBillDetailsModal = ($event) => {
             if ($event.target.classList.contains('modal-overlay')) {
                 emit('close');
             }
         }
         return {
-            closeBillDetailsModal
+            closeBillDetailsModal,
+            rating,
+            setRating
         }
     }
 }

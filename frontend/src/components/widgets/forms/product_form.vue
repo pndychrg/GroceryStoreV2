@@ -124,7 +124,6 @@ export default {
                     emit('product-edited', response);
                 }
             }
-
             // console.log(formData);
         }
 
@@ -137,7 +136,6 @@ export default {
                 }
             }
             return {
-
                 title: "Edit Product",
                 buttonText: "Update"
             }
