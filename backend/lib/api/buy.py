@@ -15,9 +15,11 @@ class BuyAPI(Resource):
 
         # getting the user_id from jwt token
         user_id = get_jwt_identity().get('id')
-
+        # getting coupon_id from params
+        coupon_id = request.args.get("coupon_id")
         response, msg = shopDB.buy(
-            user_id=user_id
+            user_id=user_id,
+            coupon_id=coupon_id
         )
         if response:
             return response.toJson(), 200

@@ -1,14 +1,15 @@
 from models.bill import Bill
-from models.products import Product
 from models.order import Order
 from lib.methods.validators import Validators
 from lib.db_utils.cart import CartDB
+from lib.db_utils.coupons import CouponDB
 from datetime import datetime
 from extensions import db
 from sqlalchemy.exc import SQLAlchemyError, IntegrityError
 # init
 validators = Validators()
 cartDB = CartDB()
+couponDB = CouponDB()
 
 
 class ShopDB:
@@ -17,7 +18,7 @@ class ShopDB:
         bills = Bill.query.filter_by(user_id=user_id).all()
         return bills
 
-    def buy(self, user_id):
+    def buy(self, user_id, coupon_id=None):
 
         # getting the cart for user and cart sum
         unboughtCartFor_user, cartSum = cartDB.getCartProducts(user_id=user_id)
@@ -35,11 +36,16 @@ class ShopDB:
             # now checking is done so first we will generate a bill
             try:
                 today = datetime.today().date()
+                # fetching coupon details from coupon_id
+                coupon, msg = couponDB.getCouponById(coupon_id=coupon_id)
+                if coupon_id != None and coupon == None:
+                    return None, "invalid coupon_id"
                 bill = Bill(
                     user_id=user_id,
                     billAmount=cartSum,
-                    # TODO WHEN ADDING COUPON CHANGE THIS FINAL AMOUNT VALUE
-                    finalAmount=cartSum,
+                    coupon_id=coupon_id,
+                    finalAmount=cartSum -
+                    (cartSum*coupon.discount)/100 if coupon else cartSum,
                     date=today
                 )
                 db.session.add(bill)

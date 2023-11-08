@@ -11,9 +11,14 @@ validators = Validators()
 class CouponDB:
 
     # get all coupons
-    def getAllCoupons(self):
+    def getAllUnexpiredCoupons(self):
         coupons = Coupon.query.filter_by(hasExpired=0)
         return coupons, "Unexpired Coupons"
+
+    # get all coupons
+    def getAllCoupons(self):
+        coupons = Coupon.query.all()
+        return coupons, "All Coupons"
 
     # get All coupons by code
     def getCouponByCode(self, coupon_code):
@@ -39,6 +44,9 @@ class CouponDB:
         if Validators.checkForInt(discount) == False:
             return None, "invalid discount"
 
+        # checking if discount is less than 100
+        if discount > 100:
+            return None, "invalid discount"
         # try catch
         try:
             new_coupon = Coupon(

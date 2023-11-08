@@ -74,3 +74,12 @@ class CouponAPI(Resource):
                 return {'msg': msg}, 400
         else:
             return {'msg': "coupon_id not found"}, 400
+
+
+class CouponsExtendedAPI(Resource):
+
+    @jwt_required()
+    @checkJWTForManager
+    def get(self):
+        coupons, msg = couponDB.getAllUnexpiredCoupons()
+        return [coupon.toJson() for coupon in coupons], 200
