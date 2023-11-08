@@ -9,33 +9,15 @@
         </h3>
         <div class="row m-2 coupons-wrapper">
             <div class="card coupon-card" v-for="coupon in coupons" :key="coupon.id">
-                <div class="card-body text-start">
-                    <h5 class="card-title">
-                        Coupon Code : <span class="float-end " style="font-weight: bold;">{{ coupon.coupon_code }}</span>
-                    </h5>
-                    <p class="card-text">
-                        Discount : <span class="float-end" style="font-weight: bold;">{{ coupon.discount }}%</span>
-                        <br>
-                        Expiry Date : <span class="float-end" style="font-weight: bold;">
-                            {{ coupon.expiryDate ?? 'None' }}
-                        </span>
-                    </p>
-                    <div class="">
-                        <button class="float-end btn btn-outline-secondary m-2" @click="showEditCouponForm(coupon)">
-                            Edit <font-awesome-icon :icon="['fas', 'pen-to-square']"
-                                class="faa-horizontal animated-hover" />
-                        </button>
-
-                        <button class="float-end m-2 btn btn-outline-danger">
-                            Delete <font-awesome-icon :icon="['fas', 'trash-can']" class="faa-horizontal animated-hover" />
-                        </button>
-
-                    </div>
-                </div>
+                <CouponCard :coupon="coupon" @edit-coupon="showEditCouponForm(coupon)"
+                    @delete-coupon="showDeleteConfirmation(coupon)" />
             </div>
         </div>
 
         <teleport to="#modal-root">
+            <ConfirmationModal v-show="isDeleteModalShown" deleteElement="Coupon" :element="selectedCoupon"
+                @close="hideDeleteModal" @confirm="deleteCoupon" />
+
             <CouponForm v-show="isCouponFormShown" :initialData="selectedCoupon" @close="closeCouponForm"
                 @coupon-added="handleCouponUpdates" @coupon-edited="handleCouponUpdates" />
         </teleport>
@@ -46,11 +28,16 @@
 import { couponMethods } from '@/services/HTTPRequests/couponMethods';
 import { onMounted, ref } from 'vue';
 import CouponForm from "@/components/widgets/forms/coupon_form.vue";
+import ConfirmationModal from "@/components/widgets/confirmation.vue"
+import CouponCard from "@/components/widgets/cards/coupon_card.vue"
+
 export default {
 
     name: "CouponsPage",
     components: {
         CouponForm,
+        ConfirmationModal,
+        CouponCard,
     },
     setup() {
         const coupons = ref([]);
@@ -80,6 +67,27 @@ export default {
             fetchAllCoupons();
         }
 
+
+        const isDeleteModalShown = ref(false);
+        const showDeleteConfirmation = (coupon) => {
+            selectedCoupon.value = coupon;
+            isDeleteModalShown.value = true;
+        }
+
+        const hideDeleteModal = () => {
+            selectedCoupon.value = null;
+            isDeleteModalShown.value = false;
+        }
+
+        const deleteCoupon = async () => {
+            const response = await couponMethods.deleteCoupon(
+                selectedCoupon.value.id
+            );
+            if (response) {
+                fetchAllCoupons();
+            }
+        }
+
         onMounted(() => {
             fetchAllCoupons();
             document.getElementById("addCouponButton").click()
@@ -92,6 +100,10 @@ export default {
             isCouponFormShown,
             selectedCoupon,
             handleCouponUpdates,
+            showDeleteConfirmation,
+            hideDeleteModal,
+            isDeleteModalShown,
+            deleteCoupon
         }
     }
 }
