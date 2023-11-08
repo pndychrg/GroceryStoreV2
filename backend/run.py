@@ -53,6 +53,8 @@ def create_app():
     api.add_resource(CouponAPI, '/coupon')
     api.add_resource(CouponAPI, '/coupon/<coupon_id>', endpoint='coupon')
     api.add_resource(CouponsExtendedAPI, '/coupons')
+    api.add_resource(CouponsExtendedAPI,
+                     "/coupons/<coupon_code>", endpoint="coupons")
     # api docs init code
     SWAGGER_URL = '/api/docs'
     API_URL = '/static/docs/swagger.yaml'

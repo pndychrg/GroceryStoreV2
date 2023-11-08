@@ -53,6 +53,8 @@
                     <h6>Bill Amount : <span class="float-end">
                             {{ bill.billAmount }}
                         </span></h6>
+                    <h6>Coupon Code : <span class="float-end">{{ bill.coupon?.coupon_code ?? 'None Applied' }}</span></h6>
+                    <h6>Discount : <span class="float-end">{{ bill.coupon?.discount ?? 'None Applied' }}</span></h6>
                     <h6>
                         Final Amount : <span class="float-end">{{ bill.finalAmount }}</span>
                     </h6>

@@ -7,7 +7,7 @@
             </div>
             <div class="row">
                 <div class="col details">
-                    <div style="padding-inline: 10px;">
+                    <div style="padding-inline: 10px;" v-if="cart?.length > 0">
                         <div v-for="cartItem in cart" :key="cartItem.id" class="row p-2">
                             <div class="col-auto col-4">
                                 <strong class="m-0">{{ cartItem.product.name }}</strong>
@@ -35,27 +35,57 @@
                             </div>
                         </div>
                     </div>
-                    <hr>
-                    <div class="row">
-                        <div class="col">
-                            <p>
-                                <strong>Sub-Total</strong>
-                                <br>
-                                <span class="text-secondary">{{ cart?.length }} items</span>
-                            </p>
-                        </div>
-                        <h4 class="col-auto float-end">$ {{ cartSum }}</h4>
+                    <div v-else class="text-center">
+                        <h5 class="text-secondary">No Items in Cart</h5>
                     </div>
                 </div>
                 <div class="vr">
                 </div>
-                <div class="col-auto coupons ">
+                <div class="col-auto coupons " :style="{ pointerEvents: pointer_css }">
                     <h6>Apply Coupons</h6>
+                    <form class="input-group mb-3" @submit.prevent="checkCouponAvailability">
+                        <input type="text" id="couponInput" class="form-control" placeholder="Coupon Code"
+                            v-model="selectedCouponCode" required>
+                        <button type="button" class="btn btn-outline-secondary dropdown-toggle dropdown-toggle-split"
+                            data-bs-toggle="dropdown" aria-expanded="false">
+                            <span class="visually-hidden">Toggle Dropdown</span>
+                        </button>
+                        <ul class="dropdown-menu dropdown-menu-end">
+                            <li v-for="coupon in coupons" :key="coupon.id" class="dropdown-item">
+                                <a @click="selectCouponFromDropdown(coupon)">
+                                    {{ coupon.coupon_code }}
+                                </a>
+                            </li>
+                        </ul>
+                    </form>
+                </div>
+            </div>
+            <hr>
+            <div class="row">
+                <div class="col">
+                    <p>
+                        <strong>Sub-Total</strong>
+                        <br>
+                        <span class="text-secondary">{{ cart?.length }} items</span>
+                    </p>
+                </div>
+                <h4 class="col-auto float-end">$ {{ cartSum }}</h4>
+                <div v-if="selectedCoupon != null">
+                    <p>
+                        <strong>Coupon Discount</strong>
+                        <span class="float-end" style="font-size: calc(1.275rem + .3vw);">{{ selectedCoupon.discount
+                        }}%</span>
+                    </p>
+                    <p>
+                        <strong>Final Amount</strong>
+                        <strong class="float-end" style="font-size: calc(1.275rem + .3vw);">$ {{ finalAmount }}</strong>
+                    </p>
 
                 </div>
             </div>
             <div class="d-grid gap-2 mt-2">
-                <button v-if="isCartEmpty" class="btn btn-primary" type="button" @click="$emit('buy-all')">Checkout</button>
+                <button v-if="isCartEmpty" class="btn btn-primary" type="button"
+                    @click="$emit('buy-all', finalAmount)">Checkout</button>
                 <button v-else class="btn btn-primary" type="button" @click="$emit('buy-all')" disabled>Checkout</button>
             </div>
         </div>
@@ -74,14 +104,39 @@ export default {
         cartSum: Number,
     },
     components: {
-        
+
     },
     setup(props, { emit }) {
         const coupons = ref([]);
         const selectedCoupon = ref(null);
-        const printSearchText = (searchText) => {
-            console.log(searchText);
+        const selectedCouponCode = ref(null);
+        const selectCouponFromDropdown = (coupon) => {
+            selectedCoupon.value = coupon;
+            selectedCouponCode.value = coupon.coupon_code
         }
+        const finalAmount = computed(() => {
+            if (selectedCoupon.value != null) {
+                return props.cartSum -
+                    (props.cartSum * selectedCoupon.value.discount) / 100
+            } else {
+                return props.cart
+            }
+        })
+        const checkCouponAvailability = async () => {
+
+            // first checking if the selectedCoupon is null or not
+            if (selectedCoupon.value == null) {
+                const data = await couponMethods.fetchCouponFromCouponCode(selectedCouponCode.value);
+                selectedCoupon.value = data;
+            } else {
+                // checking if the coupon_code is changed after selecting the coupon
+                if (selectedCoupon.value.coupon_code != selectedCouponCode.value) {
+                    const data = await couponMethods.fetchCouponFromCouponCode(selectedCouponCode.value);
+                    selectedCoupon.value = data;
+                }
+            }
+        }
+
         const closeCart = ($event) => {
             if ($event.target.classList.contains('cart-container')) {
                 emit('close');
@@ -95,6 +150,14 @@ export default {
                 return false;
             }
         });
+
+        const pointer_css = computed(() => {
+            if (isCartEmpty.value) {
+                return "all"
+            } else {
+                return "none";
+            }
+        })
 
         const fetchAllCoupons = async () => {
             const data = await couponMethods.fetchAllUnexpiredCoupons()
@@ -111,7 +174,11 @@ export default {
             isCartEmpty,
             selectedCoupon,
             coupons,
-            printSearchText
+            selectedCouponCode,
+            selectCouponFromDropdown,
+            checkCouponAvailability,
+            finalAmount,
+            pointer_css
         }
     }
 }
@@ -120,6 +187,7 @@ export default {
 <style scoped>
 .cart {
     height: auto;
+    width: auto;
     flex-grow: 1;
     padding: 10px;
     box-sizing: border-box;
@@ -134,23 +202,20 @@ export default {
     backdrop-filter: blur(8px);
 }
 
-.coupon-item {
-    border: 2px solid;
-    border-radius: 12px;
-    margin: 2px;
-    margin-right: 25px;
-    width: 100%;
-    padding: 2px 2px;
+.details {
+    width: auto;
 }
 
-
-.coupon-item>p {
-    padding: 0px;
-    margin: 0px;
-}
+/* .coupons {
+    max-width: 30%;
+} */
 
 .vr {
     padding: 0px
+}
+
+.dropdown-item {
+    cursor: pointer;
 }
 
 @import "@/static/css/modal.css"

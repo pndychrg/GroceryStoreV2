@@ -80,6 +80,15 @@ class CouponsExtendedAPI(Resource):
 
     @jwt_required()
     @checkJWTForUser
-    def get(self):
-        coupons, msg = couponDB.getAllUnexpiredCoupons()
-        return [coupon.toJson() for coupon in coupons], 200
+    def get(self, coupon_code=None):
+        if coupon_code:
+            coupon, msg = couponDB.getCouponByCode(coupon_code=coupon_code)
+            if coupon:
+                if coupon.hasExpired == 1:
+                    return {'msg': "coupon has expired"}, 400
+                return coupon.toJson(), 200
+            else:
+                return {'msg': "invalid coupon_code"}, 400
+        else:
+            coupons, msg = couponDB.getAllUnexpiredCoupons()
+            return [coupon.toJson() for coupon in coupons], 200

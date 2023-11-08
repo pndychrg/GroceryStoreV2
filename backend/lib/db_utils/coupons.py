@@ -23,7 +23,7 @@ class CouponDB:
     # get All coupons by code
     def getCouponByCode(self, coupon_code):
         existingCoupon = Coupon.query.filter(
-            Coupon.coupon_code.like(f"%{coupon_code}%")).first()
+            Coupon.coupon_code.like(f"{coupon_code}")).first()
         if existingCoupon:
             return existingCoupon, "Coupon Found"
         else:

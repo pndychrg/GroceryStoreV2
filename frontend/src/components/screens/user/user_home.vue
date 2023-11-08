@@ -34,7 +34,7 @@
                     </div>
                     <div class="modal-body text-start">
                         <h5>Confirm and Pay for all the goods</h5>
-                        <p>Total Order Sum = {{ cartDetails.sum }}</p>
+                        <p>Total Order Sum = {{ cartDetails.finalAmount }}</p>
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
@@ -91,8 +91,8 @@ export default {
         const fetchCartForUser = async () => {
             const cartData = await cartMethods.fetchAllCartProducts();
             if (cartData != null) {
-
                 cartDetails.value = cartData;
+                Object.assign(cartDetails.value, { finalAmount: null })
             }
         }
         const handleCart = async (cartForm) => {
@@ -148,13 +148,13 @@ export default {
                 // TODO YOU CAN DO IT THROUGH FRONTEND ONLY TRY THAT METHOD FOR BETTER PERFORMANCE
                 document.getElementById("closeBuyConfirmation").click()
                 fetchProductsData()
-
             }
         }
 
-        const buyModalShow = () => {
+        const buyModalShow = (finalAmount) => {
             // check if products are available in cart
             if (cartDetails.value.cart.length > 0) {
+                cartDetails.value.finalAmount = finalAmount
                 document.getElementById("buyConfirmation").click()
             }
             // document.getElementById("exampleModal").modal('show')
@@ -164,7 +164,6 @@ export default {
         onMounted(() => {
             fetchProductsData()
             fetchCartForUser()
-            showCart()
         })
 
         // Cart opening

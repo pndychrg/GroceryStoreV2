@@ -3,6 +3,7 @@ import {
   httpPostRequest,
   htttpPutRequest,
   httpDeleteRequest,
+  httpGetRequest,
 } from "../axios";
 
 import { showSuccessToast } from "@/static/js/toasts";
@@ -15,6 +16,14 @@ export const couponMethods = {
   async fetchAllUnexpiredCoupons() {
     const data = await httpGetAllRequest("/coupons");
     return data;
+  },
+  async fetchCouponFromCouponCode(coupon_code = null) {
+    console.log(coupon_code);
+    const coupon_data = await httpGetRequest(`/coupons/${coupon_code}`);
+    if (coupon_data) {
+      showSuccessToast("Coupon Found");
+    }
+    return coupon_data;
   },
   async createCoupon(data) {
     const response = await httpPostRequest("/coupon", data);
