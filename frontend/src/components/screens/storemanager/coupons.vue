@@ -90,7 +90,7 @@ export default {
 
         onMounted(() => {
             fetchAllCoupons();
-            document.getElementById("addCouponButton").click()
+            // document.getElementById("addCouponButton").click()
         })
         return {
             coupons,

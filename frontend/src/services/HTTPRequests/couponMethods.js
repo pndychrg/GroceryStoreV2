@@ -12,7 +12,10 @@ export const couponMethods = {
     const data = await httpGetAllRequest("/coupon");
     return data;
   },
-
+  async fetchAllUnexpiredCoupons() {
+    const data = await httpGetAllRequest("/coupons");
+    return data;
+  },
   async createCoupon(data) {
     const response = await httpPostRequest("/coupon", data);
     if (response) {

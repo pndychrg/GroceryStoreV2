@@ -164,6 +164,7 @@ export default {
         onMounted(() => {
             fetchProductsData()
             fetchCartForUser()
+            showCart()
         })
 
         // Cart opening

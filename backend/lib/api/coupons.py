@@ -1,7 +1,7 @@
 from flask_restful import Resource, request, reqparse
 from flask_jwt_extended import jwt_required, get_jwt_identity
 from lib.db_utils.coupons import CouponDB
-from lib.methods.decorators import checkJWTForManager
+from lib.methods.decorators import checkJWTForManager, checkJWTForUser
 
 # init CouponMethods
 couponDB = CouponDB()
@@ -79,7 +79,7 @@ class CouponAPI(Resource):
 class CouponsExtendedAPI(Resource):
 
     @jwt_required()
-    @checkJWTForManager
+    @checkJWTForUser
     def get(self):
         coupons, msg = couponDB.getAllUnexpiredCoupons()
         return [coupon.toJson() for coupon in coupons], 200

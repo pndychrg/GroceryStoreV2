@@ -1,6 +1,6 @@
 <template>
   <navbar />
-  
+
   <div class="d-flex justify-content-center align-items-center">
     <div class="container-fluid w-100">
       <router-view style="margin-top: 60px;" />
