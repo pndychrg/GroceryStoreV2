@@ -1,6 +1,6 @@
 <template>
     <div class="modal-overlay" @click="closeBillDetailsModal($event)">
-        <div class="modal-content p-3">
+        <div class="modal-content  p-3 ">
             <div class="card-header mb-2 ">
                 <h6>
                     Bill Details {{ bill.id }}
@@ -8,6 +8,8 @@
                         {{ bill.date }}
                     </span>
                 </h6>
+            </div>
+            <div class="card-body">
                 <hr>
                 <h6>Product Details</h6>
                 <!-- product cards below -->
@@ -97,15 +99,19 @@ export default {
 
 <style scoped>
 .product-details {
-    /* border: 1px solid grey; */
-    box-shadow: 0 0px 12px rgba(0, 0, 0, 0.12);
-    border-radius: 12px;
-    margin: 25px 5px 25px 5px;
-    padding: 5px;
+    box-shadow: 0 0px 8px rgba(0, 0, 0, 0.12);
+    /* Reduce the box shadow */
+    border-radius: 8px;
+    /* Smaller border radius */
+    margin: 40px;
+    /* Reduce margin */
+    padding: 10px;
+    /* Reduce padding */
 }
 
 .modal-content {
-    min-width: 1000px;
+    max-width: 90%;
+    width: 65%;
     font-size: large !important;
 }
 
