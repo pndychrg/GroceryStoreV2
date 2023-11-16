@@ -34,7 +34,7 @@
                     </div>
                     <div class="modal-body text-start">
                         <h5>Confirm and Pay for all the goods</h5>
-                        <p>Total Order Sum = {{ cartDetails.finalAmount }}</p>
+                        <p>Total Order Sum = {{ finalAmount }}</p>
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
@@ -84,6 +84,7 @@ export default {
             cart: null,
             sum: null,
         });
+        const finalAmount = ref(null);
         const fetchProductsData = async () => {
             const productsData = await productMethods.fetchAllProducts();
             products.value = productsData;
@@ -92,7 +93,9 @@ export default {
             const cartData = await cartMethods.fetchAllCartProducts();
             if (cartData != null) {
                 cartDetails.value = cartData;
-                Object.assign(cartDetails.value, { finalAmount: null })
+                // console.log(cartData);
+                finalAmount.value = cartData.sum;
+                // Object.assign(cartDetails.value, { finalAmount: null })
             }
         }
         const handleCart = async (cartForm) => {
@@ -133,7 +136,7 @@ export default {
             const response = await cartMethods.deleteCartProduct(cartItem)
             if (response) {
                 cartDetails.value.cart = cartDetails.value.cart.filter(s => s !== cartItem)
-
+                // TODO update finalAmount
             }
         }
 
@@ -142,6 +145,7 @@ export default {
             if (response) {
                 console.log(response)
                 cartDetails.value = {}
+                finalAmount.value = null;
                 // closing the cart
                 isCartShown.value = false;
                 // updating the home screen after buying so that updated available amount is shown
@@ -151,10 +155,11 @@ export default {
             }
         }
 
-        const buyModalShow = (finalAmount) => {
+        const buyModalShow = (finalAmountFromModal) => {
+            console.log(`finalAmountModal ${finalAmountFromModal}`)
             // check if products are available in cart
             if (cartDetails.value.cart.length > 0) {
-                cartDetails.value.finalAmount = finalAmount
+                finalAmount.value = finalAmountFromModal
                 document.getElementById("buyConfirmation").click()
             }
             // document.getElementById("exampleModal").modal('show')
@@ -193,6 +198,7 @@ export default {
             buyAllItems,
             buyModalSHow: buyModalShow,
             addProductToFavourite,
+            finalAmount
 
         }
     }

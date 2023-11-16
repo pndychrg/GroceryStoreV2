@@ -14,13 +14,13 @@ class UserDB:
         else:
             return False
 
-    def registerUser(self, name, username, password, role='user'):
+    def registerUser(self, name, username, email, password, role='user'):
         if (self.checkUserExists(username=username)):
             return None, "User already exists with same name"
         # if user not exists with same username
         try:
             user = User(name=name, username=username,
-                        password=password, role=role)
+                        password=password, role=role, email=email)
             db.session.add(user)
             db.session.commit()
             return user, "User Registered"

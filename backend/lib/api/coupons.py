@@ -13,7 +13,7 @@ coupon_parser = reqparse.RequestParser()
 coupon_parser.add_argument(
     "coupon_code", help='This field cannot be blank', required=True)
 coupon_parser.add_argument(
-    "discount", help='This field cannot be blank', required=True)
+    "discount", help='This field cannot be blank',type=int, required=True)
 coupon_parser.add_argument(
     "expiryDate", help='This field cannot be blank', required=True)
 

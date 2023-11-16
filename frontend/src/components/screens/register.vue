@@ -25,6 +25,11 @@
                 </div>
                 <br>
                 <div class="form-group">
+                    <label for="email">Email</label>
+                    <input type="email" class="form-control" placeholder="Email" v-model="state.email">
+                </div>
+                <br>
+                <div class="form-group">
                     <label for="password">Password</label>
                     <input type="password" class="form-control" placeholder="Password" v-model="state.password">
                 </div>
@@ -48,13 +53,15 @@ export default {
         const state = reactive({
             name: '',
             username: '',
+            email: '',
             password: '',
             role: "user",
+
         });
 
         async function submitHandler() {
             console.log(state.role)
-            await store.registerUser(state.name, state.username, state.password, state.role)
+            await store.registerUser(state.name, state.username, state.email, state.password, state.role,)
         }
 
         return {

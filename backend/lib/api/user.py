@@ -15,6 +15,10 @@ create_user_parser.add_argument(
 create_user_parser.add_argument(
     "username", type=str, help="This field cannot be blank", required=True)
 create_user_parser.add_argument(
+    "email", type=str, help="This field cannot be blank",
+    required=True
+)
+create_user_parser.add_argument(
     "password", type=str, help="This field cannot be blank", required=True)
 create_user_parser.add_argument(
     "role", type=str
@@ -31,7 +35,7 @@ class UserAPI(Resource):
             return {'msg': "username can only contain alphabets and numbers"}, 400
         # if all validations are successfull then add in database
         response, msg = userDB.registerUser(
-            name=data['name'], username=data['username'], password=data['password'], role=data['role'] if data['role'] else "user")
+            name=data['name'], username=data['username'], email=data['email'], password=data['password'], role=data['role'] if data['role'] else "user")
         if response:
             # generating the token according to user
             token = create_access_token(

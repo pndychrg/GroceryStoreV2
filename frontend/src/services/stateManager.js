@@ -60,10 +60,11 @@ export const userStateStore = defineStore("store", {
       }
     },
 
-    async registerUser(name, username, password, role = "user") {
+    async registerUser(name, username, email, password, role = "user") {
       const data = {
         name,
         username,
+        email,
         password,
         role,
       };

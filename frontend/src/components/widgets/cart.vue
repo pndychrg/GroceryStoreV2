@@ -86,7 +86,8 @@
             <div class="d-grid gap-2 mt-2">
                 <button v-if="isCartEmpty" class="btn btn-primary" type="button"
                     @click="$emit('buy-all', finalAmount)">Checkout</button>
-                <button v-else class="btn btn-primary" type="button" @click="$emit('buy-all')" disabled>Checkout</button>
+                <button v-else class="btn btn-primary" type="button" @click="$emit('buy-all', finalAmount)"
+                    disabled>Checkout</button>
             </div>
         </div>
     </div>
@@ -102,9 +103,6 @@ export default {
         cart: Array,
         cartSum: Number,
     },
-    components: {
-
-    },
     setup(props, { emit }) {
         const coupons = ref([]);
         const selectedCoupon = ref(null);
@@ -118,7 +116,7 @@ export default {
                 return props.cartSum -
                     (props.cartSum * selectedCoupon.value.discount) / 100
             } else {
-                return props.cart
+                return props.cartSum
             }
         })
         const checkCouponAvailability = async () => {
@@ -160,8 +158,10 @@ export default {
 
         const fetchAllCoupons = async () => {
             const data = await couponMethods.fetchAllUnexpiredCoupons()
-            coupons.value = data;
-            console.log('SDL coupons.value: ' + coupons?.value[0]?.coupon_code);
+            if (data != null) {
+                coupons.value = data;
+            }
+            console.log('SDL coupons.value: ' + coupons?.value);
 
         }
 

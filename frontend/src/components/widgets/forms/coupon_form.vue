@@ -13,7 +13,7 @@
                 </div>
                 <div class="form-group">
                     <label for="discount">Discount</label>
-                    <input type="number" v-model="formData.discount" class="form-control mb-2" required min="0">
+                    <input type="number" v-model.number="formData.discount" class="form-control mb-2" required min="0">
                 </div>
                 <div class="form-group">
                     <label for="expiryDate">Expiry Date</label>
