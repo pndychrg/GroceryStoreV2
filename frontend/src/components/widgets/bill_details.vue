@@ -21,7 +21,7 @@
                         <img v-else src="@/assets/img_notavailable.jpeg" alt="" class="rounded-start card-img  img-fluid"
                             aria-hidden="true">
                     </div>
-                    <div class="col-md-8 p-2">
+                    <div class="col-md-8 p-4">
                         <div class="card-body text-start">
                             <h5 class="card-title">
                                 {{ order.product.name }}
