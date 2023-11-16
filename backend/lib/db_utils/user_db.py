@@ -1,6 +1,9 @@
 from models.user import User
 from extensions import db
 from sqlalchemy.exc import SQLAlchemyError
+from lib.db_utils.shop import ShopDB
+
+shopDB = ShopDB()
 
 
 class UserDB:
@@ -81,3 +84,39 @@ class UserDB:
             error = str(e.__dict__['orig'])
             print(error, flush=True)
             raise e
+
+    def getUser(self, user_id):
+        try:
+            user = User.query.get(user_id)
+            # TODO IF USER FOUND THEN COLLECT MORE USER DATA
+            return user
+        except SQLAlchemyError as e:
+            return e
+
+    def getUserData(self, user_id):
+        try:
+            user = self.getUser(user_id=user_id)
+            if user:
+                # getting all bills for user
+                bills = shopDB.getBillsForUser(user_id=user_id)
+                # calculating total expenditure, total saved through coupons,
+                total_saved = 0
+                total_expenditure = 0
+                coupons_used = []
+                for bill in bills:
+                    # adding up the expenditure
+                    total_expenditure += bill.finalAmount
+                    # adding up the savings
+                    savedOnBill = bill.billAmount-bill.finalAmount
+                    total_saved += savedOnBill
+                    coupons_used.append(bill.coupon)
+
+            # dictionary of data
+            return {
+                "user": user,
+                "total_saved": total_saved,
+                "total_expenditure": total_expenditure,
+                "coupons_used": coupons_used
+            }
+        except SQLAlchemyError as e:
+            print(e.__dict__['orig'])

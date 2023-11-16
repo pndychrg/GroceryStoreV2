@@ -4,6 +4,9 @@ from flask_jwt_extended import JWTManager
 from flask_swagger_ui import get_swaggerui_blueprint
 from extensions import db
 from flask_cors import CORS
+import workers
+from lib.jobs.monthly_report import send_user_monthly_report
+app, celery = None, None
 
 
 def create_app():
@@ -11,6 +14,8 @@ def create_app():
     app = Flask(__name__)
     app.secret_key = "21f1000649"
     app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///groceryStoreV2.db'
+    app.config['CELERY_BROKER_URL'] = 'redis://localhost:6379/1'
+    app.config['CELERY_RESULT_BACKEND'] = 'redis://localhost:6379/2'
     db.init_app(app=app)
 
     # initializing api
@@ -18,6 +23,23 @@ def create_app():
     jwt = JWTManager(app=app)
     app.config['JWT_SECRET_KEY'] = '21f1000649'
     cors = CORS(app, resources={r"/*": {"origins": "*"}})
+
+    # celery setup
+    celery = workers.celery
+    # updating the config
+    celery.conf.update(
+        broker_url=app.config['CELERY_BROKER_URL'],
+        result_backend=app.config['CELERY_RESULT_BACKEND']
+    )
+    celery.Task = workers.ContextTask
+    app.app_context().push()
+    # celery = workers.celery
+
+    # boiler plate code for testing celery
+    @app.route("/")
+    def main():
+        send_user_monthly_report.delay()
+        return "Hello world", 200
 
     # importing all api resources
     from lib.api.user import UserAPI
@@ -65,7 +87,7 @@ def create_app():
             'app_name': "Test application"
         }
     )
-    return app
+    return app, celery
 
 
 def init_admin():
@@ -75,14 +97,14 @@ def init_admin():
     if (User.query.filter_by(username='admin').first()):
         return 0
     admin = User(name='admin', username='admin',
-                 password='admin', role='admin')
+                 password='admin', role='admin', email='admin@grocerystore.com')
     db.session.add(admin)
     db.session.commit()
     print(admin, flush=True)
 
 
+app, celery = create_app()
 if __name__ == '__main__':
-    app = create_app()
     with app.app_context():
         db.create_all()
         print("create all func ran", flush=True)

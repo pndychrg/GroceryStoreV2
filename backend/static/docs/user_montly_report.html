@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Monthly Activity Report</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+
+        table {
+            border-collapse: collapse;
+            width: 100%;
+        }
+
+        th,
+        td {
+            border: 1px solid #dddddd;
+            text-align: left;
+            padding: 8px;
+        }
+
+        th {
+            background-color: #f2f2f2;
+        }
+    </style>
+</head>
+
+<body>
+    <h2>Monthly Activity Report</h2>
+
+    <h3>User Information</h3>
+    <div class="row">
+        <div class="col-auto">
+            <img src="data:image/png;base64,{{data['user'].img}}" alt="profile img" width="200">
+        </div>
+        <p class="col">
+            <strong>Name:</strong> {{data['user'].name}}
+            <br>
+            <strong>Username:</strong> {{data['user'].username}}
+            <br>
+            <strong>Email:</strong> {{data['user'].email}}
+        </p>
+    </div>
+    <p><strong>Month:</strong> November 2023</p>
+
+    <h3>Expenditure Summary</h3>
+    <table>
+        <tr>
+            <th>Total Expenditure</th>
+            <td>${{data['total_expenditure']}}</td>
+        </tr>
+    </table>
+
+    <h3>Items Bought</h3>
+    <table>
+        <tr>
+            <th>Item</th>
+            <th>Quantity</th>
+            <th>Price</th>
+        </tr>
+        <tr>
+            <td>Apples</td>
+            <td>5</td>
+            <td>$10.00</td>
+        </tr>
+        <tr>
+            <td>Bread</td>
+            <td>2</td>
+            <td>$5.00</td>
+        </tr>
+        <!-- Add more rows as needed -->
+    </table>
+
+    <h3>Coupons Used</h3>
+    <table>
+        <tr>
+            <th>Coupon Code</th>
+            <th>Discount</th>
+        </tr>
+        {% for coupon in data['coupons_used'] %}
+        <tr>
+            <td>coupon.name</td>
+            <td>coupon.discount</td>
+        </tr>
+        {% endfor %}
+        <!-- Add more rows as needed -->
+    </table>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.min.js"
+        integrity="sha384-BBtl+eGJRgqQAUMxJ7pMwbEyER4l1g+O15P+16Ep7Q9Q+zqX6gSbd85u4mG4QzX+"
+        crossorigin="anonymous"></script>
+
+</body>
+
+</html>
