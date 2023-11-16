@@ -89,7 +89,6 @@
                 <button v-else class="btn btn-primary" type="button" @click="$emit('buy-all')" disabled>Checkout</button>
             </div>
         </div>
-
     </div>
 </template>
 
@@ -162,7 +161,7 @@ export default {
         const fetchAllCoupons = async () => {
             const data = await couponMethods.fetchAllUnexpiredCoupons()
             coupons.value = data;
-            console.log('SDL coupons.value: ' + coupons.value[0].coupon_code);
+            console.log('SDL coupons.value: ' + coupons?.value[0]?.coupon_code);
 
         }
 
@@ -186,8 +185,10 @@ export default {
 
 <style scoped>
 .cart {
-    height: auto;
+    /* height: auto; */
     width: auto;
+    /* min-height: max-content; */
+    min-height: 45vh !important;
     flex-grow: 1;
     padding: 10px;
     box-sizing: border-box;
