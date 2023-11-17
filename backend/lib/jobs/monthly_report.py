@@ -10,8 +10,8 @@ userDB = UserDB()
 
 @celery.task()
 def send_user_monthly_report():
-    data = userDB.getUserData(1)
-    print(data)
+    data = userDB.getUserData(3)
+    print(print([bill.toJson() for bill in data['bills']], flush=True))
     with open("../backend/static/docs/user_montly_report.html") as file:
         template = Template(file.read())
         message = template.render(data=data)
@@ -20,7 +20,7 @@ def send_user_monthly_report():
     return response
 
 
-@celery.on_after_finalize.connect
-def setup_periodic_tasks(sender, **kwargs):
-    sender.add_periodic_task(
-        30.0, send_user_monthly_report.s(), name="At Every 10 secs")
+# @celery.on_after_finalize.connect
+# def setup_periodic_tasks(sender, **kwargs):
+#     sender.add_periodic_task(
+#         crontab(second="*/10"), send_user_monthly_report.s(), name="At Every 10 secs")

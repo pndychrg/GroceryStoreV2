@@ -13,6 +13,8 @@ class UserDB:
             return True
         else:
             return False
+        
+
 
     def registerUser(self, name, username, email, password, role='user'):
         if (self.checkUserExists(username=username)):
@@ -98,7 +100,8 @@ class UserDB:
             user = self.getUser(user_id=user_id)
             if user:
                 # getting all bills for user
-                bills = shopDB.getBillsForUser(user_id=user_id)
+                bills = shopDB.getPreviousMonthBillsForUser(user_id=user_id)
+                
                 # calculating total expenditure, total saved through coupons,
                 total_saved = 0
                 total_expenditure = 0
@@ -109,12 +112,14 @@ class UserDB:
                     # adding up the savings
                     savedOnBill = bill.billAmount-bill.finalAmount
                     total_saved += savedOnBill
-                    coupons_used.append(bill.coupon)
+                    if bill.coupon:
+                        coupons_used.append(bill.coupon)
 
             # dictionary of data
             return {
                 "user": user,
                 "total_saved": total_saved,
+                "bills":bills,
                 "total_expenditure": total_expenditure,
                 "coupons_used": coupons_used
             }

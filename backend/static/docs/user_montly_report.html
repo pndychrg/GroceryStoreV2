@@ -56,29 +56,47 @@
             <th>Total Expenditure</th>
             <td>${{data['total_expenditure']}}</td>
         </tr>
+        <tr>
+            <th>Total Saved With Coupons</th>
+            <td>${{data['total_saved']}}</td>
+        </tr>
     </table>
-
-    <h3>Items Bought</h3>
-    <table>
-        <tr>
-            <th>Item</th>
-            <th>Quantity</th>
-            <th>Price</th>
-        </tr>
-        <tr>
-            <td>Apples</td>
-            <td>5</td>
-            <td>$10.00</td>
-        </tr>
-        <tr>
-            <td>Bread</td>
-            <td>2</td>
-            <td>$5.00</td>
-        </tr>
-        <!-- Add more rows as needed -->
-    </table>
-
+    <br>
+    <h3>Bills In Month</h3>
+    {% for bill in data['bills'] %}
+    <div class="p-2 m-2">
+        <h5><strong>Bill Id:</strong> {{bill.id}} <span class="text-secondary float-end">{{bill.date}}</span></h5>
+        <p>
+            Total Amount : <span class="float-end">{{bill.billAmount}}</span>
+            <br>
+            {% if bill.coupon != None %}
+            Coupon Used : <span class="float-end">{{bill.coupon.coupon_code}}</span>
+            <br>
+            Final Amount : <span class="float-end">{{bill.finalAmount}}</span>
+            {% endif %}
+        </p>
+        <h6><strong>Products Bought : </strong></h6>
+        <table class="p-2">
+            <tr>
+                <th>Item</th>
+                <th>Quantity</th>
+                <th>Price</th>
+                <th>Sum</th>
+            </tr>
+            {% for order in bill.orders %}
+            <tr>
+                <td>{{order.product.name}}</td>
+                <td>{{order.numOfProduct}}</td>
+                <td>{{order.product.rate}}</td>
+                <td>{{order.totalSum}}</td>
+            </tr>
+            {% endfor %}
+            <!-- Add more rows as needed -->
+        </table>
+    </div>
+    {% endfor %}
     <h3>Coupons Used</h3>
+    {% if data['coupons_used']|length > 0 %}
     <table>
         <tr>
             <th>Coupon Code</th>
@@ -86,12 +104,17 @@
         </tr>
         {% for coupon in data['coupons_used'] %}
         <tr>
-            <td>coupon.name</td>
-            <td>coupon.discount</td>
+            <td>{{coupon.name}}</td>
+            <td>{{coupon.discount}}</td>
         </tr>
         {% endfor %}
         <!-- Add more rows as needed -->
     </table>
+    {% else %}
+    <h5 class="text-secondary">No Coupons Used</h5>
+    {% endif %}
+
+
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.min.js"
         integrity="sha384-BBtl+eGJRgqQAUMxJ7pMwbEyER4l1g+O15P+16Ep7Q9Q+zqX6gSbd85u4mG4QzX+"
         crossorigin="anonymous"></script>

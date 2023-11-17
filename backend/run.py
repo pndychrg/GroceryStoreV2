@@ -5,6 +5,7 @@ from flask_swagger_ui import get_swaggerui_blueprint
 from extensions import db
 from flask_cors import CORS
 import workers
+from celery.schedules import crontab
 from lib.jobs.monthly_report import send_user_monthly_report
 app, celery = None, None
 
@@ -29,9 +30,16 @@ def create_app():
     # updating the config
     celery.conf.update(
         broker_url=app.config['CELERY_BROKER_URL'],
-        result_backend=app.config['CELERY_RESULT_BACKEND']
+        result_backend=app.config['CELERY_RESULT_BACKEND'],
     )
+    celery.conf.beat_schedule = {
+        "trigger-monthly-report": {
+            "task": "tasks.send_user_monthly_report",
+            "schedule": crontab(minute="0",hour="0",day_of_month="1")
+        }
+    }
     celery.Task = workers.ContextTask
+
     app.app_context().push()
     # celery = workers.celery
 
