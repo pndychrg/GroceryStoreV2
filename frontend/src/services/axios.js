@@ -94,7 +94,8 @@ export const updateToken = () => {
 
 export const downloadItem = async (path, label) => {
   try {
-    await axios.get(path, { responseType: "blob" }).then((response) => {
+    const response = await axios.get(path, { responseType: "blob" });
+    if (response) {
       const blob = new Blob([response.data]);
       const link = document.createElement("a");
       link.href = URL.createObjectURL(blob);
@@ -102,7 +103,7 @@ export const downloadItem = async (path, label) => {
       link.click();
       URL.revokeObjectURL(link.href);
       return true;
-    });
+    }
   } catch (e) {
     console.log(e);
     return false;

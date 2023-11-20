@@ -7,6 +7,7 @@ export const reportMethods = {
       "/report/exportCSVReports",
       "Download Reports Zip File"
     );
+    console.log(response);
     if (response) {
       showSuccessToast("Report Fetched Successfully");
     }
