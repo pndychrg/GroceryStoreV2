@@ -84,10 +84,8 @@
                 </div>
             </div>
             <div class="d-grid gap-2 mt-2">
-                <button v-if="isCartEmpty" class="btn btn-primary" type="button"
-                    @click="$emit('buy-all', finalAmount)">Checkout</button>
-                <button v-else class="btn btn-primary" type="button" @click="$emit('buy-all', finalAmount)"
-                    disabled>Checkout</button>
+                <button v-if="isCartEmpty" class="btn btn-primary" type="button" @click="$emit('buy-all')">Checkout</button>
+                <button v-else class="btn btn-primary" type="button" disabled>Checkout</button>
             </div>
         </div>
     </div>
@@ -120,16 +118,17 @@ export default {
             }
         })
         const checkCouponAvailability = async () => {
-
             // first checking if the selectedCoupon is null or not
             if (selectedCoupon.value == null) {
                 const data = await couponMethods.fetchCouponFromCouponCode(selectedCouponCode.value);
                 selectedCoupon.value = data;
+                emit("update-coupon", selectedCoupon.value);
             } else {
                 // checking if the coupon_code is changed after selecting the coupon
                 if (selectedCoupon.value.coupon_code != selectedCouponCode.value) {
                     const data = await couponMethods.fetchCouponFromCouponCode(selectedCouponCode.value);
                     selectedCoupon.value = data;
+                    emit("update-coupon", selectedCoupon);
                 }
             }
         }

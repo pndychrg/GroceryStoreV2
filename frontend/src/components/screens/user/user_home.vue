@@ -55,7 +55,7 @@
 
         <teleport to="#modal-root">
             <CartModal v-show="isCartShown" :cart="cartDetails?.cart" :cartSum="cartDetails?.sum" @close="showCart"
-                @remove-cart-item="removeCartItem" @buy-all="buyModalSHow" />
+                @remove-cart-item="removeCartItem" @buy-all="buyModalSHow" @update-coupon="hanldeUpdatedCoupon" />
         </teleport>
     </div>
 </template>
@@ -63,6 +63,7 @@
 <script>
 import CartModal from "@/components/widgets/cart.vue"
 import { productMethods } from '@/services/HTTPRequests/productMethods';
+// eslint-disable-next-line no-unused-vars
 import { buyMethods } from "@/services/HTTPRequests/buyMethods";
 import ProductCard from '@/components/widgets/cards/product_card.vue';
 import { onMounted, ref, computed } from 'vue';
@@ -84,7 +85,21 @@ export default {
             cart: null,
             sum: null,
         });
-        const finalAmount = ref(null);
+        const finalAmount = computed(
+            () => {
+                if (cartDetails.value.sum == null) {
+                    return null;
+                } else {
+                    if (cartDetails.value.sum != null && selectedCoupon.value == null) {
+                        return cartDetails.value.sum;
+                    } else {
+                        const retAmount = cartDetails.value.sum - (cartDetails.value.sum * selectedCoupon.value.discount) / 100;
+                        return retAmount
+                    }
+                }
+            }
+        );
+        const selectedCoupon = ref(null);
         const fetchProductsData = async () => {
             const productsData = await productMethods.fetchAllProducts();
             products.value = productsData;
@@ -108,7 +123,7 @@ export default {
 
             if (response) {
                 // console.log(response);
-                cartDetails.value.cart.unshift(response);
+                cartDetails?.value.cart.unshift(response);
                 cartDetails.value.sum += response.totalSum;
             }
         }
@@ -141,30 +156,34 @@ export default {
         }
 
         const buyAllItems = async () => {
-            const response = await buyMethods.buyAllCartItems();
+            console.log(selectedCoupon.value.id);
+            const response = await buyMethods.buyAllCartItems(selectedCoupon.value.id);
             if (response) {
                 console.log(response)
                 cartDetails.value = {}
                 finalAmount.value = null;
                 // closing the cart
                 isCartShown.value = false;
-                // updating the home screen after buying so that updated available amount is shown
-                // TODO YOU CAN DO IT THROUGH FRONTEND ONLY TRY THAT METHOD FOR BETTER PERFORMANCE
+                //     // updating the home screen after buying so that updated available amount is shown
+                //     // TODO YOU CAN DO IT THROUGH FRONTEND ONLY TRY THAT METHOD FOR BETTER PERFORMANCE
                 document.getElementById("closeBuyConfirmation").click()
                 fetchProductsData()
             }
         }
 
-        const buyModalShow = (finalAmountFromModal) => {
-            console.log(`finalAmountModal ${finalAmountFromModal}`)
+        const buyModalShow = () => {
             // check if products are available in cart
             if (cartDetails.value.cart.length > 0) {
-                finalAmount.value = finalAmountFromModal
                 document.getElementById("buyConfirmation").click()
             }
             // document.getElementById("exampleModal").modal('show')
         }
 
+        const hanldeUpdatedCoupon = (updatedCoupon) => {
+            console.log(`coupon ${JSON.stringify(updatedCoupon)}`);
+            selectedCoupon.value = updatedCoupon;
+            console.log(`selectedCoupon ${selectedCoupon.value}`)
+        }
 
         onMounted(() => {
             fetchProductsData()
@@ -198,7 +217,8 @@ export default {
             buyAllItems,
             buyModalSHow: buyModalShow,
             addProductToFavourite,
-            finalAmount
+            finalAmount,
+            hanldeUpdatedCoupon
 
         }
     }

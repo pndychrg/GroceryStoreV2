@@ -144,3 +144,6 @@ class ProductDB:
 
         products = query.all()
         return products, "Products found"
+
+
+    

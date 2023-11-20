@@ -8,7 +8,8 @@ class Section(db.Model):
     name = db.Column(db.String(200), nullable=False, unique=True)
     unit = db.Column(db.String(100), nullable=False)
     # section_icon = db.Column(db.LargeBinary)
-    # products = db.relationship("Product", backref='section')
+    products = db.relationship(
+        "Product", back_populates="section")
 
     def toJson(self):
         return {

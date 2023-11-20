@@ -16,7 +16,7 @@ class Product(db.Model):
     description = db.Column(db.String())
     # getting section details
     section = db.relationship(
-        "Section", backref=db.backref('section'))
+        "Section", back_populates="products")
 
     def toJson(self):
         return {
@@ -28,4 +28,5 @@ class Product(db.Model):
             "expiryDate": self.expiryDate.strftime('%Y-%m-%d') if self.expiryDate != None else None,
             "section": self.section.toJson(),
             "img": base64.b64encode(self.img).decode('utf-8') if self.img != None else None,
+            "description": self.description
         }

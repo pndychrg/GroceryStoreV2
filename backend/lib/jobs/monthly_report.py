@@ -1,6 +1,4 @@
 from workers import celery
-from datetime import datetime
-from celery.schedules import crontab
 from jinja2 import Template
 from lib.methods.mail import send_email
 from lib.db_utils.user_db import UserDB

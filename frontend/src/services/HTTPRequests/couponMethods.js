@@ -18,7 +18,7 @@ export const couponMethods = {
     return data;
   },
   async fetchCouponFromCouponCode(coupon_code = null) {
-    console.log(coupon_code);
+    // console.log(coupon_code);
     const coupon_data = await httpGetRequest(`/coupons/${coupon_code}`);
     if (coupon_data) {
       showSuccessToast("Coupon Found");
