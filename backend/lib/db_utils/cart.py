@@ -37,6 +37,7 @@ class CartDB:
             # this is to check if the product exists in cart for the user
             product_inCart = Cart.query.filter_by(
                 product_id=product_id, user_id=user_id).first()
+            # print(product_inCart.toJson())
             if product_inCart == None:
                 totalSum = numOfProduct*product.rate
                 new_cart = Cart(

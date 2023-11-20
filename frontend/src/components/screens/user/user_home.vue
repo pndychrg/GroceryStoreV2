@@ -123,8 +123,11 @@ export default {
 
             if (response) {
                 // console.log(response);
-                cartDetails?.value.cart.unshift(response);
-                cartDetails.value.sum += response.totalSum;
+                // THIS PEICE OF CODE IS CAUSING MULTIPLE ENTRIES IN CART 
+                // cartDetails?.value.cart.unshift(response);
+                // cartDetails.value.sum += response.totalSum;
+                // FOR SIMPLIFYING AT THE MOMENT WE WILL JUST FETCH THE CART FOR THE USER 
+                fetchCartForUser()
             }
         }
 

@@ -36,7 +36,7 @@ class CartAPI(Resource):
     def post(self):
         # getting the user_id from the jwt token
         userFromToken = get_jwt_identity()
-        print(userFromToken, flush=True)
+        # print(userFromToken, flush=True)
         # user_id = 3
         # parsing
         data = cart_parser.parse_args()
