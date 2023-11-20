@@ -1,1 +1,2 @@
-ID,Coupon Code,Discount,ExpiryDate,HasExpired
+ID,Coupon Code,Discount,ExpiryDate,HasExpired,Usage Count
+1,TEST20,20,,0,2

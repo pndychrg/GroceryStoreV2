@@ -86,6 +86,10 @@ def create_app():
     api.add_resource(CouponsExtendedAPI, '/coupons')
     api.add_resource(CouponsExtendedAPI,
                      "/coupons/<coupon_code>", endpoint="coupons")
+    
+    # registering the reports blueprint
+    from lib.api.reports import report
+    app.register_blueprint(report)
     # api docs init code
     SWAGGER_URL = '/api/docs'
     API_URL = '/static/docs/swagger.yaml'
