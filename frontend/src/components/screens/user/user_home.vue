@@ -159,8 +159,8 @@ export default {
         }
 
         const buyAllItems = async () => {
-            console.log(selectedCoupon.value.id);
-            const response = await buyMethods.buyAllCartItems(selectedCoupon.value.id);
+            console.log(selectedCoupon.value?.id);
+            const response = await buyMethods.buyAllCartItems(selectedCoupon.value?.id);
             if (response) {
                 console.log(response)
                 cartDetails.value = {}

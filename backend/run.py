@@ -35,7 +35,7 @@ def create_app():
     celery.conf.beat_schedule = {
         "trigger-monthly-report": {
             "task": "tasks.send_user_monthly_report",
-            "schedule": crontab(minute="0",hour="0",day_of_month="1")
+            "schedule": crontab(minute="0", hour="0", day_of_month="1")
         }
     }
     celery.Task = workers.ContextTask
@@ -73,6 +73,7 @@ def create_app():
     api.add_resource(ProductImage, '/product/img')
     api.add_resource(CartAPI, '/cart')
     api.add_resource(BuyAPI, '/buy')
+    api.add_resource(BuyAPI, '/buy/<coupon_id>', endpoint='buy')
     api.add_resource(SearchProductsAPI, '/product/search')
     api.add_resource(FavouritesAPI, '/product/favourite/<product_id>',
                      endpoint="favourite")

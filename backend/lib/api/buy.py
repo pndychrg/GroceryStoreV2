@@ -11,12 +11,14 @@ class BuyAPI(Resource):
 
     @jwt_required()
     @checkJWTForUser
-    def post(self):
+    def post(self, coupon_id=None):
 
         # getting the user_id from jwt token
         user_id = get_jwt_identity().get('id')
         # getting coupon_id from params
-        coupon_id = request.args.get("coupon_id")
+        # coupon_id = request.args.get("coupon_id")
+        # print(coupon_id, flush=True)
+        print(coupon_id, flush=True)
         response, msg = shopDB.buy(
             user_id=user_id,
             coupon_id=coupon_id
