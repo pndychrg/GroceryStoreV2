@@ -2,12 +2,14 @@
     <div class="dashboard">
         <AdminDashboard v-if="loggedInRole == 'admin'" />
         <UserDashboard v-else-if="loggedInRole == 'user'" />
+        <ManagerDashboard v-else-if="loggedInRole == 'manager'" />
     </div>
 </template>
 
 <script>
 import AdminDashboard from '@/components/screens/admin/admin_dashboard.vue'
 import UserDashboard from '@/components/screens/user/user_dashboard.vue'
+import ManagerDashboard from '@/components/screens/storemanager/dashboard.vue'
 import { userStateStore } from '@/services/stateManager';
 import { computed } from 'vue';
 export default {
@@ -16,7 +18,7 @@ export default {
     components: {
         AdminDashboard,
         UserDashboard,
-
+        ManagerDashboard,
     },
     setup() {
         const store = userStateStore()

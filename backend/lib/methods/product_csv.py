@@ -105,9 +105,8 @@ def exportProductReportToCSV():
     # create a zip file containing the csv files
     zip_filename = 'static/export/data.zip'
     with zipfile.ZipFile(zip_filename, 'w', zipfile.ZIP_DEFLATED) as zipf:
-        zipf.write(section_filename)
-        zipf.write(product_fileName)
-        zipf.write(coupon_filename)
-        zipf.write(revenue_fileName)
-
+        zipf.write(section_filename, arcname='section.csv')
+        zipf.write(product_fileName, arcname='products.csv')
+        zipf.write(coupon_filename, arcname='coupons.csv')
+        zipf.write(revenue_fileName, arcname='revenue.csv')
     return zip_filename
