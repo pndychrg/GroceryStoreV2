@@ -1,4 +1,4 @@
-import { downloadItem } from "../axios";
+import { downloadItem, httpGetImageRequest } from "../axios";
 import { showSuccessToast } from "@/static/js/toasts";
 
 export const reportMethods = {
@@ -11,6 +11,21 @@ export const reportMethods = {
     if (response) {
       showSuccessToast("Report Fetched Successfully");
     }
+    return response;
+  },
+
+  async getCouponGraph() {
+    const response = await httpGetImageRequest("/report/coupon");
+    return response;
+  },
+
+  async getFavProductGraph() {
+    const response = await httpGetImageRequest("/report/product/favourite");
+    return response;
+  },
+
+  async getBoughtProductGraph() {
+    const response = await httpGetImageRequest("/report/product/buy");
     return response;
   },
 };

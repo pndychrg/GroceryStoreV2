@@ -109,3 +109,15 @@ export const downloadItem = async (path, label) => {
     return false;
   }
 };
+export const httpGetImageRequest = async (path) => {
+  try {
+    const response = await axios.get(path, { responseType: "blob" });
+    const blob = new Blob([response.data], {
+      type: response.headers["Content-Type"],
+    });
+    return blob;
+  } catch (error) {
+    console.log(error);
+    return null;
+  }
+};
