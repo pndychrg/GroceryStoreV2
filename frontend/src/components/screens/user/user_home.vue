@@ -7,6 +7,7 @@
             </button>
         </h2>
         <div class="row m-2 products-wrapper">
+            <h5 class="text-start">Our Most Recent Products</h5>
             <div v-for="product in products" :key="product.id" class="card"
                 :class="{ 'card-unavailable': product.availableAmount == 0 }">
                 <ProductCard :productData="product" loggedInRole="user" @add-to-cart="handleCart"
@@ -40,8 +41,8 @@ export default {
         const products = ref([]);
         const cartStore = CartStateStore()
         const fetchProductsData = async () => {
-            const productsData = await productMethods.fetchAllProducts();
-            console.log(productsData);
+            const productsData = await productMethods.fetchRecentProducts(3);
+            // console.log(productsData);
             products.value = productsData;
         }
         const handleCart = async (cartForm) => {
@@ -85,7 +86,6 @@ export default {
             products,
             handleCart,
             getCartData,
-
             productCartData,
             addProductToFavourite,
         }
@@ -129,32 +129,5 @@ export default {
 .card:hover {
     transform: scale(1.05);
     box-shadow: 0 10px 20px rgba(0, 0, 0, .12), 0 4px 8px rgba(0, 0, 0, .06);
-}
-
-.floating-container {
-
-    /* border-radius: 15px;
-    border: 2px solid red; */
-    /* position: fixed; */
-    position: fixed;
-    bottom: 10px;
-    right: 0px;
-    /* float: right; */
-    margin-right: 25px;
-    box-shadow: 0 6px 10px rgba(0, 0, 0, .08), 0 0 6px rgba(0, 0, 0, .05);
-    transition: .3s transform cubic-bezier(.155, 1.105, .295, 1.12), .3s box-shadow, .3s -webkit-transform cubic-bezier(.155, 1.105, .295, 1.12);
-}
-
-.floating-container:hover {
-    transform: scale(1.05);
-    box-shadow: 0 10px 20px rgba(0, 0, 0, .12), 0 4px 8px rgba(0, 0, 0, .06);
-}
-
-.cartFloatingButton {
-    color: #4D6DE3;
-}
-
-.cartFloatingButton:hover {
-    color: white;
 }
 </style>

@@ -187,7 +187,7 @@ export default {
         const isBuyConfirmationShown = ref(false);
         const buyAllItems = async () => {
             // buying all the items
-            const response = await buyMethods.buyAllCartItems(selectedCoupon.value.id);
+            const response = await buyMethods.buyAllCartItems(selectedCoupon.value?.id);
             if (response) {
                 // close both buy confirmation and cart modal
                 isBuyConfirmationShown.value = false;

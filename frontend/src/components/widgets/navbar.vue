@@ -30,7 +30,7 @@
                     <div class="row" v-else>
                         <li class="nav-item col">
                             <!-- Cart Button -->
-                            <button class="btn btn-outline-dark" type="button" @click="showCart"
+                            <button class="btn btn-outline-dark" type="button" @click="showCart" v-if="loggedInRole == 'user'"
                                 style="width: max-content;">
                                 <font-awesome-icon :icon="['fas', 'fa-cart-plus']" class="faa-horizontal animated-hover" />
                                 Show Cart
@@ -49,9 +49,7 @@
     </nav>
     <teleport to="#modal-root">
         <Sidebar v-show="isSidebarShown" @close="showSidebar" />
-        <CartModal v-if="isCartShown" @close="showCart"
-            
-        />
+        <CartModal v-if="isCartShown" @close="showCart" />
     </teleport>
 </template>
 
@@ -81,6 +79,9 @@ export default {
                 return false;
             }
         })
+        const loggedInRole = computed(() => {
+            return store.user.role;
+        })
         const logoutMethod = store.logoutUser;
 
         //sidebar setup
@@ -104,7 +105,8 @@ export default {
             isSidebarShown,
             showSidebar,
             isCartShown,
-            showCart
+            showCart,
+            loggedInRole
         };
     },
 }

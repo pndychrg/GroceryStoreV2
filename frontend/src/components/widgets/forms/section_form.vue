@@ -76,11 +76,13 @@ export default {
                         // backend request
                         const response = await sectionMethods.addSection(dataObject)
                         if (response) {
+                            clearForm()
                             emit('section-added', response)
                         }
                     } else {
                         const response = await sectionMethods.updateSection(props.initialData.id, dataObject)
                         // console.log(response);
+                        clearForm();
                         emit('section-edited', response)
                         console.log("Update button clicked")
                     }
@@ -93,6 +95,7 @@ export default {
                     }
                     const response = await sectionMethods.addSection(dataObject)
                     if (response) {
+                        clearForm()
                         emit('section-added', response)
                     }
                 }
@@ -102,6 +105,7 @@ export default {
                     props.initialData.id, dataObject
                 );
                 if (response) {
+                    clearForm()
                     emit('sectionRequest-edited', response);
                 }
             }
@@ -114,13 +118,15 @@ export default {
                 formData.unit = newData.unit;
             }
         }, { immediate: true })
-
-
-        const handleCancel = () => {
+        const clearForm = () => {
             Object.assign(formData, {
                 "name": "",
-                "unit": ""
+                "unit": '',
             })
+        }
+
+        const handleCancel = () => {
+            clearForm();
             emit('close');
         }
         return {
