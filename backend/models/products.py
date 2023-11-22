@@ -1,5 +1,7 @@
 import base64
+from sqlalchemy import func
 from extensions import db
+from models.rating import Rating
 
 
 class Product(db.Model):
@@ -17,6 +19,13 @@ class Product(db.Model):
     # getting section details
     section = db.relationship(
         "Section", back_populates="products")
+    ratings = db.relationship(
+        "Rating", backref="product_rating", lazy="dynamic"
+    )
+
+    @property
+    def av_rating(self):
+        return db.session.query(func.avg(Rating.rating)).filter_by(product_id=self.id).scalar() or 0
 
     def toJson(self):
         return {
@@ -28,5 +37,6 @@ class Product(db.Model):
             "expiryDate": self.expiryDate.strftime('%Y-%m-%d') if self.expiryDate != None else None,
             "section": self.section.toJson(),
             "img": base64.b64encode(self.img).decode('utf-8') if self.img != None else None,
-            "description": self.description
+            "description": self.description,
+            "avgRating": self.av_rating
         }

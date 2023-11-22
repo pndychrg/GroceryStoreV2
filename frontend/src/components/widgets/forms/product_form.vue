@@ -11,6 +11,11 @@
                             <label for="productName">Product Name</label>
                             <input v-model="formData.name" type="text" id="productName" class="form-control mb-2" required>
                         </div>
+                        <div class="form-group">
+                            <label for="productDescription">Product Description</label>
+                            <textarea class="form-control" id="productDescription" rows="3"
+                                v-model="formData.description"></textarea>
+                        </div>
 
                         <div class="form-group">
                             <label for="availableAmount">Available Amount</label>
@@ -74,6 +79,7 @@ export default {
 
         const formData = reactive({
             name: "",
+            description: "",
             availableAmount: null,
             rate: null,
             manufactureDate: null,
@@ -84,6 +90,7 @@ export default {
         const clearForm = () => {
             Object.assign(formData, {
                 name: "",
+                description: "",
                 availableAmount: null,
                 rate: null,
                 manufactureDate: null,
@@ -100,6 +107,7 @@ export default {
         const handleSubmit = async () => {
             const dataObject = {
                 "name": formData.name,
+                "description": formData.description,
                 "availableAmount": formData.availableAmount,
                 "rate": formData.rate,
                 "manufactureDate": formData.manufactureDate,
@@ -174,5 +182,4 @@ export default {
 .dropdown:hover .dropdown-options {
     display: block;
 } */
-
 </style>

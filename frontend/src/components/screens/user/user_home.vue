@@ -102,6 +102,7 @@ export default {
         const selectedCoupon = ref(null);
         const fetchProductsData = async () => {
             const productsData = await productMethods.fetchAllProducts();
+            console.log(productsData);
             products.value = productsData;
         }
         const fetchCartForUser = async () => {

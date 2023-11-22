@@ -29,6 +29,10 @@
                     {{ productData.section.name }}
                 </h6>
                 <hr>
+                <p class="text-secondary" v-if="productData.description?.length > 0">
+                    {{ productData.description }}
+                </p>
+                <hr v-if="productData.description?.length > 0">
                 <p class="card-text">
                     Available Amount : {{ productData.availableAmount }}
                     <br>
@@ -40,6 +44,10 @@
                         productData.expiryDate }}
                     <br>
                 </p>
+                <div class="d-flex justify-content-start">
+                    <!-- <h5>{{ productData.avgRating }}</h5> -->
+                    <RenderStarRating :avgRating="productData.avgRating" />
+                </div>
                 <div class="d-flex justify-content-end" v-if="loggedInRole == 'manager'">
                     <button class="btn" @click="$emit('delete-product')">
                         <font-awesome-icon :icon="['fas', 'trash-can']" class="faa-horizontal animated-hover"
@@ -68,9 +76,13 @@
 </template>
 
 <script>
+import RenderStarRating from "@/components/widgets/render_star_rating.vue"
 import { reactive, watch, computed } from 'vue';
 export default {
     name: "ProductCard",
+    components: {
+        RenderStarRating,
+    },
     props: {
         productData: Object,
         loggedInRole: String,
@@ -136,9 +148,5 @@ export default {
 .image {
     height: 80%;
     width: auto;
-}
-
-.placeholder {
-    height: 100%;
 }
 </style>

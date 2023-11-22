@@ -12,6 +12,9 @@ create_product_parser.add_argument(
     "name", type=str, help='This field cannot be blank', required=True
 )
 create_product_parser.add_argument(
+    "description", type=str, help='This field cannot be blank', required=True
+)
+create_product_parser.add_argument(
     "availableAmount", type=int, help='This field cannot be blank', required=True
 )
 create_product_parser.add_argument(
@@ -54,6 +57,7 @@ class ProductsAPI(Resource):
         if data['section_id']:
             response, msg = productDB.addProduct(
                 name=data['name'].strip(),
+                description=data['description'].strip(),
                 availableAmount=data['availableAmount'],
                 rate=data['rate'],
                 manufactureDate=data['manufactureDate'],

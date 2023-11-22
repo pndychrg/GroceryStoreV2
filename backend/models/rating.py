@@ -10,8 +10,7 @@ class Rating(db.Model):
     rating = db.Column(db.Integer, nullable=False)
     comment = db.Column(db.String())
 
-    #
-    product = db.relationship("Product", foreign_keys=[product_id])
+    # product = db.relationship("Product", foreign_keys=[product_id])
     user = db.relationship("User", foreign_keys=[user_id])
 
     def toJson(self):

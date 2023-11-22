@@ -26,7 +26,7 @@ class ProductDB:
         else:
             return None, "Invalid product_id"
 
-    def addProduct(self, name, availableAmount, rate, manufactureDate, expiryDate, section_id):
+    def addProduct(self, name,description, availableAmount, rate, manufactureDate, expiryDate, section_id):
         # Validations
         if (Validators.name(name=name)):
             return None, "Name can't be empty"
@@ -50,6 +50,7 @@ class ProductDB:
         try:
             new_product = Product(
                 name=name,
+                description=description,
                 availableAmount=availableAmount,
                 rate=rate,
                 manufactureDate=manufactureDate,
