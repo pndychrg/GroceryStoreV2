@@ -36,7 +36,10 @@ class CouponDB:
         # validating date
         if (Validators.checkDate(expiryDate) == False):
             return None, "invalid expiryDate"
-
+        else:
+            expiryDate = datetime.strptime(
+                expiryDate, '%Y-%m-%d'
+            ).date() if (expiryDate != None) and (len(expiryDate) != 0) else None
         # validating couponcode and discount
         if Validators.checkStringForNull(coupon_code):
             return None, "invalid coupon_code"
@@ -68,7 +71,10 @@ class CouponDB:
         # validating date
         if (Validators.checkDate(expiryDate) == False):
             return None, "invalid expiryDate"
-
+        else:
+            expiryDate = datetime.strptime(
+                expiryDate, '%Y-%m-%d'
+            ).date() if (expiryDate != None) and (len(expiryDate) != 0) else None
         # validating couponcode and discount
         if Validators.checkStringForNull(coupon_code):
             return None, "invalid coupon_code"
@@ -109,6 +115,7 @@ class CouponDB:
         today = datetime.today()
         for coupon in coupons:
             # all the unexpired coupons are fetched
-            if coupon.expiryDate < today:
-                coupon.hasExpired = 1
+            if coupon.expiryDate:
+                if coupon.expiryDate < today:
+                    coupon.hasExpired = 1
         db.session.commit()

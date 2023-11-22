@@ -7,6 +7,7 @@ from flask_cors import CORS
 import workers
 from celery.schedules import crontab
 from lib.jobs.monthly_report import send_user_monthly_report
+from lib.jobs.coupon_update import updateCoupons
 app, celery = None, None
 
 
@@ -34,9 +35,13 @@ def create_app():
     )
     celery.conf.beat_schedule = {
         "trigger-monthly-report": {
-            "task": "tasks.send_user_monthly_report",
+            "task": "lib.jobs.monthly_report.send_user_monthly_report",
             "schedule": crontab(minute="0", hour="0", day_of_month="1")
-        }
+        },
+        "trigger-daily-coupon-update": {
+            "task": "lib.jobs.coupon_update.updateCoupons",
+            "schedule": crontab(day_of_week="*")
+        },
     }
     celery.Task = workers.ContextTask
 
@@ -46,7 +51,8 @@ def create_app():
     # boiler plate code for testing celery
     @app.route("/")
     def main():
-        send_user_monthly_report.delay()
+        # send_user_monthly_report.delay()
+        updateCoupons.delay()
         return "Hello world", 200
 
     # importing all api resources

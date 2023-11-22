@@ -13,6 +13,6 @@ class Coupon(db.Model):
             "id": self.id,
             "coupon_code": self.coupon_code,
             "discount": self.discount,
-            "expiryDate": self.expiryDate,
+            "expiryDate": self.expiryDate.strftime('%Y-%m-%d') if self.expiryDate != None else None,
             "hasExpired": self.hasExpired
         }
