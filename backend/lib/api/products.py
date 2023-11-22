@@ -156,3 +156,11 @@ ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg', 'gif'}
 
 def allowed_image(filename):
     return '.' in filename and filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
+
+
+class RecentProduct(Resource):
+    @jwt_required()
+    @checkJWTForUserOrManager
+    def get(self, limit=None):
+        products = productDB.getMostRecentProducts(limit)
+        return [product.toJson() for product in products], 200

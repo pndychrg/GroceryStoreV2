@@ -15,6 +15,12 @@ export const productMethods = {
     const data = await httpGetAllRequest("/product");
     return data;
   },
+
+  async fetchRecentProducts(limit) {
+    const data = await httpGetAllRequest(`/product/${limit}`);
+    return data;
+  },
+
   async addProduct(data) {
     // const store = userStateStore();
     const response = await httpPostRequest("/product", data);
@@ -61,6 +67,4 @@ export const productMethods = {
     const response = await httpGetRequest("/product/search", data);
     return response;
   },
-
-  
 };

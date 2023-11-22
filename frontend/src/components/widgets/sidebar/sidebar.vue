@@ -2,10 +2,7 @@
     <div class="modal-overlay sidebar-overlay" @click="closeSidebar($event)">
         <div class="modal-content sidebar">
             <!-- TODO add user image here -->
-            <h2>
-                <!-- TODO reroute to user dashboard by clicking on name -->
-                {{ store.user?.name ?? "" }}
-            </h2>
+            <SidebarLink route='/dashboard' :tag="store.user?.name ?? ''" @close="$emit('close')" icon="user" />
             <!-- here, three sections of buttons/tags would be present seperate for user/admin/storemanager -->
             <!-- ADMIN Sidebar -->
             <div v-if="store.user?.role == 'admin'">

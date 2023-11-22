@@ -26,7 +26,7 @@ class ProductDB:
         else:
             return None, "Invalid product_id"
 
-    def addProduct(self, name,description, availableAmount, rate, manufactureDate, expiryDate, section_id):
+    def addProduct(self, name, description, availableAmount, rate, manufactureDate, expiryDate, section_id):
         # Validations
         if (Validators.name(name=name)):
             return None, "Name can't be empty"
@@ -151,3 +151,8 @@ class ProductDB:
             Product.availableAmount == 0).all()
 
         return unavailableProducts
+
+    def getMostRecentProducts(self, limit):
+        recentProducts = Product.query.order_by(
+            Product.id.desc()).limit(limit=limit)
+        return recentProducts

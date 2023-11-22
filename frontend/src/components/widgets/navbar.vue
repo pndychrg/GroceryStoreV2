@@ -29,9 +29,12 @@
                     </div>
                     <div class="row" v-else>
                         <li class="nav-item col">
-                            <RouterLink to='/dashboard' class="btn btn-dark profile-button">
-                                <font-awesome-icon :icon="['fas', 'user']" class="faa-horizontal animated-hover" />
-                            </RouterLink>
+                            <!-- Cart Button -->
+                            <button class="btn btn-outline-dark" type="button" @click="showCart"
+                                style="width: max-content;">
+                                <font-awesome-icon :icon="['fas', 'fa-cart-plus']" class="faa-horizontal animated-hover" />
+                                Show Cart
+                            </button>
                         </li>
                         <li class="nav-item col">
                             <button @click="logoutMethod" class="nav-link">
@@ -46,6 +49,7 @@
     </nav>
     <teleport to="#modal-root">
         <Sidebar v-show="isSidebarShown" @close="showSidebar" />
+        <CartModal v-if="isCartShown" @close="showCart" />
     </teleport>
 </template>
 
@@ -55,10 +59,11 @@ import { RouterLink, useRouter } from 'vue-router';
 import { userStateStore } from '@/services/stateManager';
 import { UIStateStore } from '@/services/uiStateManager';
 import Sidebar from '@/components/widgets/sidebar/sidebar.vue'
+import CartModal from '@/components/widgets/cart.vue';
 export default {
     // eslint-disable-next-line vue/multi-word-component-names
     name: 'Navbar',
-    components: { RouterLink, Sidebar },
+    components: { RouterLink, Sidebar, CartModal },
     setup() {
         const store = userStateStore();
         const UIStore = UIStateStore();
@@ -83,13 +88,21 @@ export default {
             isSidebarShown.value = !isSidebarShown.value
         }
 
+        // cart setup
+        const isCartShown = ref(false);
+        const showCart = () => {
+            UIStore.toggleModal();
+            isCartShown.value = !isCartShown.value;
+        }
         return {
             routeName,
             isAuthenticated,
             logoutMethod,
             isNotApproved,
             isSidebarShown,
-            showSidebar
+            showSidebar,
+            isCartShown,
+            showCart
         };
     },
 }

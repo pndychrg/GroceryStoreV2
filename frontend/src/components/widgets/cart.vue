@@ -28,7 +28,7 @@
                                 </p>
                             </div>
                             <div class="col-auto float-end m-0">
-                                <button class="btn" @click="$emit('remove-cart-item', cartItem)">
+                                <button class="btn" @click="removeCartItem(cartItem)">
                                     <font-awesome-icon :icon="['fas', 'trash-can']" class="faa-horizontal animated-hover"
                                         style="color: #c01c28;" />
                                 </button>
@@ -69,7 +69,7 @@
                         <span class="text-secondary">{{ cart?.length }} items</span>
                     </p>
                 </div>
-                <h4 class="col-auto float-end">$ {{ cartSum }}</h4>
+                <h4 class="col-auto float-end">$ {{ cartStateStore.sum }}</h4>
                 <div v-if="selectedCoupon != null">
                     <p>
                         <strong>Coupon Discount</strong>
@@ -78,7 +78,8 @@
                     </p>
                     <p>
                         <strong>Final Amount</strong>
-                        <strong class="float-end" style="font-size: calc(1.275rem + .3vw);">$ {{ finalAmount }}</strong>
+                        <strong class="float-end" style="font-size: calc(1.275rem + .3vw);">${{ finalAmount
+                        }}</strong>
                     </p>
 
                 </div>
@@ -93,15 +94,24 @@
 
 <script>
 import { couponMethods } from '@/services/HTTPRequests/couponMethods';
-import { computed, onBeforeMount, ref } from 'vue';
-
+import { computed, onBeforeMount, ref, watch } from 'vue';
+import { CartStateStore } from '@/services/cartStateManager';
 export default {
     name: "CartPage",
-    props: {
-        cart: Array,
-        cartSum: Number,
-    },
     setup(props, { emit }) {
+        const cartStateStore = CartStateStore();
+        const cart = ref(cartStateStore.cart);
+        // const finalAmount = ref(cartStateStore.finalAmount);
+        //watcher for updating cart value in the component
+        watch(() => cartStateStore.cart, (newData) => {
+            if (newData) {
+                cart.value = cartStateStore.cart
+            }
+        })
+
+        const removeCartItem = async (cartItem) => {
+            await cartStateStore.removeCartItem(cartItem);
+        }
         const coupons = ref([]);
         const selectedCoupon = ref(null);
         const selectedCouponCode = ref(null);
@@ -109,26 +119,18 @@ export default {
             selectedCoupon.value = coupon;
             selectedCouponCode.value = coupon.coupon_code
         }
-        const finalAmount = computed(() => {
-            if (selectedCoupon.value != null) {
-                return props.cartSum -
-                    (props.cartSum * selectedCoupon.value.discount) / 100
-            } else {
-                return props.cartSum
-            }
-        })
         const checkCouponAvailability = async () => {
             // first checking if the selectedCoupon is null or not
             if (selectedCoupon.value == null) {
                 const data = await couponMethods.fetchCouponFromCouponCode(selectedCouponCode.value);
                 selectedCoupon.value = data;
-                emit("update-coupon", selectedCoupon.value);
+                // emit("update-coupon", selectedCoupon.value);
             } else {
                 // checking if the coupon_code is changed after selecting the coupon
                 if (selectedCoupon.value.coupon_code != selectedCouponCode.value) {
                     const data = await couponMethods.fetchCouponFromCouponCode(selectedCouponCode.value);
                     selectedCoupon.value = data;
-                    emit("update-coupon", selectedCoupon);
+                    // emit("update-coupon", selectedCoupon);
                 }
             }
         }
@@ -140,7 +142,7 @@ export default {
         }
 
         const isCartEmpty = computed(() => {
-            if (props.cart?.length > 0) {
+            if (cartStateStore.cart.length > 0) {
                 return true;
             } else {
                 return false;
@@ -160,14 +162,28 @@ export default {
             if (data != null) {
                 coupons.value = data;
             }
-            console.log('SDL coupons.value: ' + coupons?.value);
-
         }
-
+        // defining a watcher to update the coupon in state store
+        // watch(() => selectedCoupon.value, (newData) => {
+        //     if (newData) {
+        //         cartStateStore.applyCoupon(newData);
+        //         finalAmount.value = cartStateStore.finalAmount;
+        //     }
+        // })
+        const finalAmount = computed(() => {
+            const sum = cartStateStore.sum;
+            if (selectedCoupon.value != null) {
+                return sum - (selectedCoupon.value.discount * sum) / 100
+            } else {
+                return sum;
+            }
+        })
         onBeforeMount(() => {
             fetchAllCoupons();
         })
         return {
+            cart,
+            cartStateStore,
             closeCart,
             isCartEmpty,
             selectedCoupon,
@@ -175,8 +191,9 @@ export default {
             selectedCouponCode,
             selectCouponFromDropdown,
             checkCouponAvailability,
-            finalAmount,
-            pointer_css
+            pointer_css,
+            removeCartItem,
+            finalAmount
         }
     }
 }

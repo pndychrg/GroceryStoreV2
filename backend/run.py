@@ -56,6 +56,7 @@ def create_app():
     from lib.api.approve_sectionRequests import ApproveSectionRequests
     from lib.api.products import ProductsAPI
     from lib.api.products import ProductImage
+    from lib.api.products import RecentProduct
     from lib.api.cart import CartAPI
     from lib.api.buy import BuyAPI
     from lib.api.search_products import SearchProductsAPI
@@ -71,6 +72,7 @@ def create_app():
     api.add_resource(ApproveSectionRequests, '/section/approve')
     api.add_resource(ProductsAPI, '/product')
     api.add_resource(ProductImage, '/product/img')
+    api.add_resource(RecentProduct, '/product/<limit>', endpoint='product')
     api.add_resource(CartAPI, '/cart')
     api.add_resource(BuyAPI, '/buy')
     api.add_resource(BuyAPI, '/buy/<coupon_id>', endpoint='buy')
@@ -86,7 +88,7 @@ def create_app():
     api.add_resource(CouponsExtendedAPI, '/coupons')
     api.add_resource(CouponsExtendedAPI,
                      "/coupons/<coupon_code>", endpoint="coupons")
-    
+
     # registering the reports blueprint
     from lib.api.reports import report
     app.register_blueprint(report)

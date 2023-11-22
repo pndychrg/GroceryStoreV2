@@ -13,197 +13,69 @@
                     :cartData="getCartData(product.id)" @add-to-favourite="addProductToFavourite" />
             </div>
         </div>
-
-        <button class="btn btn-lg floating-container btn-outline-danger cartFloatingButton" type="button" @click="showCart">
-            <font-awesome-icon :icon="['fas', 'fa-cart-plus']" class="faa-horizontal animated-hover " />
-            <span v-if="cartDetails?.cart != null && cartDetails.cart.length > 0"
-                class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
-                {{ cartDetails?.cart?.length }}
-            </span>
-        </button>
-
-        <!-- Modal -->
-        <div class="modal fade" id="buyConfirmationModal" tabindex="-1" aria-labelledby="exampleModalLabel"
-            aria-hidden="true">
-            <div class="modal-dialog modal-dialog-centered ">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h1 class="modal-title fs-5" id="exampleModalLabel">Buy Confirmation</h1>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"
-                            id="closeBuyConfirmation"></button>
-                    </div>
-                    <div class="modal-body text-start">
-                        <h5>Confirm and Pay for all the goods</h5>
-                        <p>Total Order Sum = {{ finalAmount }}</p>
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                        <button type="button" class="btn btn-primary" @click="buyAllItems">Buy</button>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <!-- Button trigger modal -->
-        <button type="button" class="btn btn-primary" id="buyConfirmation" data-bs-toggle="modal"
-            data-bs-target="#buyConfirmationModal" hidden>
-            Launch static backdrop modal
-        </button>
-
-
         <SearchProductModal @add-to-cart="handleCart" />
 
-        <teleport to="#modal-root">
-            <CartModal v-show="isCartShown" :cart="cartDetails?.cart" :cartSum="cartDetails?.sum" @close="showCart"
-                @remove-cart-item="removeCartItem" @buy-all="buyModalSHow" @update-coupon="hanldeUpdatedCoupon" />
-        </teleport>
     </div>
 </template>
 
 <script>
-import CartModal from "@/components/widgets/cart.vue"
+// import CartModal from "@/components/widgets/cart.vue"
 import { productMethods } from '@/services/HTTPRequests/productMethods';
 // eslint-disable-next-line no-unused-vars
 import { buyMethods } from "@/services/HTTPRequests/buyMethods";
 import ProductCard from '@/components/widgets/cards/product_card.vue';
 import { onMounted, ref, computed } from 'vue';
-import { cartMethods } from '@/services/HTTPRequests/cartMethods';
-import { UIStateStore } from "@/services/uiStateManager";
 import { favouriteMethods } from "@/services/HTTPRequests/favouriteMethods";
 import SearchProductModal from "@/components/widgets/search_products.vue"
+import { CartStateStore } from '@/services/cartStateManager';
 export default {
     name: 'UserHome',
     components: {
         ProductCard,
-        CartModal,
+        // CartModal,
         SearchProductModal
     },
     setup() {
-        const uiStore = UIStateStore()
+        // const uiStore = UIStateStore()
         const products = ref([]);
-        const cartDetails = ref({
-            cart: null,
-            sum: null,
-        });
-        const finalAmount = computed(
-            () => {
-                if (cartDetails.value.sum == null) {
-                    return null;
-                } else {
-                    if (cartDetails.value.sum != null && selectedCoupon.value == null) {
-                        return cartDetails.value.sum;
-                    } else {
-                        const retAmount = cartDetails.value.sum - (cartDetails.value.sum * selectedCoupon.value.discount) / 100;
-                        return retAmount
-                    }
-                }
-            }
-        );
-        const selectedCoupon = ref(null);
+        const cartStore = CartStateStore()
         const fetchProductsData = async () => {
             const productsData = await productMethods.fetchAllProducts();
             console.log(productsData);
             products.value = productsData;
-        }
-        const fetchCartForUser = async () => {
-            const cartData = await cartMethods.fetchAllCartProducts();
-            if (cartData != null) {
-                cartDetails.value = cartData;
-                // console.log(cartData);
-                finalAmount.value = cartData.sum;
-                // Object.assign(cartDetails.value, { finalAmount: null })
-            }
         }
         const handleCart = async (cartForm) => {
             const dataObject = {
                 "product_id": cartForm.product_id,
                 "numOfProduct": cartForm.numOfProduct
             }
-
-            const response = await cartMethods.addToCart(dataObject)
-
+            const response = await cartStore.addProductToCart(dataObject)
             if (response) {
-                // console.log(response);
-                // THIS PEICE OF CODE IS CAUSING MULTIPLE ENTRIES IN CART 
-                // cartDetails?.value.cart.unshift(response);
-                // cartDetails.value.sum += response.totalSum;
-                // FOR SIMPLIFYING AT THE MOMENT WE WILL JUST FETCH THE CART FOR THE USER 
-                fetchCartForUser()
+                cartStore.fetchCartForUser()
             }
         }
 
         const productCartData = computed(
             function (product_id) {
-                if (cartDetails.value && cartDetails.value.cart) {
-                    return cartDetails.value.cart.find(cartElement => cartElement.product.id === product_id);
+                if (cartStore.cart) {
+                    return cartStore.cart.find(cartElement => cartElement.product.id === product_id);
                 } else {
                     return null;
                 }
             }
         )
         const getCartData = (product_id) => {
-            if (cartDetails.value && cartDetails.value.cart) {
-                return cartDetails.value.cart.find(cartElement => cartElement.product.id === product_id);
+            if (cartStore.cart) {
+                return cartStore.cart.find(cartElement => cartElement.product.id === product_id);
             } else {
                 return null;
             }
         }
 
-
-        const removeCartItem = async (cartItem) => {
-            // console.log(cartItem)
-            const response = await cartMethods.deleteCartProduct(cartItem)
-            if (response) {
-                cartDetails.value.cart = cartDetails.value.cart.filter(s => s !== cartItem)
-                // TODO update finalAmount
-            }
-        }
-
-        const buyAllItems = async () => {
-            console.log(selectedCoupon.value?.id);
-            const response = await buyMethods.buyAllCartItems(selectedCoupon.value?.id);
-            if (response) {
-                console.log(response)
-                cartDetails.value = {}
-                finalAmount.value = null;
-                // closing the cart
-                isCartShown.value = false;
-                //     // updating the home screen after buying so that updated available amount is shown
-                //     // TODO YOU CAN DO IT THROUGH FRONTEND ONLY TRY THAT METHOD FOR BETTER PERFORMANCE
-                document.getElementById("closeBuyConfirmation").click()
-                fetchProductsData()
-            }
-        }
-
-        const buyModalShow = () => {
-            // check if products are available in cart
-            if (cartDetails.value.cart.length > 0) {
-                document.getElementById("buyConfirmation").click()
-            }
-            // document.getElementById("exampleModal").modal('show')
-        }
-
-        const hanldeUpdatedCoupon = (updatedCoupon) => {
-            console.log(`coupon ${JSON.stringify(updatedCoupon)}`);
-            selectedCoupon.value = updatedCoupon;
-            console.log(`selectedCoupon ${selectedCoupon.value}`)
-        }
-
         onMounted(() => {
             fetchProductsData()
-            fetchCartForUser()
+            cartStore.fetchCartForUser()
         })
-
-        // Cart opening
-        const isCartShown = ref(false);
-        const showCart = () => {
-            uiStore.toggleModal();
-            isCartShown.value = !isCartShown.value;
-        }
-
-        // adding to favourite
-        //TODO add remove from cart also which can be then activated if the product is already in cart
-
         const addProductToFavourite = async (product) => {
             await favouriteMethods.addToFavourite(product.id);
         }
@@ -213,17 +85,9 @@ export default {
             products,
             handleCart,
             getCartData,
-            isCartShown,
-            showCart,
-            cartDetails,
-            removeCartItem,
-            productCartData,
-            buyAllItems,
-            buyModalSHow: buyModalShow,
-            addProductToFavourite,
-            finalAmount,
-            hanldeUpdatedCoupon
 
+            productCartData,
+            addProductToFavourite,
         }
     }
 
