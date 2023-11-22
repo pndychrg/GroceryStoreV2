@@ -49,7 +49,9 @@
     </nav>
     <teleport to="#modal-root">
         <Sidebar v-show="isSidebarShown" @close="showSidebar" />
-        <CartModal v-if="isCartShown" @close="showCart" />
+        <CartModal v-if="isCartShown" @close="showCart"
+            
+        />
     </teleport>
 </template>
 

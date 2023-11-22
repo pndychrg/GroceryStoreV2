@@ -5,7 +5,7 @@
             <h5>Confirm and pay for all the goods <br>
                 TOTAL ORDER SUM = {{ finalAmount }}
             </h5>
-            <button @click="$emit('confirm')" class="btn btn-success float-end">Delete</button>
+            <button @click="$emit('confirm')" class="btn btn-success float-end">Buy</button>
             <button @click="$emit('close')" class="btn float-end">Close</button>
         </div>
     </div>
@@ -26,4 +26,8 @@ export default {
 
 <style scoped>
 @import "@/static/css/modal.css";
+
+.modal-content {
+    width: 50%;
+}
 </style>

@@ -85,19 +85,29 @@
                 </div>
             </div>
             <div class="d-grid gap-2 mt-2">
-                <button v-if="isCartEmpty" class="btn btn-primary" type="button" @click="$emit('buy-all')">Checkout</button>
+                <button v-if="isCartEmpty" class="btn btn-primary" type="button"
+                    @click="isBuyConfirmationShown = true">Checkout</button>
                 <button v-else class="btn btn-primary" type="button" disabled>Checkout</button>
             </div>
         </div>
     </div>
+    <teleport to="#modal-root">
+        <BuyConfirmation v-show="isBuyConfirmationShown" :finalAmount="finalAmount" @close="isBuyConfirmationShown = false"
+            @confirm="buyAllItems" />
+    </teleport>
 </template>
 
 <script>
 import { couponMethods } from '@/services/HTTPRequests/couponMethods';
 import { computed, onBeforeMount, ref, watch } from 'vue';
 import { CartStateStore } from '@/services/cartStateManager';
+import BuyConfirmation from '@/components/widgets/buy_confirmation.vue'
+import { buyMethods } from '@/services/HTTPRequests/buyMethods';
 export default {
     name: "CartPage",
+    components: {
+        BuyConfirmation
+    },
     setup(props, { emit }) {
         const cartStateStore = CartStateStore();
         const cart = ref(cartStateStore.cart);
@@ -163,13 +173,7 @@ export default {
                 coupons.value = data;
             }
         }
-        // defining a watcher to update the coupon in state store
-        // watch(() => selectedCoupon.value, (newData) => {
-        //     if (newData) {
-        //         cartStateStore.applyCoupon(newData);
-        //         finalAmount.value = cartStateStore.finalAmount;
-        //     }
-        // })
+
         const finalAmount = computed(() => {
             const sum = cartStateStore.sum;
             if (selectedCoupon.value != null) {
@@ -178,6 +182,21 @@ export default {
                 return sum;
             }
         })
+
+        // Buy methods 
+        const isBuyConfirmationShown = ref(false);
+        const buyAllItems = async () => {
+            // buying all the items
+            const response = await buyMethods.buyAllCartItems(selectedCoupon.value.id);
+            if (response) {
+                // close both buy confirmation and cart modal
+                isBuyConfirmationShown.value = false;
+                // updating the cart by calling the fetchCartfunction again
+                cartStateStore.fetchCartForUser();
+                emit('close');
+            }
+
+        }
         onBeforeMount(() => {
             fetchAllCoupons();
         })
@@ -193,7 +212,9 @@ export default {
             checkCouponAvailability,
             pointer_css,
             removeCartItem,
-            finalAmount
+            finalAmount,
+            isBuyConfirmationShown,
+            buyAllItems,
         }
     }
 }
