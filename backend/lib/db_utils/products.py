@@ -145,5 +145,8 @@ class ProductDB:
         products = query.all()
         return products, "Products found"
 
+    def getUnavailableProduct(self):
+        unavailableProducts = Product.query.filter(
+            Product.availableAmount == 0).all()
 
-    
+        return unavailableProducts

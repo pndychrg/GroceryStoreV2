@@ -120,3 +120,4 @@ def totalRevenueMonth():
         totalRevenue += bill.finalAmount
 
     return totalRevenue
+

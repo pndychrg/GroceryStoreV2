@@ -163,3 +163,7 @@ class SectionDB:
         except SQLAlchemyError as e:
             print(e)
             return False, "error occured"
+
+    def getEmptySections(self):
+        emptySections = Section.query.filter(~Section.products.any()).all()
+        return emptySections

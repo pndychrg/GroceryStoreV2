@@ -1,4 +1,4 @@
-import { downloadItem, httpGetImageRequest } from "../axios";
+import { downloadItem, httpGetImageRequest, httpGetRequest } from "../axios";
 import { showSuccessToast } from "@/static/js/toasts";
 
 export const reportMethods = {
@@ -26,6 +26,11 @@ export const reportMethods = {
 
   async getBoughtProductGraph() {
     const response = await httpGetImageRequest("/report/product/buy");
+    return response;
+  },
+
+  async getManagementData() {
+    const response = await httpGetRequest("/report/data");
     return response;
   },
 };
