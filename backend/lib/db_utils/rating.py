@@ -29,18 +29,17 @@ class RatingMethods:
                 user_id=user_id, product_id=product_id, rating=rating, comment=comment)
             db.session.add(newRating)
             db.session.commit()
-            
+
             return newRating, "Product Rated"
 
-    def getAllRatingsForProduct(self,product_id):
+    def getAllRatingsForProduct(self, product_id):
         productRatings = Rating.query.filter_by(product_id=product_id).all()
         return productRatings
-    
-    def updateAvgRatingForProduct(self,product_id):
+
+    def updateAvgRatingForProduct(self, product_id):
         # fetchinig all the product ratings
         productRatings = self.getAllRatingsForProduct()
         # calculating the avg
-        
 
     def deleteRating(self, user_id, product_id):
         existingRating, msg = self.getProductRatingForUser(

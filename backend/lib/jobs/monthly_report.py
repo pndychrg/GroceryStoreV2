@@ -42,6 +42,7 @@ def send_report_asPDF(user_id):
     if user_id == None:
         return None
     data = userDB.getUserCurrentMonthData(user_id)
+    # print(data)
     with open("../backend/static/docs/user_montly_report.html") as file:
         template = Template(file.read())
         message = template.render(data=data)

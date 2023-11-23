@@ -2,9 +2,11 @@ from models.user import User
 from extensions import db
 from sqlalchemy.exc import SQLAlchemyError
 from lib.db_utils.shop import ShopDB
+from lib.db_utils.rating import RatingMethods
 from datetime import datetime
 
 shopDB = ShopDB()
+ratingDB = RatingMethods()
 
 
 class UserDB:
@@ -118,6 +120,7 @@ class UserDB:
             return {
                 "user": user,
                 "total_saved": total_saved,
+                "ratings": [rating.toJson() for rating in user.ratings],
                 "bills": bills,
                 "total_expenditure": total_expenditure,
                 "coupons_used": coupons_used,
@@ -149,6 +152,7 @@ class UserDB:
             # dictionary of data
             return {
                 "user": user,
+                "ratings": [rating.toJson() for rating in user.ratings],
                 "total_saved": total_saved,
                 "bills": bills,
                 "total_expenditure": total_expenditure,

@@ -12,8 +12,9 @@ class User(db.Model):
     email = db.Column(db.String(100), nullable=False)
     role = db.Column(db.String(100), nullable=False, default='user')
 
-    # roles = db.relationship("Role", secondary='user_roles',
-    #                         backref=db.backref('users', lazy='dynamic'))
+    ratings = db.relationship(
+        "Rating", backref="rating_byUser", lazy="dynamic"
+    )
 
     def toJson(self):
         return {

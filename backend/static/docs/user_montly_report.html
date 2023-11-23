@@ -114,6 +114,26 @@
     {% else %}
     <h5 class="text-secondary">No Coupons Used</h5>
     {% endif %}
+    <br>
+    <h3>Product Rated</h3>
+    {% if data['ratings']|length > 0 %}
+    <table>
+        <tr>
+            <th>Product Name</th>
+            <th>Rating</th>
+            <th>Comment</th>
+        </tr>
+        {% for rating in data['ratings'] %}
+        <tr>
+            <td>{{rating.product.name}}</td>
+            <td>{{rating.rating}}</td>
+            <td>{{rating.comment}}</td>
+        </tr>
+        {% endfor %}
+    </table>
+    {% else %}
+    <h5 class="text-secondary">No Product Rated in month</h5>
+    {% endif %}
 
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.min.js"

@@ -55,7 +55,7 @@ def create_app():
         # send_user_current_month_report.delay()
         # send_user_monthly_report.delay()
         # updateCoupons.delay()
-        send_toAllUser.delay()
+        send_user_current_month_report.delay()
         # send_report_asPDF.delay()
         return "Hello WOlrd", 200
 

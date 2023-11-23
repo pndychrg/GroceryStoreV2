@@ -20,7 +20,7 @@ class Product(db.Model):
     section = db.relationship(
         "Section", back_populates="products")
     ratings = db.relationship(
-        "Rating", backref="product_rating", lazy="dynamic"
+        "Rating", back_populates="product", lazy="dynamic"
     )
 
     @property
