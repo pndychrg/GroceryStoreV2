@@ -30,8 +30,10 @@ def send_user_current_month_report():
 
 
 @celery.task()
-def send_report_asPDF():
-    data = userDB.getUserCurrentMonthData(3)
+def send_report_asPDF(user_id):
+    if user_id == None:
+        return None
+    data = userDB.getUserCurrentMonthData(user_id)
     with open("../backend/static/docs/user_montly_report.html") as file:
         template = Template(file.read())
         message = template.render(data=data)

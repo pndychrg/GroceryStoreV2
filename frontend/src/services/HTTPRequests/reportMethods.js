@@ -1,4 +1,4 @@
-import { downloadItem, httpGetImageRequest, httpGetRequest } from "../axios";
+import { downloadItem, httpDownloadRequest, httpGetRequest } from "../axios";
 import { showSuccessToast } from "@/static/js/toasts";
 
 export const reportMethods = {
@@ -15,22 +15,27 @@ export const reportMethods = {
   },
 
   async getCouponGraph() {
-    const response = await httpGetImageRequest("/report/coupon");
+    const response = await httpDownloadRequest("/report/coupon");
     return response;
   },
 
   async getFavProductGraph() {
-    const response = await httpGetImageRequest("/report/product/favourite");
+    const response = await httpDownloadRequest("/report/product/favourite");
     return response;
   },
 
   async getBoughtProductGraph() {
-    const response = await httpGetImageRequest("/report/product/buy");
+    const response = await httpDownloadRequest("/report/product/buy");
     return response;
   },
 
   async getManagementData() {
     const response = await httpGetRequest("/report/data");
+    return response;
+  },
+
+  async downloadPDFReport() {
+    const response = await downloadItem("/report/user/pdf", "report.pdf");
     return response;
   },
 };

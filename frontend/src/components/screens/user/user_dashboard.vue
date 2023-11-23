@@ -6,6 +6,16 @@
                 <h1>{{ user.name }}</h1>
                 <h4 class="text-secondary">{{ user.username }}</h4>
             </div>
+            <hr>
+            <div class="row">
+                <div class="col-md-6">
+
+                </div>
+                <div class="col-md-6">
+                    <button class="btn btn-outline-dark mb-2" @click="downloadMonthlyReportPDF">Monthly Report
+                        <font-awesome-icon icon="fa-solid fa-download" class="faa-horizontal animated-hover " /></button>
+                </div>
+            </div>
         </div>
         <div class="row ">
             <div class="col-md-6 p-4 favproduct-col">
@@ -15,7 +25,8 @@
                 </div>
             </div>
             <div class="col-md-6 p-4">
-                <h2>Bills for User</h2>
+                <h2>Bills for User </h2>
+                <h5>Total Expense $ {{ totalExpenditure }}</h5>
                 <div v-for="bill in bills" :key="bill.id" class="bill-card card">
                     <BillCard :bill="bill" @show-billDetails="showBillDetails" />
                 </div>
@@ -30,12 +41,13 @@
 <script>
 import { buyMethods } from '@/services/HTTPRequests/buyMethods';
 import { favouriteMethods } from '@/services/HTTPRequests/favouriteMethods';
-import { onMounted, ref } from 'vue';
+import { onMounted, ref, computed } from 'vue';
 import BillCard from '@/components/widgets/cards/bill_card.vue'
 import ProductCard from '@/components/widgets/cards/product_card.vue';
 import BillDetailsModal from '@/components/widgets/bill_details.vue'
 import { UIStateStore } from '@/services/uiStateManager';
 import { userStateStore } from '@/services/stateManager';
+import { reportMethods } from '@/services/HTTPRequests/reportMethods';
 export default {
     name: "UserDashboard",
     components: {
@@ -53,7 +65,12 @@ export default {
             const response = await buyMethods.getAllBills()
             bills.value = response;
         }
-
+        const totalExpenditure = computed(() => {
+            let totalExpense = 0;
+            // for loop in bills
+            bills.value.forEach((bill) => totalExpense += bill.finalAmount);
+            return totalExpense
+        })
         const fetchAllFavouriteProducts = async () => {
             const response = await favouriteMethods.fetchAllFavouriteForUser();
 
@@ -66,7 +83,9 @@ export default {
             isBillDetailModalOpen.value = !isBillDetailModalOpen.value;
             selectedBill.value = isBillDetailModalOpen.value ? bill : {};
         }
-
+        const downloadMonthlyReportPDF = async () => {
+            await reportMethods.downloadPDFReport();
+        }
         onMounted(() => {
             fetchAllBills();
             fetchAllFavouriteProducts();
@@ -78,7 +97,9 @@ export default {
             isBillDetailModalOpen,
             showBillDetails,
             selectedBill,
-            user
+            user,
+            totalExpenditure,
+            downloadMonthlyReportPDF
         }
     }
 }

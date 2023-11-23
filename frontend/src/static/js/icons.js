@@ -15,6 +15,7 @@ import {
   faStar,
   faStarHalfAlt,
   faFilter,
+  faDownload,
 } from "@fortawesome/free-solid-svg-icons";
 
 // adding icons to library
@@ -34,5 +35,6 @@ export const iconLib = library.add(
   faStar,
   faStarHalfAlt,
   faFilter,
-  faXmark
+  faXmark,
+  faDownload
 );
