@@ -1,3 +1,4 @@
+from flask import jsonify
 from lib.db_utils.products import ProductDB
 from extensions import db
 from flask_restful import Resource, reqparse, request
@@ -163,4 +164,11 @@ class RecentProduct(Resource):
     @checkJWTForUserOrManager
     def get(self, limit=None):
         products = productDB.getMostRecentProducts(limit)
-        return [product.toJson() for product in products], 200
+        mostFavProduct = productDB.getMostFavouredProduct()
+        highestRatedProduct = productDB.getHighestRatedProduct()
+
+        return {
+            "products": [product.toJson() for product in products],
+            "mostFavProduct": mostFavProduct.toJson() if mostFavProduct != None else None,
+            "highestRatedProduct": highestRatedProduct.toJson() if highestRatedProduct else None
+        }, 200

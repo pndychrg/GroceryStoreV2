@@ -8,12 +8,31 @@
         </h2>
         <div class="row m-2 products-wrapper">
             <h5 class="text-start">Our Most Recent Products</h5>
-            <div v-for="product in products" :key="product.id" class="card"
+            <div v-for="product in latestProducts" :key="product.id" class="card"
                 :class="{ 'card-unavailable': product.availableAmount == 0 }">
                 <ProductCard :productData="product" loggedInRole="user" @add-to-cart="handleCart"
                     :cartData="getCartData(product.id)" @add-to-favourite="addProductToFavourite" />
             </div>
         </div>
+        <hr class="border border-dark border-2 rounded-circle opacity-50">
+        <div class="row m-2 products-wrapper " style="justify-content: space-around;">
+            <div v-if="mostFavProduct != null" class="card"
+                :class="{ 'card-unavailable': mostFavProduct?.availableAmount == 0 }">
+                <h5 class="mt-3">Our Most Favourite Product</h5>
+                <hr>
+                <ProductCard :productData="mostFavProduct" loggedInRole="user" @add-to-cart="handleCart"
+                    :cartData="getCartData(mostFavProduct?.id)" @add-to-favourite="addProductToFavourite" />
+            </div>
+            <div v-if="highestRatedProduct != null" class="card"
+                :class="{ 'card-unavailable': highestRatedProduct?.availableAmount == 0 }">
+                <h5 class="mt-3">Our Highest Rated Product</h5>
+                <hr>
+                <ProductCard :productData="highestRatedProduct" loggedInRole="user" @add-to-cart="handleCart"
+                    :cartData="getCartData(highestRatedProduct?.id)" @add-to-favourite="addProductToFavourite" />
+
+            </div>
+        </div>
+        <!-- <hr class="border border-dark border-2 rounded-circle opacity-50"> -->
         <SearchProductModal @add-to-cart="handleCart" />
 
     </div>
@@ -38,12 +57,16 @@ export default {
     },
     setup() {
         // const uiStore = UIStateStore()
-        const products = ref([]);
+        const latestProducts = ref([]);
+        const mostFavProduct = ref(null);
+        const highestRatedProduct = ref(null);
         const cartStore = CartStateStore()
         const fetchProductsData = async () => {
             const productsData = await productMethods.fetchRecentProducts(3);
             // console.log(productsData);
-            products.value = productsData;
+            latestProducts.value = productsData.products;
+            mostFavProduct.value = productsData.mostFavProduct;
+            highestRatedProduct.value = productsData.highestRatedProduct;
         }
         const handleCart = async (cartForm) => {
             const dataObject = {
@@ -83,11 +106,13 @@ export default {
 
 
         return {
-            products,
+            latestProducts,
             handleCart,
             getCartData,
             productCartData,
             addProductToFavourite,
+            mostFavProduct,
+            highestRatedProduct,
         }
     }
 

@@ -1,8 +1,10 @@
+from sqlalchemy import func
 from models.products import Product
 from lib.methods.validators import Validators
 from extensions import db
 from sqlalchemy.exc import SQLAlchemyError, IntegrityError
 from datetime import datetime
+from models.favourites import Favourites
 
 
 class ProductDB:
@@ -156,3 +158,21 @@ class ProductDB:
         recentProducts = Product.query.order_by(
             Product.id.desc()).limit(limit=limit)
         return recentProducts
+
+    def getMostFavouredProduct(self):
+        mostFavProudct = db.session.query(
+            Product,
+            func.count(Favourites.id).label('fav_count')
+        ).join(Favourites).group_by(Product.id).order_by(
+            func.count(Favourites.id).desc()
+        ).first()
+        # print(mostFavProudct[0].toJson())
+        return mostFavProudct[0]
+
+    def getHighestRatedProduct(self):
+        products = Product.query.all()
+        # sort the products according to avg_rating
+        sorted_products = sorted(
+            products, key=lambda x: x.avg_rating or 0, reverse=True)
+        # print(sorted_products[0].toJson())
+        return sorted_products[0]

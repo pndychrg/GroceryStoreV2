@@ -91,7 +91,7 @@ export default {
     setup(props) {
 
         const cartForm = reactive({
-            product_id: props.productData.id,
+            product_id: props.productData?.id,
             numOfProduct: null
         });
 
