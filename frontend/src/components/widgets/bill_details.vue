@@ -1,6 +1,6 @@
 <template>
     <div class="modal-overlay" @click="closeBillDetailsModal($event)">
-        <div class="modal-content  p-3 ">
+        <div class="modal-content ">
             <div class="card-header mb-2 ">
                 <h6>
                     Bill Details {{ bill.id }}
@@ -113,6 +113,10 @@ export default {
     max-width: 90%;
     width: 65%;
     font-size: large !important;
+    /* margin-top: 50px !important; */
+    max-height: 90% !important;
+    /* margin-bottom: 50px !important; */
+
 }
 
 @import "@/static/css/modal.css"

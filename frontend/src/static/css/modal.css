@@ -19,7 +19,6 @@
     box-shadow: 0 6px 12px rgba(0, 0, 0, 0.26), 0 3px 6px rgba(0, 0, 0, 0.36);
     max-width: 90%; /* Allow the modal to adjust to screen width */
     overflow: auto; /* Add scrollbars if content exceeds modal height */
-
     max-height: 100%; /* Allow the modal to adjust to screen height */
 }
 

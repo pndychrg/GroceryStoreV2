@@ -2,6 +2,7 @@ from models.user import User
 from extensions import db
 from sqlalchemy.exc import SQLAlchemyError
 from lib.db_utils.shop import ShopDB
+from datetime import datetime
 
 shopDB = ShopDB()
 
@@ -13,8 +14,6 @@ class UserDB:
             return True
         else:
             return False
-        
-
 
     def registerUser(self, name, username, email, password, role='user'):
         if (self.checkUserExists(username=username)):
@@ -95,13 +94,13 @@ class UserDB:
         except SQLAlchemyError as e:
             return e
 
-    def getUserData(self, user_id):
+    def getPreviousMonthUserData(self, user_id):
         try:
             user = self.getUser(user_id=user_id)
             if user:
                 # getting all bills for user
-                bills = shopDB.getPreviousMonthBillsForUser(user_id=user_id)
-                
+                bills, month = shopDB.getPreviousMonthBillsForUser(
+                    user_id=user_id)
                 # calculating total expenditure, total saved through coupons,
                 total_saved = 0
                 total_expenditure = 0
@@ -119,9 +118,42 @@ class UserDB:
             return {
                 "user": user,
                 "total_saved": total_saved,
-                "bills":bills,
+                "bills": bills,
                 "total_expenditure": total_expenditure,
-                "coupons_used": coupons_used
+                "coupons_used": coupons_used,
+                "month": month
+            }
+        except SQLAlchemyError as e:
+            print(e.__dict__['orig'])
+
+    def getUserCurrentMonthData(self, user_id):
+        try:
+            user = self.getUser(user_id=user_id)
+            if user:
+                today = datetime.today()
+                # getting all bills for user
+                bills = shopDB.getCurrentMonthBillsForUser(user_id=user_id)
+                # calculating total expenditure, total saved through coupons,
+                total_saved = 0
+                total_expenditure = 0
+                coupons_used = []
+                for bill in bills:
+                    # adding up the expenditure
+                    total_expenditure += bill.finalAmount
+                    # adding up the savings
+                    savedOnBill = bill.billAmount-bill.finalAmount
+                    total_saved += savedOnBill
+                    if bill.coupon:
+                        coupons_used.append(bill.coupon)
+
+            # dictionary of data
+            return {
+                "user": user,
+                "total_saved": total_saved,
+                "bills": bills,
+                "total_expenditure": total_expenditure,
+                "coupons_used": coupons_used,
+                "month": today.strftime("%B %Y")
             }
         except SQLAlchemyError as e:
             print(e.__dict__['orig'])

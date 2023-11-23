@@ -18,18 +18,28 @@ class ShopDB:
     def getBillsForUser(self, user_id):
         bills = Bill.query.filter_by(user_id=user_id).all()
         return bills
-    
-    def getPreviousMonthBillsForUser(self,user_id):
+
+    def getPreviousMonthBillsForUser(self, user_id):
         # calculating the start and end dates for the previous month
         today = datetime.now()
         first_dayofcurrentmonth = today.replace(day=1)
-        last_dayofpreviousmonth = first_dayofcurrentmonth -timedelta(days=1)
+        last_dayofpreviousmonth = first_dayofcurrentmonth - timedelta(days=1)
         first_dayofpreviousmonth = last_dayofpreviousmonth.replace(day=1)
-        
-        # now quering
-        bills = Bill.query.filter(Bill.user_id==user_id,extract('year',Bill.date) == last_dayofpreviousmonth.year,extract('month',Bill.date)==last_dayofpreviousmonth.month)
 
+        # now quering
+        bills = Bill.query.filter(Bill.user_id == user_id, extract(
+            'year', Bill.date) == last_dayofpreviousmonth.year, extract('month', Bill.date) == last_dayofpreviousmonth.month)
+
+        return bills, first_dayofpreviousmonth.strftime("%B %Y")
+
+    def getCurrentMonthBillsForUser(self, user_id):
+        today = datetime.now()
+        bills = Bill.query.filter(Bill.user_id == user_id,
+                                  extract('year', Bill.date) == today.year, extract(
+                                      'month', Bill.date) == today.month
+                                  )
         return bills
+
     def buy(self, user_id, coupon_id=None):
 
         # getting the cart for user and cart sum

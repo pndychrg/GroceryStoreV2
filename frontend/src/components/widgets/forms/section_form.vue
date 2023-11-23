@@ -1,5 +1,5 @@
 <template>
-    <div class="modal-overlay">
+    <div class="modal-overlay" @click="closeModal($event)">
         <div class="modal-content text-start">
             <div class="modal-header">
                 <h4 class="modal-title">{{ formTitle }} {{ itemType }}</h4>
@@ -111,6 +111,11 @@ export default {
             }
 
         }
+        const closeModal = ($event) => {
+            if ($event.target.classList.contains('modal-overlay')) {
+                emit('close');
+            }
+        }
 
         watch(() => props.initialData, (newData) => {
             if (newData) {
@@ -130,6 +135,7 @@ export default {
             emit('close');
         }
         return {
+            closeModal,
             formData,
             handleCancel,
             submitHandler,

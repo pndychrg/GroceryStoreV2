@@ -1,4 +1,5 @@
-from flask import Flask
+from http.client import HTTPResponse
+from flask import Flask, send_file
 from flask_restful import Api
 from flask_jwt_extended import JWTManager
 from flask_swagger_ui import get_swaggerui_blueprint
@@ -6,7 +7,7 @@ from extensions import db
 from flask_cors import CORS
 import workers
 from celery.schedules import crontab
-from lib.jobs.monthly_report import send_user_monthly_report
+from lib.jobs.monthly_report import *
 from lib.jobs.coupon_update import updateCoupons
 app, celery = None, None
 
@@ -51,9 +52,11 @@ def create_app():
     # boiler plate code for testing celery
     @app.route("/")
     def main():
+        # send_user_current_month_report.delay()
         # send_user_monthly_report.delay()
-        updateCoupons.delay()
-        return "Hello world", 200
+        # updateCoupons.delay()
+        send_report_asPDF.delay()
+        return "Hello WOlrd", 200
 
     # importing all api resources
     from lib.api.user import UserAPI

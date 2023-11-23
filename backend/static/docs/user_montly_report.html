@@ -33,12 +33,14 @@
 </head>
 
 <body>
-    <h2>Monthly Activity Report</h2>
+    <h2 class="text-center " style="font-weight: bold;">Monthly Activity Report : {{data['month']}}</h2>
 
     <h3>User Information</h3>
-    <div class="row">
+    <div class="row border-1 border border-secondary rounded-2 p-3">
         <div class="col-auto">
+            {% if (data['user'].img != None) %}
             <img src="data:image/png;base64,{{data['user'].img}}" alt="profile img" width="200">
+            {% endif %}
         </div>
         <p class="col">
             <strong>Name:</strong> {{data['user'].name}}
@@ -48,8 +50,7 @@
             <strong>Email:</strong> {{data['user'].email}}
         </p>
     </div>
-    <p><strong>Month:</strong> November 2023</p>
-
+    <br>
     <h3>Expenditure Summary</h3>
     <table>
         <tr>
@@ -104,7 +105,7 @@
         </tr>
         {% for coupon in data['coupons_used'] %}
         <tr>
-            <td>{{coupon.name}}</td>
+            <td class="text-dark">{{coupon.coupon_code}}</td>
             <td>{{coupon.discount}}</td>
         </tr>
         {% endfor %}

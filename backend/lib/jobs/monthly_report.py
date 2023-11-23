@@ -2,13 +2,13 @@ from workers import celery
 from jinja2 import Template
 from lib.methods.mail import send_email
 from lib.db_utils.user_db import UserDB
-
+import pdfkit
 userDB = UserDB()
 
 
 @celery.task()
 def send_user_monthly_report():
-    data = userDB.getUserData(3)
+    data = userDB.getPreviousMonthUserData(3)
     print(print([bill.toJson() for bill in data['bills']], flush=True))
     with open("../backend/static/docs/user_montly_report.html") as file:
         template = Template(file.read())
@@ -18,7 +18,28 @@ def send_user_monthly_report():
     return response
 
 
-# @celery.on_after_finalize.connect
-# def setup_periodic_tasks(sender, **kwargs):
-#     sender.add_periodic_task(
-#         crontab(second="*/10"), send_user_monthly_report.s(), name="At Every 10 secs")
+@celery.task()
+def send_user_current_month_report():
+    data = userDB.getUserCurrentMonthData(3)
+    with open("../backend/static/docs/user_montly_report.html") as file:
+        template = Template(file.read())
+        message = template.render(data=data)
+
+    response = send_email(data['user'].email, subject="hello", message=message)
+    return response
+
+
+@celery.task()
+def send_report_asPDF():
+    data = userDB.getUserCurrentMonthData(3)
+    with open("../backend/static/docs/user_montly_report.html") as file:
+        template = Template(file.read())
+        message = template.render(data=data)
+    pdf_content = pdfkit.from_string(message)
+    pdf_filename = "static/export/report.pdf"
+
+    with open(pdf_filename, 'wb') as pdf_file:
+        pdf_file.write(pdf_content)
+
+    # print(pdf_filename)
+    return pdf_filename

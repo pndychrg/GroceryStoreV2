@@ -1,5 +1,5 @@
 <template>
-    <div class="modal-overlay">
+    <div class="modal-overlay" @click="closeModal($event)">
         <div class="modal-content text-start">
             <div class="modal-header">
                 <h4 class="modal-title">{{ formTexts.title }} {{ itemType }}</h4>
@@ -104,7 +104,11 @@ export default {
             clearForm()
             emit('close');
         }
-
+        const closeModal = ($event) => {
+            if ($event.target.classList.contains('modal-overlay')) {
+                emit('close');
+            }
+        }
         const handleSubmit = async () => {
             const dataObject = {
                 "name": formData.name,
@@ -162,6 +166,7 @@ export default {
         })
 
         return {
+            closeModal,
             formTexts,
             formData,
             handleCancel,
