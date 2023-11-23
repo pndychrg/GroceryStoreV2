@@ -7,14 +7,14 @@
                 <h4 class="text-secondary">{{ user.username }}</h4>
             </div>
         </div>
-        <div class="row">
-            <div class="col p-4 favproduct-col">
+        <div class="row ">
+            <div class="col-md-6 p-4 favproduct-col">
                 <h2>Favourite Products</h2>
                 <div v-for="product in favProducts" :key="product.id" class="card product-card">
                     <ProductCard :productData="product" />
                 </div>
             </div>
-            <div class="col p-4">
+            <div class="col-md-6 p-4">
                 <h2>Bills for User</h2>
                 <div v-for="bill in bills" :key="bill.id" class="bill-card card">
                     <BillCard :bill="bill" @show-billDetails="showBillDetails" />

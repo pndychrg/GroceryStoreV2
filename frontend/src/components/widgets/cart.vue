@@ -225,10 +225,11 @@ export default {
     /* height: auto; */
     width: auto;
     /* min-height: max-content; */
-    min-height: 45vh !important;
+    min-height: 35vh !important;
     flex-grow: 1;
     padding: 10px;
     box-sizing: border-box;
+    justify-content: center;
 }
 
 .cart-container {

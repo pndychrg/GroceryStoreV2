@@ -167,3 +167,7 @@ class SectionDB:
     def getEmptySections(self):
         emptySections = Section.query.filter(~Section.products.any()).all()
         return emptySections
+
+    def getNonEmptySections(self):
+        nonEmptySections = Section.query.filter(Section.products.any()).all()
+        return nonEmptySections

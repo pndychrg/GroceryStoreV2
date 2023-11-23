@@ -17,7 +17,7 @@
                 </div>
                 <div class="form-group">
                     <label for="expiryDate">Expiry Date</label>
-                    <input type="date" v-model="formData.expiryDate" class="form-control mb-2" id="expirDate">
+                    <input type="date" v-model="formData.expiryDate" class="form-control mb-2" :min="today" id="expirDate">
                 </div>
                 <div class="form-actions modal-footer">
                     <button type="button" @click="closeCouponForm(null)" class="btn btn-outline-danger ms-2">
@@ -44,6 +44,8 @@ export default {
         initialData: Object,
     },
     setup(props, { emit }) {
+        const today = new Date().toISOString().split('T')[0];
+
         const formData = reactive({
             coupon_code: "",
             discount: null,
@@ -126,6 +128,7 @@ export default {
             formData,
             formTexts,
             handleSubmit,
+            today,
             closeCouponForm
         }
     }

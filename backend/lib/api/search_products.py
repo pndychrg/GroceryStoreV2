@@ -19,6 +19,7 @@ class SearchProductsAPI(Resource):
         rate = request.args.get('rate')
         section_id = request.args.get('section_id')
         manufactureDate = request.args.get('manufactureDate')
+        print(section_id, flush=True)
         # fetching the products from the database
         products, msg = productDB.search_products(
             name=name,

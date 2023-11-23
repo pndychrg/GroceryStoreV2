@@ -88,12 +88,14 @@ class SectionAPI(Resource):
 class GetAllSections(Resource):
 
     @jwt_required()
-    @checkJWTForAdminOrManager
     def get(self):
-        all_sections = sectionDB.getAllSections()
+        current_user = get_jwt_identity()
+        if current_user.get('role') == "user":
+            all_sections = sectionDB.getNonEmptySections()
+        else:
+            all_sections = sectionDB.getAllSections()
         # creating the json response
         response_json = [section.toJson() for section in all_sections]
-
         return response_json, 200
 
 

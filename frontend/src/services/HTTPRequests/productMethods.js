@@ -64,6 +64,8 @@ export const productMethods = {
   },
 
   async searchForProduct(data) {
+    console.log("searchMethod");
+    console.log(data.section_id);
     const response = await httpGetRequest("/product/search", data);
     return response;
   },

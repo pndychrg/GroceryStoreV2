@@ -32,11 +32,12 @@
                         <div class="form-group">
                             <label for="manufactureDate">Manufacture Date</label>
                             <input type="date" v-model="formData.manufactureDate" class="form-control mb-2"
-                                id="manufactureDate">
+                                id="manufactureDate" :max="today">
                         </div>
-                        <div class="form-group">
+                        <div class=" form-group">
                             <label for="expiryDate">Expiry Date</label>
-                            <input type="date" v-model="formData.expiryDate" class="form-control mb-2" id="expiryDate">
+                            <input type="date" v-model="formData.expiryDate" class="form-control mb-2" id="expiryDate"
+                                :min="today">
                         </div>
                         <div class="form-group mb-2 ">
                             <label for="section">Choose a Section:</label>
@@ -76,7 +77,7 @@ export default {
         sectionsData: Array,
     },
     setup(props, { emit }) {
-
+        const today = new Date().toISOString().split('T')[0];
         const formData = reactive({
             name: "",
             description: "",
@@ -164,7 +165,8 @@ export default {
             formTexts,
             formData,
             handleCancel,
-            handleSubmit
+            handleSubmit,
+            today
         }
     }
 }
