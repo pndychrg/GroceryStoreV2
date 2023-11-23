@@ -1,3 +1,4 @@
+from celery import group
 from workers import celery
 from jinja2 import Template
 from lib.methods.mail import send_email
@@ -7,8 +8,8 @@ userDB = UserDB()
 
 
 @celery.task()
-def send_user_monthly_report():
-    data = userDB.getPreviousMonthUserData(3)
+def send_user_monthly_report(user_id):
+    data = userDB.getPreviousMonthUserData(user_id=user_id)
     print(print([bill.toJson() for bill in data['bills']], flush=True))
     with open("../backend/static/docs/user_montly_report.html") as file:
         template = Template(file.read())
@@ -16,6 +17,13 @@ def send_user_monthly_report():
 
     response = send_email(data['user'].email, subject="hello", message=message)
     return response
+
+
+@celery.task()
+def send_toAllUser():
+    user_list = userDB.getAllUser()
+    res = group(send_user_monthly_report.s(user.id) for user in user_list)()
+    return res
 
 
 @celery.task()

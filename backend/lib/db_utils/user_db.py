@@ -157,3 +157,7 @@ class UserDB:
             }
         except SQLAlchemyError as e:
             print(e.__dict__['orig'])
+
+    def getAllUser(self):
+        users = User.query.filter_by(role="user").all()
+        return users

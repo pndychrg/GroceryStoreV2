@@ -36,7 +36,7 @@ def create_app():
     )
     celery.conf.beat_schedule = {
         "trigger-monthly-report": {
-            "task": "lib.jobs.monthly_report.send_user_monthly_report",
+            "task": "lib.jobs.monthly_report.send_toAllUser",
             "schedule": crontab(minute="0", hour="0", day_of_month="1")
         },
         "trigger-daily-coupon-update": {
@@ -55,7 +55,8 @@ def create_app():
         # send_user_current_month_report.delay()
         # send_user_monthly_report.delay()
         # updateCoupons.delay()
-        send_report_asPDF.delay()
+        send_toAllUser.delay()
+        # send_report_asPDF.delay()
         return "Hello WOlrd", 200
 
     # importing all api resources
