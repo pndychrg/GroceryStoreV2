@@ -62,6 +62,7 @@ def create_app():
     # importing all api resources
     from lib.api.user import UserAPI
     from lib.api.user import UserImageAPI
+    from lib.api.user import RefreshTokenAPI
     from lib.api.user import UserRatingAPI
     from lib.api.sections import SectionAPI, GetAllSections, SectionRequestsAPI
     from lib.api.approve_managers import ApproveManagerAPI
@@ -78,6 +79,7 @@ def create_app():
     # registering all the api resources
     api.add_resource(UserAPI, '/user')
     api.add_resource(UserImageAPI, '/user/img')
+    api.add_resource(RefreshTokenAPI, "/refresh")
     api.add_resource(UserRatingAPI, '/user/rating')
     api.add_resource(SectionAPI, '/section')
     api.add_resource(GetAllSections, '/sections')

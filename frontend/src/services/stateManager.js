@@ -137,5 +137,25 @@ export const userStateStore = defineStore("store", {
         showErrorToast(e.response.data.msg);
       }
     },
+
+    async refreshTokenAndRetry(originalRequest) {
+      try {
+        console.log("refresh token updated");
+        const response = await axios.post("/refresh");
+        // const newToken = response.data.token;
+
+        // update the token
+        TokenService.saveToken(response.data.token);
+        // updating the user data
+        this.user = JSON.parse(atob(response.data.token.split(".")[1])).sub;
+        console.log(this.user);
+        this.isAuthenticated = true;
+        console.log(this.user);
+        return axios(originalRequest);
+      } catch (error) {
+        console.error("Error refreshing token", error);
+        return Promise.reject(error);
+      }
+    },
   },
 });

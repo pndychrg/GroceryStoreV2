@@ -121,3 +121,5 @@ export const httpDownloadRequest = async (path) => {
     return null;
   }
 };
+
+export default axios;

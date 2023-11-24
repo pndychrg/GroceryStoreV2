@@ -64,9 +64,9 @@ export default {
         const fetchProductsData = async () => {
             const productsData = await productMethods.fetchRecentProducts(3);
             // console.log(productsData);
-            latestProducts.value = productsData.products;
-            mostFavProduct.value = productsData.mostFavProduct;
-            highestRatedProduct.value = productsData.highestRatedProduct;
+            latestProducts.value = productsData?.products;
+            mostFavProduct.value = productsData?.mostFavProduct;
+            highestRatedProduct.value = productsData?.highestRatedProduct;
         }
         const handleCart = async (cartForm) => {
             const dataObject = {
