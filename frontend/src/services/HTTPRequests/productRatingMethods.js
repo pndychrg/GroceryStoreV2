@@ -1,4 +1,9 @@
-import { httpGetRequest, httpPostRequest, httpDeleteRequest } from "../axios";
+import {
+  httpGetRequest,
+  httpPostRequest,
+  httpDeleteRequest,
+  httpGetAllRequest,
+} from "../axios";
 
 import { showSuccessToast } from "@/static/js/toasts";
 
@@ -30,7 +35,14 @@ export const productRatingMethods = {
       // TODO try to show the rating in the message
       showSuccessToast("Product Rating Deleted");
     }
+    return response;
+  },
 
+  async getAllRatingByUser() {
+    const response = await httpGetAllRequest("/user/rating");
+    // if(response){
+    // showSuccessToast("")
+    // }
     return response;
   },
 };

@@ -94,7 +94,8 @@ class UserDB:
             # TODO IF USER FOUND THEN COLLECT MORE USER DATA
             return user
         except SQLAlchemyError as e:
-            return e
+            print(e)
+            return None
 
     def getPreviousMonthUserData(self, user_id):
         try:

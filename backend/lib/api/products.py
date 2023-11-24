@@ -113,8 +113,7 @@ class ProductsAPI(Resource):
 
 
 add_product_img = reqparse.RequestParser()
-add_product_img.add_argument('image', type=FileStorage, location='files',
-                             required=True, help='This Field cannot be blank')
+add_product_img.add_argument('image', type=FileStorage, location='files')
 
 
 class ProductImage(Resource):
@@ -147,7 +146,15 @@ class ProductImage(Resource):
                 else:
                     return {'msg': "Invalid image format"}, 400
             else:
-                return {'msg': 'Image File not found'}, 400
+                # here we will send None to db to remove the image
+                response, msg = productDB.addProductImage(
+                    product_id=product_id,
+                    image=None
+                )
+                if response:
+                    return response.toJson(), 200
+                else:
+                    return {'msg': msg}, 400
         else:
             return {'msg': "product_id not found"}, 400
 

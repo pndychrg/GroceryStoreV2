@@ -5,6 +5,7 @@ import RegisterComponent from "../components/screens/register.vue";
 import { ROLES } from "./roles";
 import { userStateStore } from "./stateManager";
 import SectionsPage from "../components/screens/sections.vue";
+import UserRatingPage from "../components/screens/user/user_rating.vue";
 import AccessDenied from "../components/screens/accessDenied.vue";
 import NotApproved from "../components/screens/admin/storeManager_notApproved.vue";
 import ApproveManager from "../components/screens/admin/approve_manager.vue";
@@ -66,6 +67,15 @@ const routes = [
     meta: {
       requireAuth: true,
       roles: [ROLES.STORE_MANAGER],
+    },
+  },
+  {
+    name: "ratings",
+    path: "/ratings",
+    component: UserRatingPage,
+    meta: {
+      requireAuth: true,
+      roles: [ROLES.USER],
     },
   },
   {

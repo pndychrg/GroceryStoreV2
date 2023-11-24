@@ -13,6 +13,12 @@
                 <SidebarLink v-for="link in managerLinks" :key="link" :route="link.route" :tag="link.tag" :icon="link.icon"
                     @close="$emit('close')" />
             </div>
+            <div v-if="store.user?.role == 'user'">
+                <SidebarLink v-for="
+                    link in userLinks" :key="link.tag" :route="link.route" :tag="link.tag" :icon="link.icon"
+                    @close="$emit('close')" />
+
+            </div>
             <button @click="$emit('close')" class="btn text-start btn-danger ">
                 <font-awesome-icon :icon="['fas', 'xmark']" /> Close
             </button>
@@ -73,12 +79,20 @@ export default {
                 icon: "arrow-right-from-bracket",
             }
         ]
+        const userLinks = [
+            {
+                route: '/ratings',
+                tag: 'Ratings',
+                icon: 'arrow-right-from-bracket'
+            }
+        ]
 
         return {
             closeSidebar,
             store,
             adminLinks,
-            managerLinks
+            managerLinks,
+            userLinks
         }
     }
 }

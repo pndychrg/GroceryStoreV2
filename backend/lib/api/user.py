@@ -1,6 +1,7 @@
 from datetime import timedelta
 from flask_restful import Resource, request, reqparse, abort
-from flask_jwt_extended import create_access_token, jwt_required
+from flask_jwt_extended import create_access_token, get_jwt_identity, jwt_required
+from lib.methods.decorators import checkJWTForUser
 from lib.methods.validators import Validators
 from lib.db_utils.user_db import UserDB
 
@@ -66,3 +67,18 @@ class UserAPI(Resource):
             return {'token': token}, 200
         else:
             return {'msg': response[0]}, 400
+
+
+class UserRatingAPI(Resource):
+
+    @jwt_required()
+    @checkJWTForUser
+    def get(self):
+
+        # getting user_id from jwt
+        user_id = get_jwt_identity().get('id')
+        # fetching the user from user_id to get the complete user details
+        user = userDB.getUser(user_id=user_id)
+        # now sending the rating
+        # print(user.toJson(), flush=True)
+        return [rating.toJson() for rating in user.ratings], 200

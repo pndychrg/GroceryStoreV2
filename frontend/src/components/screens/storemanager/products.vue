@@ -26,9 +26,18 @@
                         </h5>
                         <button type="button" class="btn-close" @click="closeAddProductImageModal"></button>
                     </div>
-                    <div class="modal-footer form">
-                        <input type="file" class="formFile" @change="handleFileUpload">
-                        <button @click="uploadImage" class="btn">Upload</button>
+                    <div v-if="selectedProduct?.img != null" class="pt-2">
+                        <h6 class="">Product Already has a Image</h6>
+                        <img :src="'data:image/png;base64,' + selectedProduct.img" class="image img-fluid">
+                        <h6>Do You want to update ? </h6>
+                    </div>
+                    <div v-if="productImage != null">
+                        <h6 class="pt-2">Image Preview</h6>
+                        <img :src="previewImage" class="image img-fluid" />
+                    </div>
+                    <div class="modal-footer form ">
+                        <input type="file" class="formFile form-control" @change="handleFileUpload">
+                        <button @click="uploadImage" style="width: 100%;" class="btn btn-outline-primary">Upload</button>
                     </div>
                 </div>
             </div>
@@ -46,7 +55,7 @@
 
 <script>
 import { productMethods } from '@/services/HTTPRequests/productMethods'
-import { onMounted, ref } from 'vue';
+import { computed, onMounted, ref } from 'vue';
 import ProductCard from '@/components/widgets/cards/product_card.vue'
 import ProductForm from '@/components/widgets/forms/product_form.vue'
 import { sectionMethods } from '@/services/HTTPRequests/sectionMethods';
@@ -129,14 +138,24 @@ export default {
             productImage.value = event.target.files[0];
             // console.log(productImage.value)
         };
+        const previewImage = computed(() => {
+            return URL.createObjectURL(productImage.value)
+        })
         const uploadImage = async () => {
+            console.log(productImage.value)
             // console.log(selectedProduct.value.id);
             const response = await productMethods.addProductImage(selectedProduct.value, productImage.value);
             console.log(response);
+            if (response) {
+                handleProductEdited(response);
+            }
             // update the img according to response
-            // Handle image upload
+            //clear selected files
+            productImage.value = null;
             closeAddProductImageModal(); // Close the modal after uploading
         };
+
+
 
         onMounted(() => {
             fetchProductsData();
@@ -156,6 +175,7 @@ export default {
             showDeleteConfirmation,
             deleteProduct,
             productImage,
+            previewImage,
             showAddProductImageModal,
             handleFileUpload,
             uploadImage,
