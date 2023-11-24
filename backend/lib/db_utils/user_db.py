@@ -12,10 +12,11 @@ ratingDB = RatingMethods()
 class UserDB:
 
     def checkUserExists(self, username):
-        if User.query.filter_by(username=username).first():
-            return True
+        user = User.query.filter_by(username=username).first()
+        if user:
+            return user
         else:
-            return False
+            return None
 
     def registerUser(self, name, username, email, password, role='user'):
         if (self.checkUserExists(username=username)):
@@ -166,3 +167,37 @@ class UserDB:
     def getAllUser(self):
         users = User.query.filter_by(role="user").all()
         return users
+
+    def setUserImage(self, user_id, image):
+        # getting the user from user_id
+        user = self.getUser(user_id=user_id)
+        if user:
+            user.img = image
+            db.session.commit()
+            return user, "User Data Updated"
+
+        else:
+            return None, "User not found"
+
+    def updateUser(self, user_id, name, username, email, password):
+        # getting the from user_id
+        user = self.getUser(user_id=user_id)
+        # print(img, flush=True)
+        # check if another user already exists with same username
+        if user:
+            # first checking if the password is correct or not
+            print(password, user.password, flush=True)
+            if password != user.password:
+                return None, "incorrect password"
+            existingUser = self.checkUserExists(username=username)
+            if existingUser.id != user.id:
+                return None, "username already in use"
+            # update the user
+            user.name = name
+            user.username = username
+            # user.img = img
+            user.email = email
+            db.session.commit()
+            return user, "user updated"
+        else:
+            return None, "invalid user_id"

@@ -4,7 +4,7 @@ from flask_jwt_extended import create_access_token, get_jwt_identity, jwt_requir
 from lib.methods.decorators import checkJWTForUser
 from lib.methods.validators import Validators
 from lib.db_utils.user_db import UserDB
-
+from werkzeug.datastructures import FileStorage
 
 # initializing User DB methods
 userDB = UserDB()
@@ -23,6 +23,25 @@ create_user_parser.add_argument(
     "password", type=str, help="This field cannot be blank", required=True)
 create_user_parser.add_argument(
     "role", type=str
+)
+
+update_user_parser = reqparse.RequestParser()
+update_user_parser.add_argument(
+    "name", type=str, required=True, help="This Field cannot be blank",
+)
+update_user_parser.add_argument(
+    "username", type=str, required=True, help="This Field cannot be blank"
+)
+update_user_parser.add_argument(
+    "email", type=str, help="This Field cannot be blank",
+    required=True
+)
+update_user_parser.add_argument(
+    "id", type=str, help="This Field cannot be blank",
+    required=True
+)
+update_user_parser.add_argument(
+    "password", type=str, required=True, help="This Field cannot be blank"
 )
 
 
@@ -68,6 +87,25 @@ class UserAPI(Resource):
         else:
             return {'msg': response[0]}, 400
 
+    @jwt_required()
+    def put(self):
+        data = update_user_parser.parse_args()
+        response, msg = userDB.updateUser(
+            user_id=data['id'],
+            name=data['name'],
+            username=data['username'],
+            email=data['email'],
+            password=data['password']
+        )
+        if response:
+            # generating the updated token because all user data is managed through it
+            token = create_access_token(
+                identity=response.toJson(), expires_delta=timedelta(hours=8)
+            )
+            return {'token': token}, 200
+        else:
+            return {'msg': msg}, 400
+
 
 class UserRatingAPI(Resource):
 
@@ -82,3 +120,60 @@ class UserRatingAPI(Resource):
         # now sending the rating
         # print(user.toJson(), flush=True)
         return [rating.toJson() for rating in user.ratings], 200
+
+
+ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg', 'gif'}
+
+
+def allowed_image(filename):
+    return '.' in filename and filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
+
+
+# request Parser for user image
+user_img = reqparse.RequestParser()
+user_img.add_argument(
+    'image', type=FileStorage, location='files'
+)
+
+
+class UserImageAPI(Resource):
+
+    @jwt_required()
+    def post(self):
+        # fetching the user_id from jwttoken
+        user_id = get_jwt_identity().get('id')
+        data = user_img.parse_args()
+        # uploaded image
+        uploaded_img = data.get('image')
+        if uploaded_img:
+            if allowed_image(uploaded_img.filename):
+                # reading the data as bytes
+                img_data = uploaded_img.read()
+                if img_data:
+                    response, msg = userDB.setUserImage(
+                        user_id=user_id, image=img_data)
+                    if response:
+                        return response.toJson(), 200
+                    else:
+                        return {'msg': msg}, 400
+                else:
+                    return {'msg': 'Image Data is empty'}, 400
+            else:
+                return {'msg': "Invalid image format"}, 400
+        else:
+            response, msg = userDB.setUserImage(
+                user_id=user_id,
+                image=None
+            )
+            if response:
+                return response.toJson(), 200
+            else:
+                return {'msg': msg}, 400
+
+    @jwt_required()
+    def get(self):
+        user_id = get_jwt_identity().get('id')
+        # fetching user from database
+        user = userDB.getUser(user_id=user_id)
+        # returning only the user img
+        return user.image(), 200

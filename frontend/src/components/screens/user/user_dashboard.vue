@@ -2,17 +2,36 @@
     <div>
         <div class="card user-details bg-body-secondary">
             <!-- User Details -->
-            <div class="card-body">
-                <h1>{{ user.name }}</h1>
-                <h4 class="text-secondary">{{ user.username }}</h4>
-            </div>
-            <hr>
-            <div class="row">
-                <div class="col-md-6">
+            <div class="d-flex pt-2" style="justify-content: center;">
+                <div v-if="image != null" class="img-container">
+                    <img v-if="image != null" :src="'data:image/png;base64,' + image" class="image img-thumbnail  me-2">
 
                 </div>
+                <div class="card-body  profile-data">
+                    <div class="text-center">
+                        <!-- <p>{{ image }}</p> -->
+                        <h1>
+                            {{ user.name }}
+                        </h1>
+                        <h5 class="text-secondary text-center">
+                            Username : @{{ user.username }}
+                            <br>
+                            Email : {{ user.email }}
+                        </h5>
+                        <!-- <h5 class="text-secondary"></h5> -->
+                    </div>
+                </div>
+            </div>
+            <hr>
+            <div class="row m-2">
                 <div class="col-md-6">
-                    <button class="btn btn-outline-dark mb-2" @click="downloadMonthlyReportPDF">Monthly Report
+                    <button class="btn btn-outline-dark mb-2" @click="showProfileUpdateForm" style="width: 100%;"
+                        id="updateProfileButton">Update Profile
+                        <font-awesome-icon icon="fa-solid fa-edit" class="faa-horizontal animated-hover " /></button>
+                </div>
+                <div class="col-md-6 ">
+                    <button class="btn btn-outline-dark mb-2" @click="downloadMonthlyReportPDF" style="width: 100%;">Monthly
+                        Report
                         <font-awesome-icon icon="fa-solid fa-download" class="faa-horizontal animated-hover " /></button>
                 </div>
             </div>
@@ -34,6 +53,7 @@
         </div>
         <teleport to="#modal-root">
             <BillDetailsModal v-show="isBillDetailModalOpen" :bill="selectedBill" @close="showBillDetails" />
+            <UserProfileUpdateForm v-show="isProfileUpdateFormShown" @close="showProfileUpdateForm" />
         </teleport>
     </div>
 </template>
@@ -48,15 +68,24 @@ import BillDetailsModal from '@/components/widgets/bill_details.vue'
 import { UIStateStore } from '@/services/uiStateManager';
 import { userStateStore } from '@/services/stateManager';
 import { reportMethods } from '@/services/HTTPRequests/reportMethods';
+import UserProfileUpdateForm from "@/components/widgets/forms/profile_update.vue"
 export default {
     name: "UserDashboard",
     components: {
         BillCard,
         ProductCard,
+        UserProfileUpdateForm,
         BillDetailsModal,
     },
     setup() {
-        const user = userStateStore().user;
+        const store = userStateStore();
+        const user = computed(() => {
+            return store.user;
+        });
+        const image = computed(() => {
+            return store.profile_img
+        });
+        const uiStateManager = UIStateStore();
         // const user = userStateStore.user;
         const bills = ref([]);
         const favProducts = ref([]);
@@ -86,11 +115,22 @@ export default {
         const downloadMonthlyReportPDF = async () => {
             await reportMethods.downloadPDFReport();
         }
+
+
         onMounted(() => {
             fetchAllBills();
+            store.getUserImage();
             fetchAllFavouriteProducts();
+            // testing
+            // document.getElementById("updateProfileButton").click()
         })
 
+        // Profile update methods
+        const isProfileUpdateFormShown = ref(false);
+        const showProfileUpdateForm = () => {
+            isProfileUpdateFormShown.value = !isProfileUpdateFormShown.value
+            uiStateManager.toggleModal();
+        }
         return {
             bills,
             favProducts,
@@ -99,7 +139,10 @@ export default {
             selectedBill,
             user,
             totalExpenditure,
-            downloadMonthlyReportPDF
+            downloadMonthlyReportPDF,
+            showProfileUpdateForm,
+            isProfileUpdateFormShown,
+            image,
         }
     }
 }
@@ -157,5 +200,38 @@ export default {
 .favproduct-col {
     display: grid;
     justify-content: center;
+}
+
+.profile-data {
+    /* display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: max-content; */
+    flex-grow: 0;
+    /* font-size: 10dvw; */
+}
+
+.img-container {
+    flex-shrink: 0;
+    width: 20%;
+}
+
+/* Adjust the width for smaller screens */
+@media only screen and (max-width:768px) {
+    .img-container {
+        width: 40%;
+    }
+
+    .profile-data h1,
+    h5 {
+        font-size: 80%;
+    }
+}
+
+.image {
+    width: auto;
+    height: auto;
+    max-width: 100%;
+    max-height: 100%;
 }
 </style>

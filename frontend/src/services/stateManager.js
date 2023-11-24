@@ -4,15 +4,17 @@ import router from "./router";
 import { TokenService } from "./tokenService";
 import { showSuccessToast, showErrorToast } from "@/static/js/toasts";
 import { toRaw } from "vue";
-import { updateToken } from "./axios";
+import { httpGetRequest, httpPostImageRequest, updateToken } from "./axios";
 
 export const userStateStore = defineStore("store", {
   state: () => {
     const user = null;
+    const profile_img = null;
     const isAuthenticated = false;
     return {
       user,
       isAuthenticated,
+      profile_img,
     };
   },
 
@@ -45,6 +47,7 @@ export const userStateStore = defineStore("store", {
         this.isAuthenticated = true;
         updateToken();
         console.log(toRaw(this.user));
+        await this.getUserImage();
         // different route for notApproved store manager
         if (this.user.role == "notApproved") {
           showSuccessToast("Your application is not still approved");
@@ -55,6 +58,7 @@ export const userStateStore = defineStore("store", {
           router.push("/");
         }
       } catch (e) {
+        console.log(e);
         showErrorToast(e.response.data.msg);
         console.log(e.response.data.msg);
       }
@@ -74,9 +78,11 @@ export const userStateStore = defineStore("store", {
         TokenService.saveToken(response.data.token);
         // extracting user from token
         this.user = JSON.parse(atob(response.data.token.split(".")[1])).sub;
+        console.log(this.user);
         this.isAuthenticated = true;
         console.log(this.user);
-
+        // updating the user image
+        await this.getUserImage();
         // till above is fine but now changing the toast and router for notApproved Store Manager
         if (role == "storeManager") {
           showSuccessToast(`Your application is submitted. ${this.user.name}`);
@@ -98,6 +104,37 @@ export const userStateStore = defineStore("store", {
       this.user = null;
       this.isAuthenticated = false;
       router.push("/login");
+    },
+
+    async setUserImage(image) {
+      const formData = new FormData();
+      formData.append("image", image);
+      const response = await httpPostImageRequest("/user/img", formData);
+      if (response) {
+        showSuccessToast("Profile Image Updated");
+      }
+      return response;
+    },
+
+    async getUserImage() {
+      const response = await httpGetRequest("user/img");
+      this.profile_img = response.img;
+      console.log(this.image);
+    },
+
+    async updateUser(formData) {
+      try {
+        const response = await axios.put("/user", formData);
+        // this response will update the user data
+        TokenService.saveToken(response.data.token);
+        // extracting user from token
+        this.user = JSON.parse(atob(response.data.token.split(".")[1])).sub;
+        console.log(this.user);
+        return true;
+      } catch (e) {
+        console.log(e);
+        showErrorToast(e.response.data.msg);
+      }
     },
   },
 });
