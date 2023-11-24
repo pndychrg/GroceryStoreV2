@@ -153,7 +153,7 @@ class UserImageAPI(Resource):
                     response, msg = userDB.setUserImage(
                         user_id=user_id, image=img_data)
                     if response:
-                        return response.toJson(), 200
+                        return response.image(), 200
                     else:
                         return {'msg': msg}, 400
                 else:

@@ -103,8 +103,10 @@ export default {
             // const imgData = new FormData();
             // imgData.append("image", formData.value.img)
             // update the image first so then in jwt token we will get the img back
-            await store.setUserImage(formData.value.img);
-            await store.updateUser(data);
+            const response = await store.updateUser(data);
+            if (response) {
+                await store.setUserImage(formData.value.img);
+            }
             formData.value.password = null;
             // console.log(response)
             closeModal();

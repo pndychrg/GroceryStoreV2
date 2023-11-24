@@ -110,10 +110,11 @@ export const userStateStore = defineStore("store", {
       const formData = new FormData();
       formData.append("image", image);
       const response = await httpPostImageRequest("/user/img", formData);
-      if (response) {
-        showSuccessToast("Profile Image Updated");
-      }
-      return response;
+      // if (response) {
+      //   showSuccessToast("Profile Image Updated");
+      // }
+      this.profile_img = response.img;
+      // return response;
     },
 
     async getUserImage() {
