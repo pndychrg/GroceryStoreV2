@@ -5,7 +5,6 @@
             <div class="d-flex pt-2" style="justify-content: center;">
                 <div v-if="image != null" class="img-container">
                     <img v-if="image != null" :src="'data:image/png;base64,' + image" class="image img-thumbnail  me-2">
-
                 </div>
                 <div class="card-body  profile-data">
                     <div class="text-center">
@@ -54,6 +53,7 @@
         <teleport to="#modal-root">
             <BillDetailsModal v-show="isBillDetailModalOpen" :bill="selectedBill" @close="showBillDetails" />
             <UserProfileUpdateForm v-show="isProfileUpdateFormShown" @close="showProfileUpdateForm" />
+
         </teleport>
     </div>
 </template>
