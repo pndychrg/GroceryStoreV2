@@ -1,7 +1,8 @@
 ID,Section Name,Unit,Number of Products
-1,Food Items,peice,0
-2,Books,peice,0
-3,Laptops,peice,0
-4,Tablets,peice,0
-5,Smartphone,peice,0
-6,Stationery,peice,0
+1,Food Items,peice,2
+2,Books,peice,2
+3,Laptops,peice,1
+4,Tablets,peice,1
+5,Smartphone,peice,1
+6,Stationery,peice,2
+7,Sports Items,peice,1

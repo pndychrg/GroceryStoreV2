@@ -6,7 +6,6 @@ from sqlalchemy.exc import SQLAlchemyError, IntegrityError
 from datetime import datetime
 from models.favourites import Favourites
 
-
 class ProductDB:
 
     def getAllProducts(self):

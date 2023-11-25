@@ -5,7 +5,7 @@ from flask_restful import Resource, reqparse, request
 from flask_jwt_extended import jwt_required
 from lib.methods.decorators import checkJWTForManager, checkJWTForUserOrManager
 from werkzeug.datastructures import FileStorage
-
+from cache import cache
 
 # for POST Method
 create_product_parser = reqparse.RequestParser()
@@ -40,6 +40,7 @@ class ProductsAPI(Resource):
 
     @jwt_required()
     @checkJWTForUserOrManager
+    @cache.cached(timeout=30, query_string=True)
     def get(self):
         # TODO add getProductBysectionID
         # TODO add getProductByProductID
@@ -169,6 +170,7 @@ def allowed_image(filename):
 class RecentProduct(Resource):
     @jwt_required()
     @checkJWTForUserOrManager
+    @cache.cached(timeout=30, query_string=True)
     def get(self, limit=None):
         products = productDB.getMostRecentProducts(limit)
         mostFavProduct = productDB.getMostFavouredProduct()

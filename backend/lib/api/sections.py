@@ -2,6 +2,7 @@ from flask_restful import Resource, request, reqparse
 from flask_jwt_extended import jwt_required
 from lib.db_utils.sections import SectionDB
 from lib.methods.validators import Validators
+from cache import cache
 from lib.methods.decorators import *
 # init Section DB
 sectionDB = SectionDB()
@@ -25,6 +26,7 @@ class SectionAPI(Resource):
 
     @jwt_required()
     @checkJWTForAdmin
+    # @cache.cached(timeout=30, query_string=True)
     def get(self):
         # getting the section id from the request parameters
         section_id = request.args.get("section_id")
@@ -88,6 +90,7 @@ class SectionAPI(Resource):
 class GetAllSections(Resource):
 
     @jwt_required()
+    @cache.cached(timeout=30, query_string=True)
     def get(self):
         current_user = get_jwt_identity()
         if current_user.get('role') == "user":
@@ -139,6 +142,7 @@ class SectionRequestsAPI(Resource):
 
     @jwt_required()
     @checkJWTForAdminOrManager
+    @cache.cached(timeout=30, query_string=True)
     def get(self):
         # getting section_id from request args
         section_id = request.args.get("section_id")

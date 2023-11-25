@@ -5,6 +5,7 @@ from lib.db_utils.sections import SectionDB
 from lib.db_utils.products import ProductDB
 from lib.methods.decorators import checkJWTForManager, checkJWTForUser
 from lib.jobs.product_report import *
+from cache import cache
 report = Blueprint('report', __name__)
 sectionDB = SectionDB()
 productDB = ProductDB()
@@ -13,6 +14,7 @@ productDB = ProductDB()
 @report.route("/report/exportCSVReports", methods=['GET'])
 @jwt_required()
 @checkJWTForManager
+# @cache.cached(timeout=30, query_string=True)
 def exportCSVReports():
     job = generateCSVReports.apply_async()
     result = job.wait()
@@ -22,6 +24,7 @@ def exportCSVReports():
 @report.route("/report/coupon", methods=['GET'])
 @jwt_required()
 @checkJWTForManager
+# @cache.cached(timeout=30, query_string=True)
 def getCouponEngGraph():
     job = generateCouponEngBarGraph.apply_async()
     result = job.wait()
@@ -31,6 +34,7 @@ def getCouponEngGraph():
 @report.route("/report/product/favourite", methods=['GET'])
 @jwt_required()
 @checkJWTForManager
+# @cache.cached(timeout=30, query_string=True)
 def getFavProductGraph():
     job = generateFavProductGraph.apply_async()
     img_path = job.wait()
@@ -40,6 +44,7 @@ def getFavProductGraph():
 @report.route('/report/product/buy', methods=['GET'])
 @jwt_required()
 @checkJWTForManager
+# @cache.cached(timeout=30, query_string=True)
 def getProductBoughtGraph():
     job = generateProductEngBarGraph.apply_async()
     img_path = job.wait()
@@ -49,6 +54,7 @@ def getProductBoughtGraph():
 @report.route('/report/data', methods=['GET'])
 @jwt_required()
 @checkJWTForManager
+@cache.cached(timeout=30, query_string=True)
 def getMonthRevenue():
     revenue = totalRevenueMonth()
     sections = [section.toJson() for section in sectionDB.getEmptySections()]

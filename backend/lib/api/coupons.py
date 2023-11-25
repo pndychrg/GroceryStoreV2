@@ -1,8 +1,8 @@
-from flask_restful import Resource, request, reqparse
-from flask_jwt_extended import jwt_required, get_jwt_identity
+from flask_restful import Resource, reqparse
+from flask_jwt_extended import jwt_required
 from lib.db_utils.coupons import CouponDB
 from lib.methods.decorators import checkJWTForManager, checkJWTForUser
-
+from cache import cache
 # init CouponMethods
 couponDB = CouponDB()
 
@@ -13,7 +13,7 @@ coupon_parser = reqparse.RequestParser()
 coupon_parser.add_argument(
     "coupon_code", help='This field cannot be blank', required=True)
 coupon_parser.add_argument(
-    "discount", help='This field cannot be blank',type=int, required=True)
+    "discount", help='This field cannot be blank', type=int, required=True)
 coupon_parser.add_argument(
     "expiryDate", help='This field cannot be blank', required=True)
 
@@ -22,6 +22,7 @@ class CouponAPI(Resource):
 
     @jwt_required()
     @checkJWTForManager
+    @cache.cached(timeout=30, query_string=True)
     def get(self, coupon_id=None):
         if coupon_id:
             coupon, msg = couponDB.getCouponById(coupon_id=coupon_id)
@@ -80,6 +81,7 @@ class CouponsExtendedAPI(Resource):
 
     @jwt_required()
     @checkJWTForUser
+    @cache.cached(timeout=30, query_string=True)
     def get(self, coupon_code=None):
         if coupon_code:
             coupon, msg = couponDB.getCouponByCode(coupon_code=coupon_code)

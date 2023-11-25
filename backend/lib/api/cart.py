@@ -2,6 +2,7 @@ from flask_restful import Resource, request, reqparse
 from flask_jwt_extended import get_jwt_identity, jwt_required
 from lib.db_utils.cart import CartDB
 from lib.methods.decorators import checkJWTForUser
+from cache import cache
 # init
 cartDB = CartDB()
 
@@ -18,6 +19,7 @@ class CartAPI(Resource):
 
     @jwt_required()
     @checkJWTForUser
+    @cache.cached(timeout=30, query_string=True)
     def get(self):
         # getting the user_id from token
         userFromToken = get_jwt_identity()

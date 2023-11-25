@@ -1,1 +1,7 @@
 ID,NAME,DESCRIPTION,RATE,AVG_RATING,AVAILABLE_AMOUNT,MANUFACTURE_DATE,EXPIRY_DATE,SECTION NAME,SECTION UNIT,BOUGHT BY USER
+1,Hp Omen,"Ryzen 5,8GB DDR5 3200 MHz RAM,512GB m.2 SSD",80000,,4,2023-11-15 00:00:00,,Laptops,peice,1
+2,Samsung Lite,10.3 Inch Tablet with 4gb RAM and 64GB ROM,28000,,29,,,Tablets,peice,1
+4,Harry Potter First,"Written By JK Rowling, First installement of the 7 book series",500,,297,,,Books,peice,1
+5,One Peice,Written by Eichero Oda,350,,1058,,,Books,peice,1
+9,Badminton,Carbon Fibre Strung 78 grams Graphite Badminton,1000,,46,,,Sports Items,peice,1
+10,Chips,Simply Salted Falvoured Chips,10,,16,,2023-11-30 00:00:00,Food Items,peice,1

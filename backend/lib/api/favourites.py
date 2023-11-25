@@ -2,6 +2,7 @@ from flask_restful import Resource, request, reqparse
 from lib.db_utils.favourites import FavouritesMethods
 from flask_jwt_extended import jwt_required, get_jwt_identity
 from lib.methods.decorators import checkJWTForUser
+from cache import cache
 
 
 # init fav methods
@@ -30,6 +31,7 @@ class FavouritesAPI(Resource):
 
     @jwt_required()
     @checkJWTForUser
+    @cache.cached(timeout=30, query_string=True)
     def get(self, product_id=None):
         # getting the user_id from access token
         user = get_jwt_identity()

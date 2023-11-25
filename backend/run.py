@@ -6,6 +6,7 @@ from flask_swagger_ui import get_swaggerui_blueprint
 from extensions import db
 from flask_cors import CORS
 import workers
+
 from celery.schedules import crontab
 from lib.jobs.monthly_report import *
 from lib.jobs.coupon_update import updateCoupons
@@ -19,6 +20,12 @@ def create_app():
     app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///groceryStoreV2.db'
     app.config['CELERY_BROKER_URL'] = 'redis://localhost:6379/1'
     app.config['CELERY_RESULT_BACKEND'] = 'redis://localhost:6379/2'
+    app.config['CACHE_TYPE'] = 'redis'
+    app.config['CACHE_REDIS_HOST'] = 'localhost'
+    app.config['CACHE_REDIS_PORT'] = 6379
+    app.config['CACHE_REDIS_DB'] = 0
+    app.config['CACHE_REDIS_URL'] = 'redis://localhost:6379/0'
+    app.config['CACHE_DEFAULT_TIMEOUT'] = 500
     db.init_app(app=app)
 
     # initializing api
@@ -45,6 +52,9 @@ def create_app():
         },
     }
     celery.Task = workers.ContextTask
+
+    # caching setup
+    # cache = Cache(app)
 
     app.app_context().push()
     # celery = workers.celery
