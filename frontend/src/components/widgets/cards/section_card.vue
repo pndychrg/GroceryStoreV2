@@ -1,8 +1,16 @@
 <template>
-    <div class="section-card">
+    <div class="" :class="{}">
         <div class="card-body text-start">
             <h5 class="card-title ">{{ sectionData.name }}</h5>
-            <h6 class="card-text text-secondary">Unit - {{ sectionData.unit }}</h6>
+            <h6 class="card-text text-secondary">
+                Unit - {{ sectionData.unit }}
+                <br>
+                Number Of Products - <span :class="{ emptySection: sectionData.numOfProducts == 0 }">{{
+                    sectionData.numOfProducts
+                }}</span>
+            </h6>
+            <!-- <h6 class=" card-text text">
+        </h6> -->
             <!-- <h6 class="card-text text-secondary" v-show="sectionData.request">{{ sectionData.request }}</h6> -->
             <hr>
             <div class="d-flex justify-content-end">
@@ -29,4 +37,10 @@ export default {
 }
 </script>
 
-<style  scoped></style>
+<style  scoped>
+/* .emtpy-section {} */
+.emptySection {
+    color: red;
+    font-weight: bold;
+}
+</style>

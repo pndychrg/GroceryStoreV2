@@ -1,5 +1,5 @@
 <template>
-    <div class="row g-0">
+    <div class="row g-0  ">
         <div class="col-md-4 align-self-center">
             <img v-if="productData.img != null" :src="imageData" class="rounded-start card-img image img-fluid "
                 alt="Base64 Image">
@@ -34,7 +34,12 @@
                 </p>
                 <hr v-if="productData.description?.length > 0">
                 <p class="card-text">
-                    Available Amount : {{ productData.availableAmount }}
+                    Available Amount : <span v-if="productData.availableAmount > 0">
+                        {{ productData.availableAmount }}
+                    </span>
+                    <span v-else>
+                        <button disabled class="btn btn-sm btn-danger">Unavailable</button>
+                    </span>
                     <br>
                     Rate : {{ productData.rate }}
                     <br>
@@ -114,7 +119,6 @@ export default {
 </script>
 
 <style scoped>
-
 .image {
     height: 80%;
     width: auto;

@@ -5,7 +5,8 @@
             </button></h3>
 
         <div class="row m-2 border-dark-subtle products-wrapper border-2 border">
-            <div v-for="product in products" :key="product.id" class="ProductCard card">
+            <div v-for="product in products" :key="product.id" class="ProductCard card"
+                :class="{ UnavailableProduct: product.availableAmount == 0 }">
                 <ProductCard loggedInRole="manager" :productData="product" @edit-product="showEditProductForm(product)"
                     @delete-product="showDeleteConfirmation(product)"
                     @show-addimagemodal="showAddProductImageModal(product)" />
@@ -201,6 +202,9 @@ export default {
     margin: 10px;
 }
 
+.UnavailableProduct {
+    box-shadow: 3px 3px 5px rgba(255, 25, 25, 0.2);
+}
 
 .modal {
     display: block;

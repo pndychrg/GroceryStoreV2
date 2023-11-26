@@ -16,5 +16,6 @@ class Section(db.Model):
             'id': self.id,
             'name': self.name,
             'unit': self.unit,
+            "numOfProducts": len(self.products)
             # 'section_icon': self.section_icon
         }

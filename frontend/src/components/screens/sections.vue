@@ -12,7 +12,8 @@
                 </h2>
             </div>
 
-            <div v-for="section in sections" :key="section.id" class="SectionCard card">
+            <div v-for="section in sections" :key="section.id" class="SectionCard card"
+                :class="{ emtpySectionCard: section.numOfProducts == 0 }">
                 <SectionCard :sectionData="section" @deleteSection="showDelete(section, 'section')"
                     @editSection="showEditSectionForm(section, 'section')" />
             </div>
@@ -218,6 +219,10 @@ export default {
     transition: all .3s;
     width: 18rem;
     margin: 10px;
+}
+
+.emtpySectionCard {
+    box-shadow: rgba(235, 19, 19, 0.2) 0px 7px 29px 0px;
 }
 
 .btn-addSection {
