@@ -1,16 +1,10 @@
 <template>
     <div class="">
-        <h3>Products Page</h3>
+        <h3 class="mb-3">Products Page <button class="btn btn-primary" type="button" @click="showAddProductForm">
+                Add Product
+            </button></h3>
 
         <div class="row m-2 border-dark-subtle products-wrapper border-2 border">
-            <div class="row">
-                <h2 class="col text-start">
-                    Products
-                    <button class="btn btn-primary" type="button" @click="showAddProductForm">
-                        Add Product
-                    </button>
-                </h2>
-            </div>
             <div v-for="product in products" :key="product.id" class="ProductCard card">
                 <ProductCard loggedInRole="manager" :productData="product" @edit-product="showEditProductForm(product)"
                     @delete-product="showDeleteConfirmation(product)"
@@ -194,6 +188,7 @@ export default {
     padding: 40px 55px 45px 55px;
     border-radius: 15px;
     transition: all .3s;
+    justify-content: center;
 }
 
 .ProductCard {

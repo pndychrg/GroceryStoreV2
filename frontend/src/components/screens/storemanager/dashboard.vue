@@ -183,6 +183,7 @@ export default {
             fetchManagementData();
 
             await store.getUserImage();
+            console.log("User Image updated")
         })
 
         const downloadZipFile = async () => {

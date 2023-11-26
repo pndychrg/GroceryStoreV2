@@ -1,10 +1,12 @@
 import base64
+
+from sqlalchemy import extract
 from models.user import User
 from extensions import db
 from sqlalchemy.exc import SQLAlchemyError
 from lib.db_utils.shop import ShopDB
 from lib.db_utils.rating import RatingMethods
-from datetime import datetime
+from datetime import datetime, timedelta
 
 shopDB = ShopDB()
 ratingDB = RatingMethods()
@@ -25,7 +27,7 @@ class UserDB:
         # if user not exists with same username
         try:
             user = User(name=name, username=username,
-                        password=password, role=role, email=email)
+                        password=password, role=role, email=email, lastLogin=datetime.now())
             db.session.add(user)
             db.session.commit()
             return user, "User Registered"
@@ -40,6 +42,10 @@ class UserDB:
             user = User.query.filter_by(username=username).first()
             if user:
                 if password == user.password:
+                    # updating last User Login
+                    user.lastLogin = datetime.now()
+                    db.session.commit()
+                    print(user.lastLogin, flush=True)
                     return user, True
                 else:
                     return "Wrong Password", False
@@ -206,3 +212,16 @@ class UserDB:
             return user, "user updated"
         else:
             return None, "invalid user_id"
+
+
+class UserRemainder:
+
+    def getNonVisitedUsers(self):
+        # this function will fetch everyone (user only) who hasn't visited in last 24 hours
+
+        oneDayBefore = datetime.today() - timedelta(hours=24)
+        # fetching all the user
+        users = User.query.filter(User.role == 'user',
+                                  User.lastLogin < oneDayBefore
+                                  )
+        return users

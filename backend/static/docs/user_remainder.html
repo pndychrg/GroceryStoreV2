@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Daily Remainder</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f4;
+        }
+    </style>
+</head>
+
+<body class="p-3">
+    <h2>Reminder to Visit Our Website</h2>
+
+    <p>Dear {{data['user'].name}},</p>
+
+    <p>We hope you're doing well! It's been a while since your last visit to our website. Don't miss out on the latest
+        updates and products.</p>
+
+    <div>
+        <h5>Our Latest Product</h5>
+        <div class="card mb-3 ms-3"
+            style="max-width: 540px; flex-shrink: 0; flex-grow: 0; justify-content: start; width: auto;">
+            <div class="row g-0">
+                {% if data['latestProduct'].imgRenderReady() != None %}
+                <div class="col-md-4">
+                    <img src="{{data['latestProduct'].imgRenderReady()}}" class="img-fluid rounded-start" alt="...">
+                </div>
+                {% endif %}
+                <div class="col-md-8 ">
+                    <div class="card-body">
+                        <h5 class="card-title">{{data['latestProduct'].name}}</h5>
+                        <h6 class="card-subtitle mb-2 text-secondary">{{data['latestProduct'].section.name}}</h6>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+        <h5>Our Highest Rated Product</h5>
+        <div class="card mb-3 ms-3" style="max-width: 540px; flex-shrink: 0; flex-grow: 0;">
+            <div class="row g-0">
+                {% if data['highestRatedProduct'].imgRenderReady() != None %}
+                <div class="col-md-4">
+                    <img src="{{data['highestRatedProduct'].imgRenderReady()}}" class="img-fluid rounded-start"
+                        alt="...">
+                </div>
+                {% endif %}
+                <div class="col-md-8">
+                    <div class="card-body">
+                        <h5 class="card-title">{{data['highestRatedProduct'].name}}</h5>
+                        <h6 class="card-subtitle mb-2 text-secondary">{{data['highestRatedProduct'].section.name}}</h6>
+
+                    </div>
+                </div>
+            </div>
+
+        </div>
+        <h5>Our Most Liked Product</h5>
+        <div class="card mb-3 ms-3" style="max-width: 540px; flex-shrink: 0; flex-grow: 0;">
+            <div class="row g-0">
+                {% if data['mostLikedProduct'].imgRenderReady() != None %}
+                <div class="col-md-4">
+                    <img src="{{data['mostLikedProduct'].imgRenderReady()}}" class="img-fluid rounded-start" alt="...">
+                </div>
+                {% endif %}
+                <div class="col-md-8">
+                    <div class="card-body">
+                        <h5 class="card-title">{{data['mostLikedProduct'].name}}</h5>
+                        <h6 class="card-subtitle mb-2 text-secondary">{{data['mostLikedProduct'].section.name}}</h6>
+
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <p>Thank you for being a valued member of our community. We look forward to seeing you on our website soon!</p>
+
+    <p>Best regards,<br>Your GroceryStore Team</p>
+
+</body>
+
+</html>

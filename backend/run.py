@@ -6,10 +6,10 @@ from flask_swagger_ui import get_swaggerui_blueprint
 from extensions import db
 from flask_cors import CORS
 import workers
-
+from lib.jobs.coupon_update import updateCoupons
 from celery.schedules import crontab
 from lib.jobs.monthly_report import *
-from lib.jobs.coupon_update import updateCoupons
+from lib.jobs.daily_remainder import fetchAllUnvisitedUser
 app, celery = None, None
 
 
@@ -65,7 +65,7 @@ def create_app():
         # send_user_current_month_report.delay()
         # send_user_monthly_report.delay()
         # updateCoupons.delay()
-        send_user_current_month_report.delay()
+        fetchAllUnvisitedUser.delay()
         # send_report_asPDF.delay()
         return "Hello WOlrd", 200
 

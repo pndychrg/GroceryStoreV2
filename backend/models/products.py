@@ -40,3 +40,12 @@ class Product(db.Model):
             "description": self.description,
             "avgRating": self.av_rating
         }
+
+    # this function will send a computed string which can be directly used in img src, (used in rendering images in the pdf)
+    def imgRenderReady(self):
+        image = base64.b64encode(self.img).decode(
+            'utf-8') if self.img != None else None
+        if image:
+            return "data:image/png;base64,"+image
+        else:
+            return None

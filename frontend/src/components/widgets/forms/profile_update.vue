@@ -55,15 +55,20 @@
 
 <script>
 import { userStateStore } from '@/services/stateManager';
-import { ref, computed, watch } from 'vue';
+import { ref, computed, watch, onMounted } from 'vue';
 export default {
     name: "UserProfileUpdateForm",
     setup(props, { emit }) {
         const store = userStateStore();
         const user = store.user;
-        const formData = ref({ ...user, password: null });
+        const formData = ref({ ...user, password: null, img: null });
+        // const selectedImage = ref(store.profile_img)
         // const password = ref();
         const previewImage = computed(() => {
+            // console.log(`store ${store.profile_img}`)
+            // console.log(`form ${formData.value.img}`)
+            // formData.value.img = store.profile_img;
+
             // first checking if the formData got any img from user that will be in blob 
             if (formData.value.img != null) {
                 if (typeof (formData.value.img) === 'string') {
@@ -116,6 +121,18 @@ export default {
         watch(formData.value, () => {
             isFormUpdated.value = true;
         }, { deep: true });
+
+        onMounted(async () => {
+            if (store.profile_img === null) {
+                // image fetched
+                await store.getUserImage();
+                formData.value.img = store.profile_img
+                // console.log(formData.value.img)
+            } else {
+                formData.value.img = store.profile_img
+            }
+        })
+
         return {
             user,
             closeModal,
