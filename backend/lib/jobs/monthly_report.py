@@ -10,7 +10,7 @@ userDB = UserDB()
 @celery.task()
 def send_user_monthly_report(user_id):
     data = userDB.getPreviousMonthUserData(user_id=user_id)
-    print(print([bill.toJson() for bill in data['bills']], flush=True))
+    # print(print([bill.toJson() for bill in data['bills']], flush=True))
     with open("../backend/static/docs/user_montly_report.html") as file:
         template = Template(file.read())
         message = template.render(data=data)
@@ -42,6 +42,7 @@ def send_report_asPDF(user_id):
     if user_id == None:
         return None
     data = userDB.getUserCurrentMonthData(user_id)
+    # print(data['img'])
     # print(data)
     with open("../backend/static/docs/user_montly_report.html") as file:
         template = Template(file.read())

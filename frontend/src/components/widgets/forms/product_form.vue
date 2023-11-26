@@ -162,6 +162,7 @@ export default {
                 formData.manufactureDate = newData.manufactureDate;
                 formData.expiryDate = newData.expiryDate;
                 formData.section_id = newData.section.id;
+                formData.description = newData.description;
             }
         })
 

@@ -1,3 +1,4 @@
+import base64
 from models.user import User
 from extensions import db
 from sqlalchemy.exc import SQLAlchemyError
@@ -150,10 +151,14 @@ class UserDB:
                     total_saved += savedOnBill
                     if bill.coupon:
                         coupons_used.append(bill.coupon)
-
+            # generating the img_string earlier
+            image = base64.b64encode(user.img).decode(
+                'utf-8') if user.img != None else None
+            # print(str(image))
             # dictionary of data
             return {
                 "user": user,
+                "img": "data:image/png;base64,"+image,
                 "ratings": [rating.toJson() for rating in user.ratings],
                 "total_saved": total_saved,
                 "bills": bills,

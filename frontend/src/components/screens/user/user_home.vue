@@ -7,7 +7,7 @@
             </button>
         </h2>
         <div class="row m-2 products-wrapper">
-            <h5 class="text-start">Our Most Recent Products</h5>
+            <h5 class="">Our Most Recent Products</h5>
             <div v-for="product in latestProducts" :key="product.id" class="card"
                 :class="{ 'card-unavailable': product.availableAmount == 0 }">
                 <ProductCard :productData="product" loggedInRole="user" @add-to-cart="handleCart"
@@ -127,7 +127,7 @@ export default {
     padding: 40px 55px 45px 55px;
     border-radius: 15px;
     transition: all .3s;
-
+    justify-content: center;
 }
 
 

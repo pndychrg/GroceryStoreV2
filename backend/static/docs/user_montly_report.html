@@ -39,7 +39,8 @@
     <div class="row border-1 border border-secondary rounded-2 p-3">
         <div class="col-auto">
             {% if (data['user'].img != None) %}
-            <img src="data:image/png;base64,{{data['user'].img}}" alt="profile img" width="200">
+            <!-- <p>{{data['img']}}</p> -->
+            <img src="{{data['img']}}" alt="profile img" width="200">
             {% endif %}
         </div>
         <p class="col">

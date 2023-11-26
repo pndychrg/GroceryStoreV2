@@ -6,6 +6,7 @@ from sqlalchemy.exc import SQLAlchemyError, IntegrityError
 from datetime import datetime
 from models.favourites import Favourites
 
+
 class ProductDB:
 
     def getAllProducts(self):
@@ -73,9 +74,15 @@ class ProductDB:
         product, message = self.getProductById(product_id)
 
         if product:
-            db.session.delete(product)
-            db.session.commit()
-            return True, "Product Deleted"
+            try:
+                db.session.delete(product)
+                db.session.commit()
+                return True, "Product Deleted"
+            except IntegrityError as e:
+                return None, "Product exists in Bills"
+            except SQLAlchemyError as e:
+                return None, str(e.__dict__['orig'])
+
         else:
             return False, "product_id not found"
 
@@ -116,7 +123,7 @@ class ProductDB:
             else:
                 return None, message
         except IntegrityError as e:
-            return None, "Section Request with same name already exists"
+            return None, "Product with same name already exists"
         except SQLAlchemyError as e:
             return None, str(e.__dict__['orig'])
 
