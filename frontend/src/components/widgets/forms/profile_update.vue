@@ -109,8 +109,12 @@ export default {
             // imgData.append("image", formData.value.img)
             // update the image first so then in jwt token we will get the img back
             const response = await store.updateUser(data);
+            // console.log(response)
             if (response) {
                 await store.setUserImage(formData.value.img);
+            } else {
+                // emtying the formData and refilling it with userData
+                formData.value = { ...user, password: null, img: null }
             }
             formData.value.password = null;
             // console.log(response)
@@ -151,6 +155,10 @@ export default {
 
 <style scoped>
 @import "@/static/css/modal.css";
+
+.modal-content {
+    width: 80%;
+}
 
 .image {
     height: 20vh !important;

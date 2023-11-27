@@ -23,6 +23,7 @@ def couponEngBarGraph():
     ).join(Bill).group_by(Coupon.coupon_code).all()
 
     coupon_codes = [usage[0] for usage in coupon_usage]
+    # print(coupon_codes)
     usage_count = [usage[1] for usage in coupon_usage]
 
     plt.bar(coupon_codes, usage_count)
@@ -120,4 +121,3 @@ def totalRevenueMonth():
         totalRevenue += bill.finalAmount
 
     return totalRevenue
-

@@ -35,14 +35,14 @@
                 </div>
             </div>
         </div>
-        <div class="row ">
-            <div class="col-md-6 p-4 favproduct-col">
+        <div class="row " style="justify-content: center;">
+            <div class="col-md-6 p-4 favproduct-col" v-if="favProducts.length > 0">
                 <h2>Favourite Products</h2>
                 <div v-for="product in favProducts" :key="product.id" class="card product-card">
                     <ProductCard :productData="product" />
                 </div>
             </div>
-            <div class="col-md-6 p-4">
+            <div class="col-md-6 p-4" v-if="bills.length > 0">
                 <h2>Bills for User </h2>
                 <h5>Total Expense ₹ {{ totalExpenditure }}</h5>
                 <div v-for="bill in bills" :key="bill.id" class="bill-card card">
@@ -116,10 +116,10 @@ export default {
         }
 
 
-        onMounted(() => {
-            fetchAllBills();
-            store.getUserImage();
-            fetchAllFavouriteProducts();
+        onMounted(async () => {
+            await fetchAllBills();
+            await store.getUserImage();
+            await fetchAllFavouriteProducts();
             // testing
             // document.getElementById("updateProfileButton").click()
         })
