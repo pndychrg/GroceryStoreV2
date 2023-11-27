@@ -17,6 +17,9 @@
                 <SectionCard :sectionData="section" @deleteSection="showDelete(section, 'section')"
                     @editSection="showEditSectionForm(section, 'section')" />
             </div>
+            <div v-if="sections.length == 0">
+                <h5>No Registered Sections Found</h5>
+            </div>
         </div>
 
         <div class="row m-2 border-dark-subtle sections-wrapper border border-2">
@@ -28,6 +31,10 @@
                     @deleteSectionRequest="showDelete(section, 'sectionRequest')"
                     @editSectionRequest="showEditSectionForm(section, 'sectionRequest')"
                     @sectionrequest-approved="handleApprovedSection" @sectionrequest-rejected="handleRejectedSection" />
+            </div>
+
+            <div v-if="sectionRequests.length == 0">
+                <h5>No Registered Sections Found</h5>
             </div>
         </div>
 

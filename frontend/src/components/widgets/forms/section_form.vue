@@ -16,7 +16,7 @@
                             <input v-model="formData.unit" class="form-control mb-2" type="text" id="sectionUnit" required>
                         </div>
                         <div class="form-actions modal-footer">
-                            <button type="button" @click="handleCancel" class="btn btn-secondary">
+                            <button type="button" @click="handleCancel" class="btn btn-secondary me-3">
                                 Cancel
                             </button>
                             <button type="submit" class="btn btn-primary">
@@ -148,4 +148,8 @@ export default {
 
 <style scoped>
 @import "@/static/css/modal.css";
+
+.modal-content {
+    max-width: 90% !important;
+}
 </style>

@@ -137,4 +137,9 @@ export default {
 
 <style scoped>
 @import "@/static/css/modal.css";
+
+
+.modal-content {
+    max-width: 90% !important;
+}
 </style>

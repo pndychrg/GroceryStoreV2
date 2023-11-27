@@ -22,15 +22,15 @@
                     Bill Amount :
                 </span>
                 <span>
-                    {{ bill.billAmount }}
+                    ₹ {{ bill.billAmount }}
                 </span>
             </h6>
             <h6 style="font-size: 15px;" class="text-spaced-between">
                 <span>
-                    Total Amount :
+                    Final Amount :
                 </span>
                 <span>
-                    {{ bill.finalAmount }}
+                    ₹ {{ bill.finalAmount }}
                 </span>
             </h6>
             <!-- <button class="btn" @click="showOrderProductDetails(bill)">

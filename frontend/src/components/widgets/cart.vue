@@ -6,20 +6,20 @@
                 <a href="" class="col-auto float-end">Remove All</a>
             </div>
             <div class="row">
-                <div class="col details">
+                <div class="col-md-8  details">
                     <div style="padding-inline: 10px;" v-if="cart?.length > 0">
                         <div v-for="cartItem in cart" :key="cartItem.id" class="row p-2">
                             <div class="col-auto col-4">
                                 <strong class="m-0">{{ cartItem.product.name }}</strong>
                                 <p class="text-secondary m-0 p-0">{{ cartItem.product.section.name }}</p>
                             </div>
-                            <div class="col-auto col-4 text-center">
+                            <div class="col-auto col-4 ">
                                 <!-- TODO ADD increase and decreasing button -->
                                 <p class="text-secondary">
                                     {{ cartItem.numOfProduct }} {{ cartItem.product.section.unit }}
                                 </p>
                             </div>
-                            <div class="col text-end m-0">
+                            <div class="col  m-0">
                                 <strong class="m-0 p-0">
                                     $ {{ cartItem.totalSum }}
                                 </strong>
@@ -39,14 +39,14 @@
                         <h5 class="text-secondary">No Items in Cart</h5>
                     </div>
                 </div>
-                <div class="vr">
-                </div>
-                <div class="col-auto coupons " :style="{ pointerEvents: pointer_css }">
+                <!-- <div class="vr">
+                </div> -->
+                <div class="col-md-4 coupons " :style="{ pointerEvents: pointer_css }">
                     <h6>Apply Coupons</h6>
-                    <form class="input-group mb-3" @submit.prevent="checkCouponAvailability">
-                        <input type="text" id="couponInput" class="form-control" placeholder="Coupon Code"
+                    <form class="input-group mb-3 " @submit.prevent="checkCouponAvailability">
+                        <input type="text" id="couponInput" class="form-control " placeholder="Coupon Code"
                             v-model="selectedCouponCode" required>
-                        <button type="button" class="btn btn-outline-secondary dropdown-toggle dropdown-toggle-split"
+                        <!-- <button type="button" class="btn btn-outline-secondary dropdown-toggle dropdown-toggle-split"
                             data-bs-toggle="dropdown" aria-expanded="false">
                             <span class="visually-hidden">Toggle Dropdown</span>
                         </button>
@@ -56,7 +56,7 @@
                                     {{ coupon.coupon_code }}
                                 </a>
                             </li>
-                        </ul>
+                        </ul> -->
                     </form>
                 </div>
             </div>
@@ -69,7 +69,7 @@
                         <span class="text-secondary">{{ cart?.length }} items</span>
                     </p>
                 </div>
-                <h4 class="col-auto float-end">$ {{ cartStateStore.sum }}</h4>
+                <h4 class="col-auto float-end">₹ {{ cartStateStore.sum }}</h4>
                 <div v-if="selectedCoupon != null">
                     <p>
                         <strong>Coupon Discount</strong>
@@ -78,7 +78,7 @@
                     </p>
                     <p>
                         <strong>Final Amount</strong>
-                        <strong class="float-end" style="font-size: calc(1.275rem + .3vw);">${{ finalAmount
+                        <strong class="float-end" style="font-size: calc(1.275rem + .3vw);">₹ {{ finalAmount
                         }}</strong>
                     </p>
 
@@ -152,7 +152,7 @@ export default {
         }
 
         const isCartEmpty = computed(() => {
-            if (cartStateStore.cart.length > 0) {
+            if (cartStateStore?.cart?.length > 0) {
                 return true;
             } else {
                 return false;
@@ -197,8 +197,10 @@ export default {
             }
 
         }
-        onBeforeMount(() => {
-            fetchAllCoupons();
+        onBeforeMount(async () => {
+            await fetchAllCoupons();
+            // console.log(coupons.value)
+            await cartStateStore.fetchCartForUser();
         })
         return {
             cart,
@@ -222,32 +224,29 @@ export default {
 
 <style scoped>
 .cart {
-    /* height: auto; */
-    width: auto;
-    /* min-height: max-content; */
-    min-height: 35vh !important;
-    flex-grow: 1;
+    /* padding: 2% !important; */
+    display: block;
+    /* height: 1000px !important; */
+    min-height: 45vh !important;
+    /* flex-grow: 1; */
     padding: 10px;
     box-sizing: border-box;
     justify-content: center;
+    overflow: scroll;
 }
 
 .cart-container {
     display: flex;
     flex-wrap: wrap;
-    padding: 20%;
+    padding: 15%;
     align-content: center;
     /* Add the blur effect */
     backdrop-filter: blur(8px);
 }
 
-.details {
-    width: auto;
+.coupons {
+    border-left: 1px solid grey;
 }
-
-/* .coupons {
-    max-width: 30%;
-} */
 
 .vr {
     padding: 0px
@@ -255,6 +254,14 @@ export default {
 
 .dropdown-item {
     cursor: pointer;
+}
+
+@media only screen and (max-width:768) {
+    .cart {
+        /* width: 90% !important; */
+        width: 100% !important;
+        max-width: 100% !important;
+    }
 }
 
 @import "@/static/css/modal.css"

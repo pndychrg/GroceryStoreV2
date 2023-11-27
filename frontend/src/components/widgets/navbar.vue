@@ -1,6 +1,6 @@
 <template>
-    <nav class="navbar navbar-expand fixed-top">
-        <div class="container-fluid">
+    <nav class="navbar navbar-expand  bg-body-secondary">
+        <div class=" container-fluid">
             <button v-if="isAuthenticated" @click="showSidebar" id="sidebarButton" class="btn ">
                 <font-awesome-icon :icon="['fas', 'bars']" class="faa-bounce animated-hover" />
             </button>
@@ -30,8 +30,8 @@
                     <div class="row" v-else>
                         <li class="nav-item col">
                             <!-- Cart Button -->
-                            <button class="btn btn-outline-dark" type="button" @click="showCart" v-if="loggedInRole == 'user'"
-                                style="width: max-content;">
+                            <button class="btn btn-outline-dark" type="button" @click="showCart"
+                                v-if="loggedInRole == 'user'" style="width: max-content;">
                                 <font-awesome-icon :icon="['fas', 'fa-cart-plus']" class="faa-horizontal animated-hover" />
                                 Show Cart
                             </button>

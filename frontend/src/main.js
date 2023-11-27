@@ -17,6 +17,7 @@ import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
 import "font-awesome-animation/css/font-awesome-animation.min.css";
 // eslint-disable-next-line no-unused-vars
 import { iconLib } from "./static/js/icons";
+// import { CartStateStore } from "./services/cartStateManager";
 const pinia = createPinia();
 const app = createApp(App);
 app.use(router);
@@ -33,7 +34,7 @@ axios.interceptors.response.use(
     return Promise.reject(error);
   }
 );
-
+// pinia.use(CartStateStore);
 app.component("font-awesome-icon", FontAwesomeIcon);
 userStateStore().checkTokenOnAppStart();
 app.mount("#app");

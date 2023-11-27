@@ -30,7 +30,7 @@
                                 {{ order.product.section.name }}
                             </h6>
                             <p class="card-text">
-                                Rate : <span class="float-end">{{ order.product.rate }} / {{ order.product.section.unit
+                                Rate : <span class="float-end">₹ {{ order.product.rate }} / {{ order.product.section.unit
                                 }}</span>
                                 <br>
                                 Items Bought : <span class="float-end">
@@ -38,7 +38,7 @@
                                 </span>
                                 <br>
                                 Sum : <span class="float-end">
-                                    {{ order.totalSum }}
+                                    ₹ {{ order.totalSum }}
                                 </span>
                             </p>
                             <hr>
@@ -53,12 +53,12 @@
                 <!-- bill Details -->
                 <div>
                     <h6>Bill Amount : <span class="float-end">
-                            {{ bill.billAmount }}
+                            ₹ {{ bill.billAmount }}
                         </span></h6>
                     <h6>Coupon Code : <span class="float-end">{{ bill.coupon?.coupon_code ?? 'None Applied' }}</span></h6>
                     <h6>Discount : <span class="float-end">{{ bill.coupon?.discount ?? 'None Applied' }}</span></h6>
                     <h6>
-                        Final Amount : <span class="float-end">{{ bill.finalAmount }}</span>
+                        Final Amount : <span class="float-end">₹ {{ bill.finalAmount }}</span>
                     </h6>
                 </div>
             </div>

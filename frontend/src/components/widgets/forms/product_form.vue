@@ -181,11 +181,17 @@ export default {
 <style scoped>
 @import "@/static/css/modal.css";
 
+
+.modal-content {
+    max-width: 90% !important;
+}
+
 /* .dropdown-options {
     display: none;
     position: absolute;
     overflow: auto;
 }
+
 
 .dropdown:hover .dropdown-options {
     display: block;

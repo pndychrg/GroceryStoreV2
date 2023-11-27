@@ -2,7 +2,6 @@ import {
   httpDeleteRequest,
   httpGetAllRequest,
   httpPostRequest,
-  htttpPutRequest,
 } from "../axios";
 
 import { showSuccessToast } from "@/static/js/toasts";
@@ -19,14 +18,6 @@ export const cartMethods = {
       showSuccessToast("Product added to card successfully");
     }
     return response;
-  },
-
-  async updateCartProductAmount(data) {
-    const response = await htttpPutRequest("/cart", data);
-    if (response) {
-      showSuccessToast("Product Updated Successfully");
-      return response;
-    }
   },
 
   async deleteCartProduct(cart) {

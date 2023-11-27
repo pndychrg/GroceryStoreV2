@@ -13,9 +13,8 @@
                         {{ productData.name }}
                     </span>
                     <span class="float-end" v-if="loggedInRole === 'manager'">
-                        <button class="btn" @click="$emit('show-addimagemodal')">
-                            <font-awesome-icon :icon="['fas', 'image']" class="faa-horizontal animated-hover"
-                                style="color: #4D6DE3;" />
+                        <button class="btn btn-outline-primary img-btn" @click="$emit('show-addimagemodal')">
+                            <font-awesome-icon :icon="['fas', 'image']" class="faa-horizontal animated-hover " />
                         </button>
                     </span>
                     <span class="float-end" v-if="loggedInRole === 'user'">
@@ -35,18 +34,18 @@
                 <hr v-if="productData.description?.length > 0">
                 <p class="card-text">
                     Available Amount : <span v-if="productData.availableAmount > 0">
-                        {{ productData.availableAmount }}
+                        {{ productData.availableAmount }} {{ productData.section.unit }}
                     </span>
                     <span v-else>
                         <button disabled class="btn btn-sm btn-danger">Unavailable</button>
                     </span>
                     <br>
-                    Rate : {{ productData.rate }}
+                    Rate : ₹ {{ productData.rate }}/{{ productData.section.unit }}
                     <br>
-                    Manufacture Date : {{ productData.manufactureDate }}
+                    Manufacture Date : {{ productData.manufactureDate ?? "None" }}
                     <br>
-                    Expiry Date : {{
-                        productData.expiryDate }}
+                    Expiry Date :
+                    {{ productData.expiryDate ?? "None" }}
                     <br>
                 </p>
                 <div class="d-flex justify-content-start">
@@ -54,11 +53,11 @@
                     <RenderStarRating :avgRating="productData.avgRating" />
                 </div>
                 <div class="d-flex justify-content-end" v-if="loggedInRole == 'manager'">
-                    <button class="btn" @click="$emit('delete-product')">
-                        <font-awesome-icon :icon="['fas', 'trash-can']" class="faa-horizontal animated-hover"
-                            style="color: #c01c28;" />
+                    <button class="btn btn-outline-danger me-3" @click="$emit('delete-product')">
+                        <font-awesome-icon :icon="['fas', 'trash-can']" class="faa-horizontal animated-hover" />
+                        <!-- style="color: #c01c28;"  -->
                     </button>
-                    <button class="btn" @click="$emit('edit-product')">
+                    <button class="btn btn-outline-primary" @click="$emit('edit-product')">
                         <font-awesome-icon :icon="['fas', 'pen-to-square']" class="faa-horizontal animated-hover" />
                     </button>
 
@@ -122,5 +121,13 @@ export default {
 .image {
     height: 80%;
     width: auto;
+}
+
+.img-btn {
+    color: #4D6DE3;
+}
+
+.img-btn:hover {
+    color: white;
 }
 </style>

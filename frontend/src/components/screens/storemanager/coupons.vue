@@ -8,7 +8,8 @@
             </span>
         </h3>
         <div class="row m-2 coupons-wrapper">
-            <div class="card coupon-card" v-for="coupon in coupons" :key="coupon.id">
+            <div class="card coupon-card" v-for="coupon in  coupons " :key="coupon.id"
+                :class="{ expiredCoupon: coupon.hasExpired == 1 }">
                 <CouponCard :coupon="coupon" @edit-coupon="showEditCouponForm(coupon)"
                     @delete-coupon="showDeleteConfirmation(coupon)" />
             </div>
@@ -120,5 +121,9 @@ export default {
     border-radius: 12px;
     max-width: 540px;
     margin: 10px;
+}
+
+.expiredCoupon {
+    box-shadow: 3px 3px 5px rgba(255, 25, 25, 0.2);
 }
 </style>

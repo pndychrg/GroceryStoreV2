@@ -11,6 +11,10 @@
             </span>
         </p>
         <div class="">
+            <button v-if="coupon.hasExpired == 1" class="float-start btn btn-danger ms-2" disabled>
+                Expired
+            </button>
+
             <button class="float-end btn btn-outline-secondary m-2" @click="$emit('edit-coupon')">
                 Edit <font-awesome-icon :icon="['fas', 'pen-to-square']" class="faa-horizontal animated-hover" />
             </button>

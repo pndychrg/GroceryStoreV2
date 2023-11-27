@@ -19,7 +19,7 @@ class CartAPI(Resource):
 
     @jwt_required()
     @checkJWTForUser
-    @cache.cached(timeout=30, query_string=True)
+    # @cache.cached(timeout=30, query_string=True)
     def get(self):
         # getting the user_id from token
         userFromToken = get_jwt_identity()
@@ -27,7 +27,7 @@ class CartAPI(Resource):
         # getting the cart for user_id
         cartItems, cartSum = cartDB.getCartProducts(
             user_id=userFromToken.get('id'))
-
+        
         return {
             "cart": [cart.toJson() for cart in cartItems],
             "sum": cartSum

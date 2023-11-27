@@ -104,6 +104,10 @@ class CouponDB:
     def deleteCoupon(self, coupon_id):
         coupon, msg = self.getCouponById(coupon_id=coupon_id)
         if coupon:
+            # check if coupon is being used anywhere
+            bills = Bill.query.filter(Bill.coupon_id == coupon.id).first()
+            if bills:
+                return False, "Coupon is used in a bill"
             db.session.delete(coupon)
             db.session.commit()
             return True, "Coupon Deleted"

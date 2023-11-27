@@ -1,6 +1,6 @@
 <template>
-    <div>
-        <div class="card user-details bg-body-secondary">
+    <div class="" style="justify-self: center; width: 80%;">
+        <div class="card user-details mb-4">
             <!-- User Details -->
             <div class="d-flex pt-2" style="justify-content: center;">
                 <div v-if="image != null" class="img-container">
@@ -44,7 +44,7 @@
             </div>
             <div class="col-md-6 p-4">
                 <h2>Bills for User </h2>
-                <h5>Total Expense $ {{ totalExpenditure }}</h5>
+                <h5>Total Expense ₹ {{ totalExpenditure }}</h5>
                 <div v-for="bill in bills" :key="bill.id" class="bill-card card">
                     <BillCard :bill="bill" @show-billDetails="showBillDetails" />
                 </div>
@@ -53,7 +53,6 @@
         <teleport to="#modal-root">
             <BillDetailsModal v-show="isBillDetailModalOpen" :bill="selectedBill" @close="showBillDetails" />
             <UserProfileUpdateForm v-show="isProfileUpdateFormShown" @close="showProfileUpdateForm" />
-
         </teleport>
     </div>
 </template>
@@ -233,5 +232,20 @@ export default {
     height: auto;
     max-width: 100%;
     max-height: 100%;
+}
+
+.user-details {
+    padding: 20px;
+    border: none;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    background-color: #D8E7F7;
+}
+
+.user-details h1 {
+    color: #001F3F;
+}
+
+.user-details h5 {
+    color: #333333
 }
 </style>

@@ -38,5 +38,6 @@ export default {
 <style scoped>
 .dashboard {
     background-color: white;
+    display: grid;
 }
 </style>

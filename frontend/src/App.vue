@@ -1,9 +1,9 @@
 <template>
   <navbar />
-
   <div class="d-flex justify-content-center align-items-center">
-    <div class="container-fluid w-100">
-      <router-view style="margin-top: 60px;" />
+    <div class="container-fluid w-100 ">
+      <router-view style="margin-top: 60px;">
+      </router-view>
     </div>
   </div>
 </template>
@@ -41,4 +41,8 @@ body {
   justify-content: center;
   align-items: center;
 }
+
+/* .RouterContainer {
+  border-top-right-radius: 20%;
+} */
 </style>
