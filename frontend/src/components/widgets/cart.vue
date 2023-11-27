@@ -5,60 +5,61 @@
                 <h6 class="col">Shopping Cart</h6>
                 <a href="" class="col-auto float-end">Remove All</a>
             </div>
-            <div class="row">
-                <div class="col-md-8  details">
-                    <div style="padding-inline: 10px;" v-if="cart?.length > 0">
-                        <div v-for="cartItem in cart" :key="cartItem.id" class="row p-2">
-                            <div class="col-auto col-4">
-                                <strong class="m-0">{{ cartItem.product.name }}</strong>
-                                <p class="text-secondary m-0 p-0">{{ cartItem.product.section.name }}</p>
-                            </div>
-                            <div class="col-auto col-4 ">
-                                <!-- TODO ADD increase and decreasing button -->
-                                <p class="text-secondary">
-                                    {{ cartItem.numOfProduct }} {{ cartItem.product.section.unit }}
-                                </p>
-                            </div>
-                            <div class="col  m-0">
-                                <strong class="m-0 p-0">
-                                    $ {{ cartItem.totalSum }}
-                                </strong>
-                                <p class="text-secondary m-0 p-0">
-                                    {{ cartItem.product.rate }}/{{ cartItem.product.section.unit }}
-                                </p>
-                            </div>
-                            <div class="col-auto float-end m-0">
-                                <button class="btn" @click="removeCartItem(cartItem)">
-                                    <font-awesome-icon :icon="['fas', 'trash-can']" class="faa-horizontal animated-hover"
-                                        style="color: #c01c28;" />
-                                </button>
-                            </div>
+            <div class="">
+                <!-- <div class="col-md-8  details"> -->
+                <div style="padding-inline: 10px;" v-if="cart?.length > 0">
+                    <div v-for="cartItem in cart" :key="cartItem.id" class="row p-2">
+                        <div class=" col-md-3 col-sm-12">
+                            <strong class="m-0">{{ cartItem.product.name }}</strong>
+                            <p class="text-secondary m-0 p-0">{{ cartItem.product.section.name }}</p>
+                        </div>
+                        <div class="col-md-3 col-sm-12">
+                            <!-- TODO ADD increase and decreasing button -->
+                            <p class="text-secondary">
+                                {{ cartItem.numOfProduct }} {{ cartItem.product.section.unit }}
+                            </p>
+                        </div>
+                        <div class="col-md-3  m-0 col-sm-6">
+                            <strong class="m-0 p-0">
+                                $ {{ cartItem.totalSum }}
+                            </strong>
+                            <p class="text-secondary m-0 p-0">
+                                {{ cartItem.product.rate }}/{{ cartItem.product.section.unit }}
+                            </p>
+                        </div>
+                        <div class="col-md-3 float-end m-0 col-sm-6">
+                            <button class="btn float-end" @click="removeCartItem(cartItem)">
+                                <font-awesome-icon :icon="['fas', 'trash-can']" class="faa-horizontal animated-hover"
+                                    style="color: #c01c28;" />
+                            </button>
                         </div>
                     </div>
-                    <div v-else class="text-center">
-                        <h5 class="text-secondary">No Items in Cart</h5>
-                    </div>
                 </div>
+                <div v-else class="text-center">
+                    <h5 class="text-secondary">No Items in Cart</h5>
+                </div>
+                <!-- </div> -->
                 <!-- <div class="vr">
                 </div> -->
-                <div class="col-md-4 coupons " :style="{ pointerEvents: pointer_css }">
-                    <h6>Apply Coupons</h6>
-                    <form class="input-group mb-3 " @submit.prevent="checkCouponAvailability">
-                        <input type="text" id="couponInput" class="form-control " placeholder="Coupon Code"
-                            v-model="selectedCouponCode" required>
-                        <!-- <button type="button" class="btn btn-outline-secondary dropdown-toggle dropdown-toggle-split"
-                            data-bs-toggle="dropdown" aria-expanded="false">
-                            <span class="visually-hidden">Toggle Dropdown</span>
-                        </button>
-                        <ul class="dropdown-menu dropdown-menu-end">
-                            <li v-for="coupon in coupons" :key="coupon.id" class="dropdown-item">
-                                <a @click="selectCouponFromDropdown(coupon)">
-                                    {{ coupon.coupon_code }}
-                                </a>
-                            </li>
-                        </ul> -->
-                    </form>
-                </div>
+            </div>
+            <hr>
+            <div class=" coupons " :style="{ pointerEvents: pointer_css }">
+                <h6>Apply Coupons</h6>
+                <form class="input-group mb-3 " @submit.prevent="checkCouponAvailability">
+                    <input type="text" id="couponInput" class="form-control " placeholder="Coupon Code"
+                        v-model="selectedCouponCode" required>
+                    <!-- <button type="button" class="btn btn-outline-secondary dropdown-toggle dropdown-toggle-split"
+                        data-bs-toggle="dropdown" aria-expanded="false">
+                        <span class="visually-hidden">Toggle Dropdown</span>
+                    </button>
+                    <ul class="dropdown-menu dropdown-menu-end">
+                        <li v-for="coupon in coupons" :key="coupon.id" class="dropdown-item">
+                            <a @click="selectCouponFromDropdown(coupon)">
+                                {{ coupon.coupon_code }}
+                            </a>
+                        </li>
+                    </ul> -->
+                </form>
             </div>
             <hr>
             <div class="row">
@@ -75,6 +76,8 @@
                         <strong>Coupon Discount</strong>
                         <span class="float-end" style="font-size: calc(1.275rem + .3vw);">{{ selectedCoupon.discount
                         }}%</span>
+                        <br>
+
                     </p>
                     <p>
                         <strong>Final Amount</strong>
@@ -224,15 +227,18 @@ export default {
 
 <style scoped>
 .cart {
-    /* padding: 2% !important; */
     display: block;
-    /* height: 1000px !important; */
-    min-height: 45vh !important;
-    /* flex-grow: 1; */
+    /* width: max-content; */
     padding: 10px;
     box-sizing: border-box;
     justify-content: center;
     overflow: scroll;
+    /* background-color: white; */
+    /* border: 0.5px solid grey; */
+    /* min-height: inherit; */
+    /* border-radius: 2%; */
+    /* max-height: none !important
+    ; */
 }
 
 .cart-container {
@@ -244,9 +250,7 @@ export default {
     backdrop-filter: blur(8px);
 }
 
-.coupons {
-    border-left: 1px solid grey;
-}
+/* .coupons {} */
 
 .vr {
     padding: 0px
