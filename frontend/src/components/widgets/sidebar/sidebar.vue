@@ -1,6 +1,6 @@
 <template>
     <div class="modal-overlay sidebar-overlay" @click="closeSidebar($event)">
-        <div class="modal-content sidebar">
+        <div class="modal-content sidebar bg-dark text-light">
             <!-- TODO add user image here -->
             <SidebarLink route='/dashboard' :tag="store.user?.name ?? ''" @close="$emit('close')" icon="user" />
             <!-- here, three sections of buttons/tags would be present seperate for user/admin/storemanager -->
@@ -16,12 +16,14 @@
             <div v-if="store.user?.role == 'user'">
                 <SidebarLink v-for="
                     link in userLinks" :key="link.tag" :route="link.route" :tag="link.tag" :icon="link.icon"
-                    @close="$emit('close')" />
+                    :color="link.color" @close="$emit('close')" />
 
             </div>
-            <button @click="$emit('close')" class="btn text-start btn-danger ">
+            <!-- <div class="bottom-buttons"> -->
+            <button @click="$emit('close')" class="btn text-start btn-danger btn-bottom">
                 <font-awesome-icon :icon="['fas', 'xmark']" /> Close
             </button>
+            <!-- </div> -->
         </div>
     </div>
 </template>
@@ -54,7 +56,7 @@ export default {
             {
                 route: '/sections',
                 tag: "Sections",
-                icon: 'arrow-right-from-bracket'
+                icon: 'puzzle-piece'
             },
             {
                 route: '/admin/approveManager',
@@ -66,24 +68,25 @@ export default {
             {
                 route: '/sections',
                 tag: "Sections",
-                icon: 'arrow-right-from-bracket'
+                icon: 'puzzle-piece'
             },
             {
                 route: '/products',
                 tag: "Products",
-                icon: 'arrow-right-from-bracket'
+                icon: 'fa-brands fa-product-hunt'
             },
             {
                 route: '/coupons',
                 tag: "Coupons",
-                icon: "arrow-right-from-bracket",
+                icon: "fa-solid fa-c",
             }
         ]
         const userLinks = [
             {
                 route: '/ratings',
                 tag: 'Ratings',
-                icon: 'arrow-right-from-bracket'
+                icon: 'fa-star',
+                color: '#f8e45c'
             }
         ]
 
@@ -115,6 +118,19 @@ export default {
     height: 100%;
     width: 288px;
     margin: 0px;
-    border-radius: 0px 10px 10px 0px !important;
+    border-radius: 0% !important;
+    box-shadow: 0 10px 15px rgba(0, 0, 0, 0.26), 0 3px 6px rgba(0, 0, 0, 0.36);
+
+    /* border-radius: 0px 10px 10px 0px !important; */
+}
+
+.btn-bottom {
+    bottom: 10px;
+    position: absolute;
+    width: 70%;
+}
+
+SidebarLink {
+    width: 70%;
 }
 </style>

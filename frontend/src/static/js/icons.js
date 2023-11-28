@@ -1,4 +1,5 @@
 import { library } from "@fortawesome/fontawesome-svg-core";
+import { faProductHunt } from "@fortawesome/free-brands-svg-icons";
 /* import specific icons */
 import {
   faArrowRightFromBracket,
@@ -16,6 +17,8 @@ import {
   faStarHalfAlt,
   faFilter,
   faDownload,
+  faPuzzlePiece,
+  faC,
 } from "@fortawesome/free-solid-svg-icons";
 
 // adding icons to library
@@ -36,5 +39,8 @@ export const iconLib = library.add(
   faStarHalfAlt,
   faFilter,
   faXmark,
-  faDownload
+  faDownload,
+  faPuzzlePiece,
+  faProductHunt,
+  faC
 );
