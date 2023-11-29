@@ -140,6 +140,9 @@ export default {
     box-shadow: 0 6px 10px rgba(0, 0, 0, .08), 0 0 6px rgba(0, 0, 0, .05);
     transition: .3s transform cubic-bezier(.155, 1.105, .295, 1.12), .3s box-shadow, .3s -webkit-transform cubic-bezier(.155, 1.105, .295, 1.12);
     cursor: pointer;
+
+    position: relative;
+    overflow: hidden;
 }
 
 .card-unavailable {
@@ -155,4 +158,28 @@ export default {
     transform: scale(1.05);
     box-shadow: 0 10px 20px rgba(0, 0, 0, .12), 0 4px 8px rgba(0, 0, 0, .06);
 }
+
+
+/* Details container initially hidden */
+/* .details-container {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    transform: translate(-50%, -50%) scale(1);
+    opacity: 0;
+    background-color: rgba(255, 255, 255, 0.9);
+    width: 100%;
+    height: 100%;
+    transition: opacity 0.3s ease-in-out, transform 0.3s ease-in-out;
+}
+
+Show details on hover
+.card:hover .details-container {
+    opacity: 1;
+    transform: translate(-50%, -50%) scale(1.1);
+} */
 </style>

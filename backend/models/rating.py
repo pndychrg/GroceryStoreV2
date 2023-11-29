@@ -12,6 +12,10 @@ class Rating(db.Model):
     product = db.relationship(
         "Product", back_populates="ratings", foreign_keys=[product_id])
 
+    user = db.relationship(
+        "User", back_populates="ratings"
+    )
+
     def toJson(self):
         return {
             "id": self.id,
@@ -20,4 +24,12 @@ class Rating(db.Model):
             "rating": self.rating,
             "comment": self.comment,
             "product": self.product.toJson()
+        }
+
+    # this will only send the rating and comment, for sending less data with product
+    def baseRating(self):
+        return {
+            "user": self.user.toJson(),
+            "rating": self.rating,
+            "comment": self.comment
         }

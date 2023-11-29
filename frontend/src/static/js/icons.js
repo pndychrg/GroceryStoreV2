@@ -19,6 +19,7 @@ import {
   faDownload,
   faPuzzlePiece,
   faC,
+  faComments,
 } from "@fortawesome/free-solid-svg-icons";
 
 // adding icons to library
@@ -42,5 +43,6 @@ export const iconLib = library.add(
   faDownload,
   faPuzzlePiece,
   faProductHunt,
-  faC
+  faC,
+  faComments
 );

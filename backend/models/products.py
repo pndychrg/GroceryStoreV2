@@ -38,7 +38,8 @@ class Product(db.Model):
             "section": self.section.toJson(),
             "img": base64.b64encode(self.img).decode('utf-8') if self.img != None else None,
             "description": self.description,
-            "avgRating": self.av_rating
+            "avgRating": self.av_rating,
+            "ratings": [rating.baseRating() for rating in self.ratings]
         }
 
     # this function will send a computed string which can be directly used in img src, (used in rendering images in the pdf)

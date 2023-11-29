@@ -1,10 +1,10 @@
 <template>
     <div class="cart-container modal-overlay " @click="closeCart($event)">
         <div class="modal-content cart p-3 ">
-            <div class="row card-header mb-2">
-                <h6 class="col">Shopping Cart</h6>
+            <h6 class="">Shopping Cart</h6>
+            <!-- <div class="row card-header mb-2">
                 <a href="" class="col-auto float-end">Remove All</a>
-            </div>
+            </div> -->
             <div class="">
                 <!-- <div class="col-md-8  details"> -->
                 <div style="padding-inline: 10px;" v-if="cart?.length > 0">
@@ -21,7 +21,7 @@
                         </div>
                         <div class="col-md-3  m-0 col-sm-6">
                             <strong class="m-0 p-0">
-                                $ {{ cartItem.totalSum }}
+                                ₹ {{ cartItem.totalSum }}
                             </strong>
                             <p class="text-secondary m-0 p-0">
                                 {{ cartItem.product.rate }}/{{ cartItem.product.section.unit }}
@@ -48,17 +48,6 @@
                 <form class="input-group mb-3 " @submit.prevent="checkCouponAvailability">
                     <input type="text" id="couponInput" class="form-control " placeholder="Coupon Code"
                         v-model="selectedCouponCode" required>
-                    <!-- <button type="button" class="btn btn-outline-secondary dropdown-toggle dropdown-toggle-split"
-                        data-bs-toggle="dropdown" aria-expanded="false">
-                        <span class="visually-hidden">Toggle Dropdown</span>
-                    </button>
-                    <ul class="dropdown-menu dropdown-menu-end">
-                        <li v-for="coupon in coupons" :key="coupon.id" class="dropdown-item">
-                            <a @click="selectCouponFromDropdown(coupon)">
-                                {{ coupon.coupon_code }}
-                            </a>
-                        </li>
-                    </ul> -->
                 </form>
             </div>
             <hr>

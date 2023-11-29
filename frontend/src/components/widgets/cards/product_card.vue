@@ -7,7 +7,7 @@
                 aria-hidden="true">
         </div>
         <div class="col-md-8 p-2">
-            <div class="card-body text-start">
+            <div class="card-body text-start ">
                 <h5 class="card-title">
                     <span>
                         {{ productData.name }}
@@ -18,6 +18,10 @@
                         </button>
                     </span>
                     <span class="float-end" v-if="loggedInRole === 'user'">
+                        <button class="btn" @click="showDetails">
+                            <font-awesome-icon icon="fa-solid fa-comments" class="faa-horizontal animated-hover"
+                                style="color: #4D6DE3;" />
+                        </button>
                         <button class="btn" @click="$emit('add-to-favourite', productData)">
                             <font-awesome-icon :icon="['fas', 'heart']" class="faa-horizontal animated-hover"
                                 style="color: #FF5733 ;" />
@@ -50,7 +54,7 @@
                 </p>
                 <div class="d-flex justify-content-start">
                     <!-- <h5>{{ productData.avgRating }}</h5> -->
-                    <RenderStarRating :avgRating="productData.avgRating" />
+                    <RenderStarRating :avgRating="productData.avgRating" iconSize="large" />
                 </div>
                 <div class="d-flex justify-content-end" v-if="loggedInRole == 'manager'">
                     <button class="btn btn-outline-danger me-3" @click="$emit('delete-product')">
@@ -77,11 +81,25 @@
             </div>
         </div>
     </div>
+    <div class="details-container text-start p-3 " v-if="productData.ratings.length > 0"
+        :class="{ renderDetails: isDetailsShown == true }" @click="showDetails">
+        <div class="rating " v-for=" rating  in  productData.ratings " :key="rating">
+            <!-- <h5>Rating: <span class="">{{ rating.rating }}</span></h5> -->
+            <h6 style="margin: 0px;">{{ rating.user.name }}</h6>
+            <RenderStarRating :avgRating="rating.rating" iconSize="small" />
+            <p>
+                Comment : {{ rating.comment }}
+            </p>
+            <hr>
+        </div>
+        <!-- <p>{{ productData.ratings }}</p> -->
+
+    </div>
 </template>
 
 <script>
 import RenderStarRating from "@/components/widgets/render_star_rating.vue"
-import { reactive, watch, computed } from 'vue';
+import { reactive, watch, computed, ref } from 'vue';
 export default {
     name: "ProductCard",
     components: {
@@ -108,10 +126,18 @@ export default {
                 return `data:image/png;base64,${props.productData.img}`
             }
         )
+        // details-container setup
+        const isDetailsShown = ref(false);
 
+        const showDetails = () => {
+            console.log("Button Pressed")
+            isDetailsShown.value = !isDetailsShown.value
+        }
         return {
             cartForm,
-            imageData
+            imageData,
+            isDetailsShown,
+            showDetails,
         }
     }
 }
@@ -130,4 +156,57 @@ export default {
 .img-btn:hover {
     color: white;
 }
+
+.details-container {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    display: none;
+    flex-direction: column;
+    /* align-items: center; */
+    justify-content: start;
+    transform: translate(-50%, -50%) scale(1);
+    /* opacity: 0; */
+    background-color: rgba(255, 255, 255, 0.9);
+    width: 100%;
+    height: 100%;
+    word-wrap: break-word;
+    transition: opacity 0.3s ease-in-out, transform 0.3s ease-in-out;
+    overflow-wrap: break-word;
+    overflow-y: auto;
+}
+
+.renderDetails {
+    /* opacity: 1; */
+    display: flex;
+    transform: translate(-50%, -50%) scale(1);
+}
+
+.card-body {
+    border-left: 1px solid rgba(0, 0, 0, 0.1);
+}
+
+/* Show details on hover */
+/* .card:hover .details-container {
+    opacity: 1;
+    transform: translate(-50%, -50%) scale(1);
+    pointer-events: none;
+} */
+
+/* .card:active .details-container {
+    opacity: 1;
+    transform: translate(-50%, -50%) scale(1);
+    pointer-events: none;
+} */
 </style>
+
+
+
+<!-- 
+ing : 4
+Comment : Best laptop for gaming, would be better if the panel have mor esh rates
+
+Best laptop for gaming, would be better if the panel have more refresh rates
+
+
+ -->
