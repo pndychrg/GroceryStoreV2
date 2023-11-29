@@ -92,8 +92,10 @@
             </p>
             <hr>
         </div>
-        <!-- <p>{{ productData.ratings }}</p> -->
-
+    </div>
+    <div v-else class="details-container text-center p-3 " :class="{ renderDetails: isDetailsShown == true }"
+        style="justify-content: center;" @click="showDetails">
+        <h6>No Comments Available</h6>
     </div>
 </template>
 

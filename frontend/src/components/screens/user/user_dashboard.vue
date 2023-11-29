@@ -39,7 +39,8 @@
             <div class="col-md-6 p-4 favproduct-col" v-if="favProducts.length > 0">
                 <h2>Favourite Products</h2>
                 <div v-for="product in favProducts" :key="product.id" class="card product-card">
-                    <ProductCard :productData="product" />
+                    <ProductCard :productData="product" loggedInRole="user"
+                        @add-to-favourite="removeProductsFromFavourites" />
                 </div>
             </div>
             <div class="col-md-6 p-4" v-if="bills.length > 0">
@@ -130,6 +131,12 @@ export default {
             isProfileUpdateFormShown.value = !isProfileUpdateFormShown.value
             uiStateManager.toggleModal();
         }
+
+        //removing products from favourites
+        const removeProductsFromFavourites = async (product) => {
+            await favouriteMethods.removeFromFavourite(product.id)
+            await fetchAllFavouriteProducts();
+        }
         return {
             bills,
             favProducts,
@@ -142,6 +149,7 @@ export default {
             showProfileUpdateForm,
             isProfileUpdateFormShown,
             image,
+            removeProductsFromFavourites
         }
     }
 }

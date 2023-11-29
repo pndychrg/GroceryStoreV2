@@ -61,7 +61,7 @@ class FavouritesMethods:
             return None, "invalid product_id"
 
         # searching for favItem in db
-        existingFav = self.getFavouriteProduct(
+        existingFav, mesg = self.getFavouriteProduct(
             user_id=user_id, product_id=product_id)
 
         if existingFav:

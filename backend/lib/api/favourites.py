@@ -9,6 +9,12 @@ from cache import cache
 favouritesMethods = FavouritesMethods()
 
 
+# def make_key():
+#     user = get_jwt_identity()
+#     print(",".join([f"{key}={value}" for key, value in user.toJson().items()]))
+#     return ",".join([f"{key}={value}" for key, value in user.toJson().items()])
+
+
 class FavouritesAPI(Resource):
 
     @jwt_required()
@@ -23,6 +29,9 @@ class FavouritesAPI(Resource):
                 product_id=product_id
             )
             if response:
+                # Deleting the cache for the corresponding get endpoint
+                # cache_key = f'favourite:get/{user.get("id")}/{product_id}'
+                # cache.delete_memoized('get', cache_key)
                 return response, 200
             else:
                 return {'msg': msg}, 400
@@ -31,7 +40,7 @@ class FavouritesAPI(Resource):
 
     @jwt_required()
     @checkJWTForUser
-    @cache.cached(timeout=30, query_string=True)
+    # @cache.cached(timeout=30)
     def get(self, product_id=None):
         # getting the user_id from access token
         user = get_jwt_identity()
@@ -57,6 +66,12 @@ class FavouritesAPI(Resource):
                 user_id=user.get('id'), product_id=product_id)
 
             if response:
+                # deleting the cache of get method
+                # cache.delete("")
+                # Deleting the cache for the corresponding get endpoint
+                # cache.delete(f"view//product/favourite")
+                # cached_data = cache.get
+                # cache.delete(f"flask_cache_/product/favourite")
                 return response, 200
             else:
                 return {'msg': msg}, 400

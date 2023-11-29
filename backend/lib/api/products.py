@@ -102,7 +102,7 @@ class ProductsAPI(Resource):
     @checkJWTForManager
     def delete(self):
         product_id = request.args.get('product_id')
-        
+
         if product_id:
             response, msg = productDB.deleteProductById(product_id=product_id)
             if response:

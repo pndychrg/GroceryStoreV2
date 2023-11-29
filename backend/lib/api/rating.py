@@ -2,7 +2,7 @@ from flask_restful import Resource, reqparse, request
 from lib.db_utils.rating import RatingMethods
 from flask_jwt_extended import jwt_required, get_jwt_identity
 from lib.methods.decorators import checkJWTForUser
-
+from cache import cache
 
 # init fav methods
 ratingMethods = RatingMethods()
@@ -39,6 +39,7 @@ class RatingsAPI(Resource):
 
     @jwt_required()
     @checkJWTForUser
+    @cache.cached(timeout=30, query_string=True)
     def get(self, product_id=None):
         response, msg = ratingMethods.getProductRatingForUser(
             user_id=get_jwt_identity().get('id'), product_id=product_id)

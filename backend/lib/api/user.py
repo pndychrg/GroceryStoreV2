@@ -5,7 +5,7 @@ from lib.methods.decorators import checkJWTForUser
 from lib.methods.validators import Validators
 from lib.db_utils.user_db import UserDB
 from werkzeug.datastructures import FileStorage
-
+from cache import cache
 # initializing User DB methods
 userDB = UserDB()
 
@@ -111,8 +111,8 @@ class UserRatingAPI(Resource):
 
     @jwt_required()
     @checkJWTForUser
+    @cache.cached(timeout=30, query_string=True)
     def get(self):
-
         # getting user_id from jwt
         user_id = get_jwt_identity().get('id')
         # fetching the user from user_id to get the complete user details
