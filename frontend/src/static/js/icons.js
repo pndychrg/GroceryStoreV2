@@ -44,5 +44,5 @@ export const iconLib = library.add(
   faPuzzlePiece,
   faProductHunt,
   faC,
-  faComments
+  faComments,
 );

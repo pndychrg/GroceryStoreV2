@@ -23,19 +23,14 @@
                 </div>
             </div>
             <hr>
-            <div class="row m-2">
-                <div class="col-md-6">
-                    <button class="btn btn-outline-dark mb-2" @click="showProfileUpdateForm" style="width: 100%;"
-                        id="updateProfileButton">Update Profile
-                        <font-awesome-icon icon="fa-solid fa-edit" class="faa-horizontal animated-hover " /></button>
-                </div>
-                <div class="col-md-6 ">
-                    <button class="btn btn-outline-dark mb-2" @click="downloadMonthlyReportPDF" style="width: 100%;">Monthly
-                        Report
-                        <font-awesome-icon icon="fa-solid fa-download" class="faa-horizontal animated-hover " /></button>
-                </div>
-            </div>
+            <button class="btn btn-outline-dark m-2" @click="showProfileUpdateForm" style="width: 100%;"
+                id="updateProfileButton">Update Profile
+                <font-awesome-icon icon="fa-solid fa-edit" class="faa-horizontal animated-hover " /></button>
+
         </div>
+        <!-- <div>
+            <embed src="http://0.0.0.0:5555/worker/celery%40sherloque#tab-tasks" style="width:500px; height: 300px;">
+        </div> -->
         <div class="card management-data">
             <div class="card-header text-start">
                 Management Data

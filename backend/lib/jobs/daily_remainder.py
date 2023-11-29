@@ -9,7 +9,7 @@ productDB = ProductDB()
 
 
 @celery.task()
-def fetchAllUnvisitedUser():
+def sendMailtoUnvisitedUser():
     users = userRemainder.getNonVisitedUsers()
     latestProduct = productDB.getMostRecentProducts(1)[0]
     highestRatedProduct = productDB.getHighestRatedProduct()
@@ -33,3 +33,5 @@ def fetchAllUnvisitedUser():
             print(
                 f"Sent Remainder to user {data['user'].username} : {response}")
     # print([user.toJson() for user in users])
+
+    return True

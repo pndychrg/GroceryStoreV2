@@ -164,7 +164,7 @@ class UserDB:
             # dictionary of data
             return {
                 "user": user,
-                "img": "data:image/png;base64,"+image,
+                "img": "data:image/png;base64,"+image if image != None else None,
                 "ratings": [rating.toJson() for rating in user.ratings],
                 "total_saved": total_saved,
                 "bills": bills,

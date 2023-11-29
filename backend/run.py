@@ -9,7 +9,7 @@ import workers
 from lib.jobs.coupon_update import updateCoupons
 from celery.schedules import crontab
 from lib.jobs.monthly_report import *
-from lib.jobs.daily_remainder import fetchAllUnvisitedUser
+from lib.jobs.daily_remainder import sendMailtoUnvisitedUser
 app, celery = None, None
 
 
@@ -48,16 +48,23 @@ def create_app():
         },
         "trigger-daily-coupon-update": {
             "task": "lib.jobs.coupon_update.updateCoupons",
-            "schedule": crontab(day_of_week="*")
+            "schedule": crontab(day_of_week="*", hour="0")
         },
+        "trigger-daily-user-remainder": {
+            "task": "lib.jobs.daily_remainder.sendMailtoUnvisitedUser",
+            "schedule": crontab(hour="18")
+        }
     }
     celery.Task = workers.ContextTask
 
     # caching setup
     # cache = Cache(app)
 
-    app.app_context().push()
     # celery = workers.celery
+    # Associating celery with flask app context
+    # celery.conf.update(app.config)
+    # celery.app = app
+    app.app_context().push()
 
     # boiler plate code for testing celery
     @app.route("/")
@@ -65,7 +72,7 @@ def create_app():
         # send_user_current_month_report.delay()
         # send_user_monthly_report.delay()
         # updateCoupons.delay()
-        fetchAllUnvisitedUser.delay()
+        sendMailtoUnvisitedUser.delay()
         # send_report_asPDF.delay()
         return "Hello WOlrd", 200
 
@@ -117,7 +124,9 @@ def create_app():
 
     # registering the reports blueprint
     from lib.api.reports import report
+    from lib.api.admin import admin
     app.register_blueprint(report)
+    app.register_blueprint(admin)
     # api docs init code
     SWAGGER_URL = '/api/docs'
     API_URL = '/static/docs/swagger.yaml'
