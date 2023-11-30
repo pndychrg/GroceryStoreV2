@@ -22,17 +22,17 @@
                 </div>
             </div>
             <hr>
-            <div class="row m-2">
-                <div class="col-md-6">
-                    <button class="btn btn-outline-dark mb-2" @click="showProfileUpdateForm" style="width: 100%;"
-                        id="updateProfileButton">Update Profile
-                        <font-awesome-icon icon="fa-solid fa-edit" class="faa-horizontal animated-hover " /></button>
-                </div>
-                <div class="col-md-6 ">
-                    <button class="btn btn-outline-dark mb-2" @click="downloadMonthlyReportPDF" style="width: 100%;">Monthly
-                        Report
-                        <font-awesome-icon icon="fa-solid fa-download" class="faa-horizontal animated-hover " /></button>
-                </div>
+            <div>
+                <button class="btn btn-danger mb-2 float-start" style="width: 20%;" @click="showUpdatePasswordForm">
+                    Update Password
+                </button>
+                <button class="float-end btn btn-outline-dark mb-2" @click="showProfileUpdateForm" style="width: 30%;"
+                    id="updateProfileButton">Update Profile
+                    <font-awesome-icon icon="fa-solid fa-edit" class="faa-horizontal animated-hover " /></button>
+                <button class="float-end me-2 btn btn-outline-dark mb-2" @click="downloadMonthlyReportPDF"
+                    style="width: 30%;">Monthly
+                    Report
+                    <font-awesome-icon icon="fa-solid fa-download" class="faa-horizontal animated-hover " /></button>
             </div>
         </div>
         <div class="row " style="justify-content: center;">
@@ -54,6 +54,7 @@
         <teleport to="#modal-root">
             <BillDetailsModal v-show="isBillDetailModalOpen" :bill="selectedBill" @close="showBillDetails" />
             <UserProfileUpdateForm v-show="isProfileUpdateFormShown" @close="showProfileUpdateForm" />
+            <UpdatePasswordFormShown v-show="isUpdatePasswordFormShown" @close="showUpdatePasswordForm" />
         </teleport>
     </div>
 </template>
@@ -69,6 +70,8 @@ import { UIStateStore } from '@/services/uiStateManager';
 import { userStateStore } from '@/services/stateManager';
 import { reportMethods } from '@/services/HTTPRequests/reportMethods';
 import UserProfileUpdateForm from "@/components/widgets/forms/profile_update.vue"
+import UpdatePasswordFormShown from "@/components/widgets/forms/update_password.vue"
+
 export default {
     name: "UserDashboard",
     components: {
@@ -76,6 +79,7 @@ export default {
         ProductCard,
         UserProfileUpdateForm,
         BillDetailsModal,
+        UpdatePasswordFormShown,
     },
     setup() {
         const store = userStateStore();
@@ -137,6 +141,14 @@ export default {
             await favouriteMethods.removeFromFavourite(product.id)
             await fetchAllFavouriteProducts();
         }
+
+        // updating password setup
+
+        const isUpdatePasswordFormShown = ref(false);
+        const showUpdatePasswordForm = () => {
+            isUpdatePasswordFormShown.value = !isUpdatePasswordFormShown.value
+            uiStateManager.toggleModal();
+        }
         return {
             bills,
             favProducts,
@@ -149,7 +161,9 @@ export default {
             showProfileUpdateForm,
             isProfileUpdateFormShown,
             image,
-            removeProductsFromFavourites
+            removeProductsFromFavourites,
+            isUpdatePasswordFormShown,
+            showUpdatePasswordForm,
         }
     }
 }

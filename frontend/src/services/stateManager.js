@@ -120,7 +120,7 @@ export const userStateStore = defineStore("store", {
     async getUserImage() {
       const response = await httpGetRequest("user/img");
       this.profile_img = response.img;
-      console.log(this.image);
+      // console.log(this.image);
     },
 
     async updateUser(formData) {
@@ -138,23 +138,30 @@ export const userStateStore = defineStore("store", {
       }
     },
 
-    async refreshTokenAndRetry(originalRequest) {
+    async updateUserPassword(data) {
       try {
-        console.log("refresh token updated");
-        const response = await axios.post("/refresh");
-        // const newToken = response.data.token;
+        const response = await axios.put("/user/password", data);
+        if (response) {
+          showSuccessToast("Password Updated Successfully");
+        }
+        return response;
+      } catch (e) {
+        console.log(e);
+        showErrorToast(e.response.data.msg);
+        return false;
+      }
+    },
 
-        // update the token
-        TokenService.saveToken(response.data.token);
-        // updating the user data
-        this.user = JSON.parse(atob(response.data.token.split(".")[1])).sub;
-        console.log(this.user);
-        this.isAuthenticated = true;
-        console.log(this.user);
-        return axios(originalRequest);
-      } catch (error) {
-        console.error("Error refreshing token", error);
-        return Promise.reject(error);
+    async forgotPassword() {
+      try {
+        const response = await axios.post("/user/password");
+        if (response) {
+          showSuccessToast("Password sent to mail");
+        }
+        return response;
+      } catch (e) {
+        console.log(e);
+        showErrorToast("Error Occured");
       }
     },
   },

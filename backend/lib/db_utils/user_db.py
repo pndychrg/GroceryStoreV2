@@ -217,6 +217,28 @@ class UserDB:
         else:
             return None, "invalid user_id"
 
+    def updateUserPassword(self, user_id, current_password, new_password):
+        # getting user from database
+        user = self.getUser(user_id=user_id)
+        if user:
+            # check if the current password is correct or not
+            if user.password != current_password:
+                return False, "incorrect current password"
+            else:
+                # setting updated password
+                user.password = new_password
+                print(user.password, flush=True)
+                db.session.commit()
+                return True, "Password updated"
+
+    def setRandomPassword(self, user_id):
+        user = self.getUser(user_id=user_id)
+        if user:
+            # here any new password can be set or randomly generated
+            user.password = 1234
+            db.session.commit()
+            return user.password
+
 
 class UserRemainder:
 

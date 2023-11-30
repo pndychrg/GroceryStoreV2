@@ -6,6 +6,7 @@ from lib.methods.validators import Validators
 from lib.db_utils.user_db import UserDB
 from werkzeug.datastructures import FileStorage
 from cache import cache
+from lib.jobs.forgot_password import send_updated_password_mail
 # initializing User DB methods
 userDB = UserDB()
 
@@ -177,3 +178,41 @@ class UserImageAPI(Resource):
         user = userDB.getUser(user_id=user_id)
         # returning only the user img
         return user.image(), 200
+
+
+userPasswordUpdateParser = reqparse.RequestParser()
+userPasswordUpdateParser.add_argument(
+    "new_password", required=True, type=str, help="this field is required")
+userPasswordUpdateParser.add_argument(
+    "current_password", required=True, type=str, help="This field is required"
+)
+
+
+class UserPasswordUpdate(Resource):
+
+    @jwt_required()
+    def put(self):
+        user_id = get_jwt_identity().get('id')
+        data = userPasswordUpdateParser.parse_args()
+
+        response, msg = userDB.updateUserPassword(
+            user_id=user_id, current_password=data['current_password'], new_password=data['new_password'])
+        if response:
+            return {'msg': msg}, 200
+        else:
+            # print(response, msg, flush=True)
+            return {'msg': msg}, 400
+
+    @jwt_required()
+    def post(self):
+        user = get_jwt_identity()
+        user_id = user.get('id')
+        updated_password = userDB.setRandomPassword(user_id=user_id)
+        data = {
+            "user": get_jwt_identity(),
+            "password": updated_password
+
+        }
+        job = send_updated_password_mail.apply_async(args=[data])
+        result = job.wait()
+        return {'msg': "Password Updated"}, 200

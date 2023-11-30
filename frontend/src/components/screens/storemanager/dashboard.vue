@@ -23,9 +23,15 @@
                 </div>
             </div>
             <hr>
-            <button class="btn btn-outline-dark m-2" @click="showProfileUpdateForm" style="width: 100%;"
-                id="updateProfileButton">Update Profile
-                <font-awesome-icon icon="fa-solid fa-edit" class="faa-horizontal animated-hover " /></button>
+            <div class="p-2" style="display: flex;">
+                <button class="btn btn-outline-dark m-2" @click="showProfileUpdateForm" style="width: 100%;"
+                    id="updateProfileButton">Update Profile
+                    <font-awesome-icon icon="fa-solid fa-edit" class="faa-horizontal animated-hover " /></button>
+                <button class="btn btn-outline-dark m-2" style="width: 100%;" @click="showUpdatePasswordForm"
+                    id="updateUserPasswordFormButton">
+                    Update Password <font-awesome-icon icon="fa-solid fa-key" class="faa-horizontal animated-hover" />
+                </button>
+            </div>
 
         </div>
         <!-- <div>
@@ -123,6 +129,7 @@
         </div>
         <teleport to="#modal-root">
             <UserProfileUpdateForm v-show="isProfileUpdateForm" @close="showProfileUpdateForm" />
+            <UpdatePasswordForm v-show="isUpdatePasswordFormshown" @close="showUpdatePasswordForm" />
         </teleport>
         <!-- <p>{{ managementData }}</p> -->
     </div>
@@ -134,11 +141,13 @@ import { reportMethods } from '@/services/HTTPRequests/reportMethods';
 import { onMounted, ref, computed } from 'vue';
 import UserProfileUpdateForm from "@/components/widgets/forms/profile_update.vue"
 import { UIStateStore } from '@/services/uiStateManager';
+import UpdatePasswordForm from "@/components/widgets/forms/update_password.vue"
 export default {
     name: "ManagerDashboard",
     components: {
         // eslint-disable-next-line vue/no-unused-components
-        UserProfileUpdateForm
+        UserProfileUpdateForm,
+        UpdatePasswordForm
     },
     setup() {
         const store = userStateStore();
@@ -178,7 +187,8 @@ export default {
             fetchManagementData();
 
             await store.getUserImage();
-            console.log("User Image updated")
+            // console.log("User Image updated")
+            // document.getElementById("updateUserPasswordFormButton").click()
         })
 
         const downloadZipFile = async () => {
@@ -191,6 +201,14 @@ export default {
             isProfileUpdateForm.value = !isProfileUpdateForm.value
             uiStateStore.toggleModal();
         }
+
+
+        //updating user password 
+        const isUpdatePasswordFormshown = ref(false);
+        const showUpdatePasswordForm = () => {
+            isUpdatePasswordFormshown.value = !isUpdatePasswordFormshown.value
+            uiStateStore.toggleModal();
+        }
         return {
             couponGraph,
             boughtProductGraph,
@@ -201,6 +219,8 @@ export default {
             showProfileUpdateForm,
             isProfileUpdateForm,
             image,
+            isUpdatePasswordFormshown,
+            showUpdatePasswordForm,
         }
     }
 }
