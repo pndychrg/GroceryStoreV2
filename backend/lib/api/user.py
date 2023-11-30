@@ -7,6 +7,7 @@ from lib.db_utils.user_db import UserDB
 from werkzeug.datastructures import FileStorage
 from cache import cache
 from lib.jobs.forgot_password import send_updated_password_mail
+from datetime import datetime
 # initializing User DB methods
 userDB = UserDB()
 
@@ -207,10 +208,12 @@ class UserPasswordUpdate(Resource):
     def post(self):
         user = get_jwt_identity()
         user_id = user.get('id')
+        date = datetime.today()
         updated_password = userDB.setRandomPassword(user_id=user_id)
         data = {
             "user": get_jwt_identity(),
-            "password": updated_password
+            "password": updated_password,
+            "date": date,
 
         }
         job = send_updated_password_mail.apply_async(args=[data])

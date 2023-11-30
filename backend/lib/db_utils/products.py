@@ -178,8 +178,9 @@ class ProductDB:
 
     def getHighestRatedProduct(self):
         products = Product.query.all()
+        # print([(product.av)])
         # sort the products according to avg_rating
         sorted_products = sorted(
-            products, key=lambda x: x.avg_rating or 0, reverse=True)
+            products, key=lambda x: x.av_rating or 0, reverse=True)
         # print(sorted_products[0].toJson())
         return sorted_products[0]
