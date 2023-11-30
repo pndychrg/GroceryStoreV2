@@ -22,7 +22,7 @@ class CouponAPI(Resource):
 
     @jwt_required()
     @checkJWTForManager
-    @cache.cached(timeout=30, query_string=True)
+    # @cache.cached(timeout=30, query_string=True)
     def get(self, coupon_id=None):
         if coupon_id:
             coupon, msg = couponDB.getCouponById(coupon_id=coupon_id)

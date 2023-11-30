@@ -40,7 +40,7 @@ class ProductsAPI(Resource):
 
     @jwt_required()
     @checkJWTForUserOrManager
-    @cache.cached(timeout=30, query_string=True)
+    # @cache.cached(timeout=30, query_string=True)
     def get(self):
         # TODO add getProductBysectionID
         # TODO add getProductByProductID
@@ -88,6 +88,7 @@ class ProductsAPI(Resource):
             product_id=product_id,
             name=data['name'],
             availableAmount=data['availableAmount'],
+            description=data['description'],
             rate=data['rate'],
             manufactureDate=data['manufactureDate'],
             expiryDate=data['expiryDate'],

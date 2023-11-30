@@ -1,5 +1,5 @@
 <template>
-    <nav class="navbar navbar-expand  bg-body-secondary">
+    <nav class="navbar navbar-expand sticky-top  bg-body-secondary">
         <div class=" container-fluid">
             <button v-if="isAuthenticated" @click="showSidebar" id="sidebarButton" class="btn ">
                 <font-awesome-icon :icon="['fas', 'bars']" class="faa-bounce animated-hover" />

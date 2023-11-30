@@ -3,7 +3,7 @@ ID,Section Name,Unit,Number of Products
 2,Books,peice,2
 3,Laptops,peice,1
 4,Tablets,peice,1
-5,Smartphone,peice,1
+5,Smartphone,peice,0
 6,Stationery,peice,2
 7,Sports Items,peice,1
-8,Cosmetics,Peice,0
+10,Cosmetics,piece,1

@@ -112,6 +112,14 @@ export default {
         loggedInRole: String,
         cartData: Object,
     },
+    emits: [
+        "add-to-cart",
+        "edit-product",
+        "delete-product",
+        "add-to-favourite",
+        "show-addimagemodal",
+
+    ],
     setup(props) {
 
         const cartForm = reactive({

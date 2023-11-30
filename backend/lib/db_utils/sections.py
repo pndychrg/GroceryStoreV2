@@ -16,7 +16,7 @@ class SectionDB:
 
     def addSection(self, name, unit):
         if (Validators.name(name)):
-            return None, "Name can't be empty"
+            return None, "Invalid Name found"
         if (Validators.checkStringForNull(unit)):
             return None, "Unit can't be empty"
         #  check if section exists with same name

@@ -86,6 +86,7 @@ export default {
                     sectionRequests.value[index] = editedSectionRequest
                 }
             });
+            formClosed()
         }
 
         const handleApprovedSection = (approvedSection, sectionRequestData) => {

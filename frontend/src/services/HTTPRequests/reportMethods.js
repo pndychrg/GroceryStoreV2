@@ -5,7 +5,7 @@ export const reportMethods = {
   async downloadReportCSV() {
     const response = await downloadItem(
       "/report/exportCSVReports",
-      "Download Reports Zip File"
+      "reports.zip"
     );
     console.log(response);
     if (response) {

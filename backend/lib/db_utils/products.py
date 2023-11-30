@@ -31,7 +31,7 @@ class ProductDB:
     def addProduct(self, name, description, availableAmount, rate, manufactureDate, expiryDate, section_id):
         # Validations
         if (Validators.name(name=name)):
-            return None, "Name can't be empty"
+            return None, "Invalid Product name"
 
         if (Validators.checkForInt(availableAmount) == False):
             return None, "invalid available amount"
@@ -86,7 +86,7 @@ class ProductDB:
         else:
             return False, "product_id not found"
 
-    def updateProduct(self, product_id, name, availableAmount, rate, manufactureDate, expiryDate, section_id):
+    def updateProduct(self, product_id, name, availableAmount, rate, manufactureDate, expiryDate, section_id, description):
         # validation for name
         if (Validators.name(name=name)):
             return None, "invalid name"
@@ -112,6 +112,7 @@ class ProductDB:
             product, message = self.getProductById(product_id)
             if product:
                 product.name = name
+                product.description = description
                 product.availableAmount = availableAmount
                 product.rate = rate
                 product.manufactureDate = manufactureDate

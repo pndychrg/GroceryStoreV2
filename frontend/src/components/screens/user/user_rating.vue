@@ -1,9 +1,12 @@
 <template>
     <div>
         <h1>Product Ratings</h1>
-        <div class="wrapper">
+        <div class="wrapper " v-if="ratings?.length > 0">
             <ProductRatingCard v-for="rating in ratings" :key="rating.id" :rating="rating"
                 class="product-rating-card card" />
+        </div>
+        <div v-else>
+            <h5>No Product Rating Found</h5>
         </div>
     </div>
 </template>

@@ -13,7 +13,7 @@
                         </div>
                         <div class="form-group">
                             <label for="productDescription">Product Description</label>
-                            <textarea class="form-control" id="productDescription" rows="3"
+                            <textarea class="form-control mb-2" id="productDescription" rows="3"
                                 v-model="formData.description"></textarea>
                         </div>
 
@@ -41,7 +41,7 @@
                         </div>
                         <div class="form-group mb-2 ">
                             <label for="section">Choose a Section:</label>
-                            <select name="section" id="section" class="ms-2 " v-model="formData.section_id">
+                            <select name="section" id="section" class="ms-2 form-control" v-model="formData.section_id">
                                 <option default value="null">Section</option>
                                 <option v-for="section in sectionsData" :key="section.id" :value="section.id">
                                     {{ section.name }}

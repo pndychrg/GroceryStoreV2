@@ -177,13 +177,3 @@ class UserImageAPI(Resource):
         user = userDB.getUser(user_id=user_id)
         # returning only the user img
         return user.image(), 200
-
-
-class RefreshTokenAPI(Resource):
-
-    @jwt_required()
-    def post(self):
-        current_user = get_jwt_identity()
-        new_token = create_access_token(
-            identity=current_user, timedelta=timedelta(hours=8))
-        return {"token": new_token}, 200

@@ -124,10 +124,13 @@ class UserDB:
                     total_saved += savedOnBill
                     if bill.coupon:
                         coupons_used.append(bill.coupon)
+            image = base64.b64encode(user.img).decode(
+                'utf-8') if user.img != None else None
 
             # dictionary of data
             return {
                 "user": user,
+                "img": "data:image/png;base64,"+image if image != None else None,
                 "total_saved": total_saved,
                 "ratings": [rating.toJson() for rating in user.ratings],
                 "bills": bills,
@@ -157,6 +160,7 @@ class UserDB:
                     total_saved += savedOnBill
                     if bill.coupon:
                         coupons_used.append(bill.coupon)
+            # print(user.img)
             # generating the img_string earlier
             image = base64.b64encode(user.img).decode(
                 'utf-8') if user.img != None else None

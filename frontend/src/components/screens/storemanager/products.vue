@@ -55,7 +55,6 @@ import ProductCard from '@/components/widgets/cards/product_card.vue'
 import ProductForm from '@/components/widgets/forms/product_form.vue'
 import { sectionMethods } from '@/services/HTTPRequests/sectionMethods';
 import ConfirmationModal from '@/components/widgets/confirmation.vue';
-import { UIStateStore } from '@/services/uiStateManager';
 export default {
     name: "ProductPage",
     components: {
@@ -64,8 +63,6 @@ export default {
         ConfirmationModal
     },
     setup() {
-        // eslint-disable-next-line no-unused-vars
-        const uiStateStore = UIStateStore()
         const products = ref([]);
         const selectedProduct = ref(null);
         const isProductFormShown = ref(false);
@@ -76,7 +73,7 @@ export default {
         }
         const isDeleteModalShown = ref(false);
         const showDeleteConfirmation = (productData) => {
-            uiStateStore.toggleModal()
+            // uiStateStore.toggleModal()
             selectedProduct.value = productData
             isDeleteModalShown.value = true;
         }
